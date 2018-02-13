@@ -6,7 +6,7 @@
   "scripts": {
     "server": "node index.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\"  \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/kazordomo/ultimate-typing-game#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "concurrently": "^3.5.1",
     "cookie-session": "^2.0.0-beta.3",
     "express": "^4.16.2",
     "mongoose": "^5.0.4",
