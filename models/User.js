@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    googleId: String,
-    facebookId: String,
+    providerId: String,
     wpm: { type: Number, default: 0 },
     correctWords: { type: Number, default: 0 },
     wrongWords: { type: Number, default: 0 },
