@@ -1,8 +1,9 @@
 import React from 'react';
+import Login from './Login';
 
 const FirstPage = () => {
     return(
-        <div>First Page!</div>
+        <div><Login /></div>
     );
 }
 

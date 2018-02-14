@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import reduxThunk from 'redux-thunk'; //dispatch middleware
+import reduxThunk from 'redux-thunk'; //dispatch action func when request is done.
 
 import App from './components/App';
 import reducers from './reducers';
