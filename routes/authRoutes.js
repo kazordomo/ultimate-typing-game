@@ -1,32 +1,22 @@
 const passport = require('passport');
 
 module.exports = app => {
-    //TODO: remove.
-    //TODO: error handling.
-    app.get('/success', (req, res) => {
-        res.send('SUCCESS ROUTE');
-    })
-
-    app.get('/fail', (req, res) => {
-        res.send('FAILED ROUTE');
-    })
-
-    // AUTHANTEICATE (first login)
     //start the auth process.
     app.get('/auth/facebook', passport.authenticate('facebook'));
 
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        successRedirect: '/success',
-        failureRedirect: '/fail'
+        successRedirect: '/dashboard',
+        failureRedirect: '/error'
     }));
 
     app.get('/auth/google', passport.authenticate('google', {
         scope: ['profile', 'email'] //remove if we find no use for these.
     }));
 
-    app.get('/auth/google/callback', passport.authenticate('google'), (req, res) => {
-        res.redirect('/success');
-    });
+    app.get('/auth/google/callback', passport.authenticate('google', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/error'
+    }));
 
     // AUTHORIZE (already loggedin / connect other social account
     // app.get('/connect/facebook', passport.authorize('facebook'));
@@ -64,5 +54,10 @@ module.exports = app => {
         user.save(() => {
             res.redirect('/success');
         });
+    });
+
+    app.get('/api/logout', (req, res) => {
+        req.logout(); //logout with passport
+        res.redirect('/');
     });
 }

@@ -10,6 +10,8 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 const app = express();
 
+app.use(bodyParser.json());
+
 app.use(cookieSession({
         maxAge: 30 * 24 * 60 * 1000, //30 days
         keys: [keys.cookieKey]
