@@ -1,9 +1,14 @@
 import React from 'react';
+import { reduxForm, Field } from 'redux-form';
 import styled, { css } from 'react-emotion';
 import Wrapper from '../styles/Wrapper';
-import Title from '../styles/Title';
+import AuthField from './AuthField';
 
 //TODO: use css grid to center things.
+
+const authArea = css({
+    width: '500px'
+});
 
 const loginAhref = css({
     display: 'block',
@@ -27,20 +32,34 @@ const BrandIcon = styled('i')({
     fontSize: '40px'
 });
 
-const Login = () => {
+//TODO: refacto from class component.
+const Login = ({ handleSubmit, handleAuthSubmit }) => {
     return(
         <Wrapper>
-            <div>
-                <Title>Ultimate Typing Game</Title>
-            </div>
-            <div className={ahrefWrapper}>
-                <a href="/auth/google" className={loginAhref}><BrandIcon className="fab fa-google-plus-square"></BrandIcon>Login With Google</a>
-            </div>
-            <div className={ahrefWrapper}>
-                <a href='/auth/facebook' className={loginAhref}><BrandIcon className="fab fa-facebook-square"></BrandIcon>Login Wih Facebook</a>
+            <div className={authArea}>
+                <div className={ahrefWrapper}>
+                    <a href='/auth/google' className={loginAhref}><BrandIcon className='fab fa-google-plus-square'></BrandIcon>Login With Google</a>
+                </div>
+                <div className={ahrefWrapper}>
+                    <a href='/auth/facebook' className={loginAhref}><BrandIcon className='fab fa-facebook-square'></BrandIcon>Login Wih Facebook</a>
+                </div>
+                <form onSubmit={handleSubmit(handleSubmit(handleAuthSubmit))} >
+                    <Field component={AuthField} type='text' label='Username' name='username' />
+                    <Field component={AuthField} type='password' label='Password' name='password' />
+                    <button type='submit'>
+                        Register
+                    </button>
+                </form>
             </div>
         </Wrapper>
     );
 }
 
-export default Login;
+// function validate(values) {
+
+// }
+
+export default reduxForm({
+    // validate,
+    form: 'authForm'
+})(Login);

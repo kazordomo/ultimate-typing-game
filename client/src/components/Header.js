@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styled, { css } from 'react-emotion';
+import { css } from 'react-emotion';
 
 const header = css({
     width: '100%',

@@ -35,6 +35,14 @@ module.exports = app => {
     //     failureRedirect : '/'
     // }));
 
+    app.post('/auth/signup', passport.authenticate('local-signup'), (req, res) => {
+        return passport.authenticate('local-signup', (err, user) => {
+            req.login(user, (err) => {
+                res.send(user);
+            })
+        })(req, res);
+    });
+
     app.get('/api/current_user', (req, res) => {
         res.send(req.user);
     });

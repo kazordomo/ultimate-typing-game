@@ -1,6 +1,7 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
 
@@ -27,10 +28,10 @@ passport.use(new FacebookStrategy({
         const user = await User.findOne({ facebook: { id }});
 
         if(user) {
-            done(null, user);
+            return done(null, user);
         }
         const newUser = await new User({ facebook: { id, token } }).save();
-        done(null, newUser);
+        return done(null, newUser);
 
     } else {
         const user = req.user;
@@ -38,7 +39,7 @@ passport.use(new FacebookStrategy({
         user.facebook.token = token;
         user.save();
         
-        done(null, user);
+        return done(null, user);
     }
 }));
 
@@ -53,10 +54,10 @@ passport.use(new GoogleStrategy({
         const user = await User.findOne({ google: { id }});
 
         if(user) {
-            done(null, user);
+            return done(null, user);
         }
         const newUser = await new User({ google: { id, token } }).save();
-        done(null, newUser);
+        return done(null, newUser);
 
     } else {
         const user = req.user;
@@ -64,6 +65,24 @@ passport.use(new GoogleStrategy({
         user.google.token = token;
         user.save();
         
-        done(null, user);
+        return done(null, user);
     }
+}));
+
+passport.use('local-signup', new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+    proxy: true
+}, async (username, password, done) => {
+    const user = await User.findOne({ local: { username } });
+        if(user) {
+            //TODO: return error that the username is already taken.
+            done(null, false);
+        }
+
+        const newUser = new User();
+        newUser.local.username = username;
+        newUser.local.password = newUser.generateHash(password);
+        await newUser.save();
+        done(null, newUser);
 }));
