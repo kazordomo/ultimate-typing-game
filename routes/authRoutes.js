@@ -35,9 +35,9 @@ module.exports = app => {
     //     failureRedirect : '/'
     // }));
 
-    // app.get('/api/current_user', (req, res) => {
-    //     res.send(req.user);
-    // });
+    app.get('/api/current_user', (req, res) => {
+        res.send(req.user);
+    });
 
     //UNLINK
     app.get('/unlink/facebook', (req, res) => {
