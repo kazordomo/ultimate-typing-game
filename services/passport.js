@@ -16,73 +16,72 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-//DRY -> strategies - for simplicity this will not be refactored.
 passport.use(new FacebookStrategy({
     clientID: keys.facebookClientID,
     clientSecret: keys.facebookClientSecret,
     callbackURL: '/auth/facebook/callback',
-    passReqToCallback: true,
     proxy: true //if heroku - let herokus proxy server use https
-}, async (req, token, refreshToken, { id }, done) => {
-    if(!req.user) {
-        const user = await User.findOne({ facebook: { id }});
+}, async (token, refreshToken, { id }, done) => {
+    const user = await User.findOne({ 'facebook.id': id });
 
-        if(user) {
-            return done(null, user);
-        }
-        const newUser = await new User({ facebook: { id, token } }).save();
-        return done(null, newUser);
-
-    } else {
-        const user = req.user;
-        user.facebook.id = id;
-        user.facebook.token = token;
-        user.save();
-        
+    if(user) {
         return done(null, user);
     }
+    const newUser = await new User({ facebook: { id, token } }).save();
+    return done(null, newUser);
 }));
 
 passport.use(new GoogleStrategy({
     clientID: keys.googleClientID,
     clientSecret: keys.googleClientSecret,
     callbackURL: '/auth/google/callback',
-    passReqToCallback: true,
     proxy: true
-}, async (req, token, refreshToken, { id }, done) => {   
-    if(!req.user) {
-        const user = await User.findOne({ google: { id }});
+}, async (token, refreshToken, { id }, done) => {   
+    const user = await User.findOne({ 'google.id': id });
 
-        if(user) {
-            return done(null, user);
-        }
-        const newUser = await new User({ google: { id, token } }).save();
-        return done(null, newUser);
-
-    } else {
-        const user = req.user;
-        user.google.id = id;
-        user.google.token = token;
-        user.save();
-        
+    if(user) {
         return done(null, user);
     }
+    const newUser = await new User({ google: { id, token } }).save();
+    return done(null, newUser);
 }));
 
+
+//LOCAL SIGNUP
 passport.use('local-signup', new LocalStrategy({
     usernameField: 'username',
     passwordField: 'password',
     proxy: true
 }, async (username, password, done) => {
-    const user = await User.findOne({ local: { username } });
-        if(user) {
-            //TODO: return error that the username is already taken.
-            done(null, false);
-        }
+    const user = await User.findOne({ 'local.username': username });
+    debugger;
+    if(user) {
+        //TODO: return error that the username is already taken.
+        return done(null, false);
+    }
+    const newUser = new User();
+    newUser.local.username = username;
+    newUser.local.password = newUser.generateHash(password);
+    await newUser.save();
+    return done(null, newUser);
+}));
 
-        const newUser = new User();
-        newUser.local.username = username;
-        newUser.local.password = newUser.generateHash(password);
-        await newUser.save();
-        done(null, newUser);
+//LOCAL LOGIN
+passport.use('local-login', new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+    proxy: true
+}, async (username, password, done) => {
+    debugger;
+    const user = await User.findOne({ 'local.username': username });
+
+    if(!user) {
+        //TODO: return to user that user does not exist.
+        return done(null, false);
+    }
+    if(!user.validPassword(password, user.local.password)) {
+        return done(null, false);
+    }
+
+    return done(null, user);
 }));
