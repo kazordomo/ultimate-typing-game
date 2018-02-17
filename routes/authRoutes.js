@@ -18,20 +18,30 @@ module.exports = app => {
         failureRedirect: '/error'
     }));
 
-    app.post('/auth/login', (req, res) => {
-        return passport.authenticate('local-login', (err, user) => {
+
+    //TODO: a lot of testing on this pl0x.
+    app.post('/auth/login', (req, res, next) => {
+        passport.authenticate('local-login', (err, user, info) => {
+            if(!user)
+                return res.status(401).json({ message: info });
             req.login(user, (err) => {
+                if(err)
+                    return next(err);
                 res.send(user);
             });
         })(req, res);
     });
 
-    app.post('/auth/signup', (req, res) => {
-        return passport.authenticate('local-signup', (err, user) => {
+    app.post('/auth/signup', (req, res, next) => {
+        passport.authenticate('local-signup', (err, user, info) => {
+            if(!user)
+                return res.status(401).json({ message: info });
             req.login(user, (err) => {
+                if(err)
+                    return next(err);
                 res.send(user); //sending back credentials as well atm
             });
-        })(req, res);
+        })(req, res, next);
     });
 
     app.get('/api/current_user', (req, res) => {

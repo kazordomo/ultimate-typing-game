@@ -19,9 +19,11 @@ export const submitAuthForm = (values, authType, history) => async dispatch => {
             body: JSON.stringify(values),
             headers: { 'Content-Type': 'application/json' }
         });
-        const json = await response.json();
-        dispatch({ type: FETCH_USER, payload: json });       
-        history.push('/dashboard');
+        if(response.status === 200) {
+            const json = await response.json();
+            dispatch({ type: FETCH_USER, payload: json });       
+            history.push('/dashboard');
+        }
     } catch (err) {
         return;
     }
