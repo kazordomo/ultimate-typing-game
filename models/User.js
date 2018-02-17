@@ -12,7 +12,16 @@ const userSchema = new Schema({
         token: String
     },
     local: {
-        username: String,
+        username: {
+            type: String,
+            unique: true,
+            trim: true
+        },
+        email: {
+            type: String,
+            unique: true,
+            trim: true
+        },
         password: String
     },
     wpm: { type: Number, default: 0 },
@@ -29,8 +38,8 @@ userSchema.methods.generateHash = password => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-userSchema.methods.validPassword = (password, storePassword) => {
-    return bcrypt.compareSync(password, storePassword);
+userSchema.methods.validPassword = (password, storedPassword) => {
+    return bcrypt.compareSync(password, storedPassword);
 };
 
 mongoose.model('users', userSchema);

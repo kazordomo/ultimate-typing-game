@@ -16,11 +16,21 @@ const inputStyle = css({
     boxSizing: 'border-box'
 });
 
-export default ({ input, label, type }) => {
+const errorMessageStyle = css({
+    color: 'red'
+});
+
+export default ({ input, label, type, meta: { touched, error } }) => {
+    function renderErrorMessage() {
+        return (touched && error) ? 
+            <div className={errorMessageStyle}>{error} <i className="fas fa-exclamation-triangle"></i></div> : '';
+    }
+
     return (
         <div>
             <div><label className={labelStyle} >{label}</label></div>
             <input className={inputStyle} {...input} type={type} />
+            {renderErrorMessage()}
         </div>
     );
 }

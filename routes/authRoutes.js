@@ -38,27 +38,27 @@ module.exports = app => {
         res.send(req.user);
     });
 
-    //UNLINK
-    app.get('/unlink/facebook', (req, res) => {
-        const user = req.user;
-        user.facebook.token = undefined;
-        user.save(() => {
-            res.redirect('/success');
-        });
-    });
-
-    app.get('/unlink/google', (req, res) => {
-        const user = req.user;
-        user.google.token = undefined;
-        user.save(() => {
-            res.redirect('/success');
-        });
-    });
-
     app.get('/api/logout', (req, res) => {
         req.logout(); //logout with passport
         res.redirect('/');
     });
+
+    // //UNLINK
+    // app.get('/unlink/facebook', (req, res) => {
+    //     const user = req.user;
+    //     user.facebook.token = undefined;
+    //     user.save(() => {
+    //         res.redirect('/success');
+    //     });
+    // });
+
+    // app.get('/unlink/google', (req, res) => {
+    //     const user = req.user;
+    //     user.google.token = undefined;
+    //     user.save(() => {
+    //         res.redirect('/success');
+    //     });
+    // });
 
     // AUTHORIZE (already loggedin / connect other social account
     // app.get('/connect/facebook', passport.authorize('facebook'));

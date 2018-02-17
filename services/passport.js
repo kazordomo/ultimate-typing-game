@@ -22,6 +22,7 @@ passport.use(new FacebookStrategy({
     callbackURL: '/auth/facebook/callback',
     proxy: true //if heroku - let herokus proxy server use https
 }, async (token, refreshToken, { id }, done) => {
+    debugger;
     const user = await User.findOne({ 'facebook.id': id });
 
     if(user) {
@@ -36,7 +37,7 @@ passport.use(new GoogleStrategy({
     clientSecret: keys.googleClientSecret,
     callbackURL: '/auth/google/callback',
     proxy: true
-}, async (token, refreshToken, { id }, done) => {   
+}, async (token, refreshToken, { id }, done) => { 
     const user = await User.findOne({ 'google.id': id });
 
     if(user) {
@@ -51,16 +52,17 @@ passport.use(new GoogleStrategy({
 passport.use('local-signup', new LocalStrategy({
     usernameField: 'username',
     passwordField: 'password',
+    passReqToCallback: true, 
     proxy: true
-}, async (username, password, done) => {
+}, async (req, username, password, done) => {
     const user = await User.findOne({ 'local.username': username });
-    debugger;
     if(user) {
         //TODO: return error that the username is already taken.
         return done(null, false);
     }
     const newUser = new User();
     newUser.local.username = username;
+    newUser.local.email = req.body.email;
     newUser.local.password = newUser.generateHash(password);
     await newUser.save();
     return done(null, newUser);
@@ -72,7 +74,6 @@ passport.use('local-login', new LocalStrategy({
     passwordField: 'password',
     proxy: true
 }, async (username, password, done) => {
-    debugger;
     const user = await User.findOne({ 'local.username': username });
 
     if(!user) {
