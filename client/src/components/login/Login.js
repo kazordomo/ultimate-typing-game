@@ -1,6 +1,7 @@
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import AuthField from './AuthField';
+import Button from '../../styles/Button';
 
 //TODO: refacto from class component.
 const Login = ({ handleSubmit, handleAuthSubmit }) => {
@@ -8,9 +9,7 @@ const Login = ({ handleSubmit, handleAuthSubmit }) => {
         <form onSubmit={handleSubmit(handleSubmit(handleAuthSubmit))} >
             <Field component={AuthField} type='text' label='Username' name='username' />
             <Field component={AuthField} type='password' label='Password' name='password' />
-            <button type='submit'>
-                Login
-            </button>
+            <Button type='submit'>Login</Button>
         </form>
     );
 }

@@ -1,36 +1,44 @@
 import React from 'react';
-import { css } from 'emotion';
+import styled from 'react-emotion';
 
-const labelStyle = css({
-    
+// const Label = styled('label')({
+//     fontSize: '20px'
+// });
+
+const FormGroup = styled('div')({
+    position: 'relative',
+    marginBottom: '10px' 
 });
 
-const inputStyle = css({
+const Input = styled('input')({
     width: '100%',
+    marginBottom: '20px',
     padding: '15px',
     backgroundColor: 'pink',
-    fontSize: '25px',
+    fontSize: '20px',
     border: 'none',
     outline: 'none',
     borderRadius: '4px',
     boxSizing: 'border-box'
 });
 
-const errorMessageStyle = css({
+const ErrorMessage = styled('span')({
+    position: 'absolute',
+    top: '-20px',
     color: 'red'
 });
 
 export default ({ input, label, type, meta: { touched, error } }) => {
     function renderErrorMessage() {
         return (touched && error) ? 
-            <div className={errorMessageStyle}>{error} <i className="fas fa-exclamation-triangle"></i></div> : '';
+            <ErrorMessage><i className="fas fa-exclamation-triangle"></i> {error}</ErrorMessage> : '';
     }
 
     return (
-        <div>
-            <div><label className={labelStyle} >{label}</label></div>
-            <input className={inputStyle} {...input} type={type} />
+        <FormGroup>
+            {/* <div><Label>{label}</Label></div> */}
             {renderErrorMessage()}
-        </div>
+            <Input {...input} type={type} touchOnBlur={false} placeholder={label} />
+        </FormGroup>
     );
 }

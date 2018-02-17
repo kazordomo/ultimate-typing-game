@@ -1,32 +1,34 @@
 import React from 'react';
-import styled, { css } from 'react-emotion';
+import styled from 'react-emotion';
 
-const loginAhref = css({
+const Section = styled('div')({
+    marginBottom: '40px'
+});
+
+const Ahref = styled('a')({
     display: 'block',
     width: '100%',
     color: '#000000',
-    fontSize: '40px',
-    border: '1px solid #FFFFFF',
-    borderRadius: '4px',
+    fontSize: '30px',
     textDecoration: 'none'
 });
 
 const BrandIcon = styled('i')({
     marginRight: '10px',
-    fontSize: '40px'
+    fontSize: '35px'
 });
 
 
 const SocialMedia = () => {
     return (
-        <div>
+        <Section>
             <div>
-                <a href='/auth/google' className={loginAhref}><BrandIcon className='fab fa-google-plus-square'></BrandIcon>Login With Google</a>
+                <Ahref href='/auth/google'><BrandIcon className='fab fa-google-plus-square'></BrandIcon>Login With Google</Ahref>
             </div>
             <div>
-                <a href='/auth/facebook' className={loginAhref}><BrandIcon className='fab fa-facebook-square'></BrandIcon>Login Wih Facebook</a>
+                <Ahref href='/auth/facebook'><BrandIcon className='fab fa-facebook-square'></BrandIcon>Login Wih Facebook</Ahref>
             </div>
-        </div>
+        </Section>
     );
 };
 

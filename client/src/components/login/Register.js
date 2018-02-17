@@ -1,6 +1,7 @@
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import AuthField from './AuthField';
+import Button from '../../styles/Button';
 import validate from './validateForm';
 
 const Register = ({ handleSubmit, handleAuthSubmit }) => {
@@ -10,9 +11,7 @@ const Register = ({ handleSubmit, handleAuthSubmit }) => {
             <Field component={AuthField} type='email' label='Email' name='email' />
             <Field component={AuthField} type='password' label='Password' name='password' />
             <Field component={AuthField} type='password' label='Retype password' name='retypepassword' />
-            <button type='submit'>
-                Register
-            </button>
+            <Button type='submit'>Register</Button>
         </form>
     );
 }
