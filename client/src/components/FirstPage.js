@@ -19,10 +19,16 @@ const AhrefButton = styled('a')({
     color: 'purple'
 });
 
+const ErrorMessage = styled('div')({
+    color: 'red',
+    fontSize: '20px'
+});
+
 class FirstPage extends Component {
     state = { showRegister: true };
 
     renderAuthType() {
+        console.log(this.props);
         const {submitAuthForm, authForm, history } = this.props;
 
         if(this.state.showRegister) {
@@ -41,12 +47,26 @@ class FirstPage extends Component {
         );
     }
 
+    renderErrorMsg() {
+        const { error, clearError } = this.props;
+        if(error) {
+            //TODO: lol. for now, redo later please.
+            setTimeout(() => {
+                clearError();
+            },5000);
+            return <ErrorMessage>{error.message}</ErrorMessage>;
+        }
+        return '';
+    }
+
     render() {
+
         return(
             <div>
                 <Title>Ultimate Typing Game</Title>
                 <Wrapper>
                     <SocialMedia />
+                    {this.renderErrorMsg()}
                     {this.renderAuthType()}
                 </Wrapper>
             </div>
@@ -54,8 +74,8 @@ class FirstPage extends Component {
     }
 }
 
-function mapStateToProps({ submitAuthForm, form: { authForm } }) {
-    return { submitAuthForm, authForm };
+function mapStateToProps({ submitAuthForm, form: { authForm }, error }) {
+    return { submitAuthForm, authForm, error };
 }
 
 export default connect(mapStateToProps, actions)(withRouter(FirstPage));

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import styled from 'react-emotion';
 
 import Header from './Header';
 import FirstPage from './FirstPage';
@@ -9,9 +10,12 @@ import Dashboard from './Dashboard';
 import Single from './gameModes/Single';
 import Versus from './gameModes/Versus';
 import Practice from './gameModes/Practice';
-import Error from './Error';
 
-//TODO: use css grid and eventually emotion for inline js styling.
+const Container = styled('div')({
+    width: '2000px',
+    maxWidth: '90%',
+    margin: '0 auto'
+});
 
 class App extends Component {
     componentDidMount() {
@@ -21,7 +25,7 @@ class App extends Component {
     render() {
         return (
             <BrowserRouter>
-                <div className="container">
+                <Container>
                     <Header />
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />
@@ -29,7 +33,7 @@ class App extends Component {
                     <Route exact path='/game/versus' component={Versus} />
                     <Route exact path='/game/practice' component={Practice} />
                     <Route path='/error' component={Error} />
-                </div>
+                </Container>
             </BrowserRouter>
         );
     }

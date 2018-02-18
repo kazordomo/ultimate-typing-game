@@ -1,4 +1,4 @@
-import { FETCH_USER } from './types';
+import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR } from './types';
 
 export const fetchUser = () => async dispatch => {
     try {
@@ -19,12 +19,20 @@ export const submitAuthForm = (values, authType, history) => async dispatch => {
             body: JSON.stringify(values),
             headers: { 'Content-Type': 'application/json' }
         });
+        const json = await response.json();
         if(response.status === 200) {
-            const json = await response.json();
             dispatch({ type: FETCH_USER, payload: json });       
             history.push('/dashboard');
+        } else {
+            console.log("JA");
+            dispatch({ type: AUTH_ERROR, payload: json });
+            return;
         }
     } catch (err) {
         return;
     }
+}
+
+export const clearError = () => dispatch => {
+    dispatch({ type: CLEAR_ERROR, payload: null });
 }

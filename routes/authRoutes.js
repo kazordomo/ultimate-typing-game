@@ -23,7 +23,7 @@ module.exports = app => {
     app.post('/auth/login', (req, res, next) => {
         passport.authenticate('local-login', (err, user, info) => {
             if(!user)
-                return res.status(401).json({ message: info });
+                return res.status(401).json( info );
             req.login(user, (err) => {
                 if(err)
                     return next(err);
@@ -35,7 +35,7 @@ module.exports = app => {
     app.post('/auth/signup', (req, res, next) => {
         passport.authenticate('local-signup', (err, user, info) => {
             if(!user)
-                return res.status(401).json({ message: info });
+                return res.status(401).json( info );
             req.login(user, (err) => {
                 if(err)
                     return next(err);
