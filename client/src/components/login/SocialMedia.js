@@ -1,22 +1,22 @@
 import React from 'react';
 import styled from 'react-emotion';
 
-const Section = styled('div')({
-    marginBottom: '40px'
-});
+const Section = styled('div')`
+    margin-bottom: 40px;
+`;
 
-const Ahref = styled('a')({
-    display: 'block',
-    width: '100%',
-    color: '#000000',
-    fontSize: '30px',
-    textDecoration: 'none'
-});
+const Ahref = styled('a')`
+    display: block;
+    width: 100%;
+    color: #20C20E;
+    font-size: 30px;
+    text-decoration: none;
+`;
 
-const BrandIcon = styled('i')({
-    marginRight: '10px',
-    fontSize: '35px'
-});
+const BrandIcon = styled('i')`
+    margin-right: 10px;
+    font-size: 35px;
+`;
 
 
 const SocialMedia = () => {

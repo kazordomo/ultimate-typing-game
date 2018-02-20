@@ -1,32 +1,40 @@
 import React from 'react';
-import styled from 'react-emotion';
+import Input from '../../styles/Input';
+import styled, { css, keyframes } from 'react-emotion';
 
 // const Label = styled('label')({
 //     fontSize: '20px'
 // });
 
-const FormGroup = styled('div')({
-    position: 'relative',
-    marginBottom: '10px' 
-});
+const FormGroup = styled('div')`
+    position: relative;
+    margin-bottom: 10px; 
+`;
 
-const Input = styled('input')({
-    width: '100%',
-    marginBottom: '20px',
-    padding: '15px',
-    backgroundColor: 'pink',
-    fontSize: '20px',
-    border: 'none',
-    outline: 'none',
-    borderRadius: '4px',
-    boxSizing: 'border-box'
-});
+const ErrorMessage = styled('span')`
+    position: absolute;
+    top: 20px;
+    color: red;
+`;
 
-const ErrorMessage = styled('span')({
-    position: 'absolute',
-    top: '-20px',
-    color: 'red'
-});
+const blink = keyframes`
+    from { opacity: 1; }
+    to { opacity: 0; }
+`;
+
+const cursor = css`
+    position: relative;
+    i {
+        position: absolute;
+        width: 1px;
+        height: 30%;
+        background-color: green;
+        left: 16px;
+        top: 20%;
+        animation ${blink} 1000ms infinite;
+        opacity: 1;
+    }
+`;
 
 export default ({ input, label, type, meta: { touched, error } }) => {
     function renderErrorMessage() {
@@ -38,7 +46,10 @@ export default ({ input, label, type, meta: { touched, error } }) => {
         <FormGroup>
             {/* <div><Label>{label}</Label></div> */}
             {renderErrorMessage()}
-            <Input {...input} type={type} touchOnBlur={false} placeholder={label} />
+            <div className={cursor}>
+                <Input {...input} type={type} touchOnBlur={false} placeholder={label} />
+                <i></i>
+            </div>
         </FormGroup>
     );
 }

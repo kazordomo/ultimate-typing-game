@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import styled from 'react-emotion';
+import styled, { injectGlobal } from 'react-emotion';
 
 import Header from './Header';
 import FirstPage from './FirstPage';
@@ -11,11 +11,24 @@ import Single from './gameModes/Single';
 import Versus from './gameModes/Versus';
 import Practice from './gameModes/Practice';
 
-const Container = styled('div')({
-    width: '2000px',
-    maxWidth: '90%',
-    margin: '0 auto'
-});
+injectGlobal`
+    * {
+        box-sizing: border-box;
+    }
+    @font-face {
+        font-family: 'kongtext';
+        src: local('kongtext'),
+          local('kongtext'),
+          url(../styles/fonts/kongtext.ttf)
+            format('ttf');
+      }
+`;
+
+const Container = styled('div')`
+    width: 2000px;
+    max-width: 90%;
+    margin: 0 auto;
+`;
 
 class App extends Component {
     componentDidMount() {

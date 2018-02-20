@@ -3,16 +3,18 @@ import { connect } from 'react-redux';
 import { css } from 'react-emotion';
 import styled from 'react-emotion';
 
-const header = css({
-    width: '100%',
-    padding: '20px',
-    color: '#000000',
-    boxSizing: 'border-box'
-})
+const header = css`
+    width: 100%;
+    padding: 20px;
+    color: #20C20E;
+    box-sizing: border-box;
+`;
 
-const Ahref = styled('a')({
-    float: 'right'
-});
+const Ahref = styled('a')`
+    float: right;
+    text-decoration: none;
+    color: #20C20E;
+`;
 
 class Header extends Component {
 

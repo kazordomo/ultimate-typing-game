@@ -6,29 +6,29 @@ import Login from './login/Login';
 import Register from './login/Register';
 import SocialMedia from './login/SocialMedia';
 import Title from '../styles/Title';
+import Background from '../styles/Background';
 import * as actions from '../actions';
 
-const Wrapper = styled('div')({
-    width: '500px' ,
-    margin: '0 auto'
-});
+const Wrapper = styled('div')`
+    width: 500px;
+    margin: 0 auto
+`;
 
-const AhrefButton = styled('a')({
-    cursor: 'pointer',
-    float: 'right',
-    color: 'purple'
-});
+const AhrefButton = styled('a')`
+    cursor: pointer;
+    float: right;
+    color: #FFFFFF;
+`;
 
-const ErrorMessage = styled('div')({
-    color: 'red',
-    fontSize: '20px'
-});
+const ErrorMessage = styled('div')`
+    color: red;
+    font-size: 20px;
+`;
 
 class FirstPage extends Component {
     state = { showRegister: true };
 
     renderAuthType() {
-        console.log(this.props);
         const {submitAuthForm, authForm, history } = this.props;
 
         if(this.state.showRegister) {
@@ -50,7 +50,7 @@ class FirstPage extends Component {
     renderErrorMsg() {
         const { error, clearError } = this.props;
         if(error) {
-            //TODO: lol. for now, redo later please.
+            //TODO: lol. for now. redo later please.
             setTimeout(() => {
                 clearError();
             },5000);
@@ -63,6 +63,7 @@ class FirstPage extends Component {
 
         return(
             <div>
+                <Background />
                 <Title>Ultimate Typing Game</Title>
                 <Wrapper>
                     <SocialMedia />

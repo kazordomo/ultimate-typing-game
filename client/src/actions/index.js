@@ -24,7 +24,6 @@ export const submitAuthForm = (values, authType, history) => async dispatch => {
             dispatch({ type: FETCH_USER, payload: json });       
             history.push('/dashboard');
         } else {
-            console.log("JA");
             dispatch({ type: AUTH_ERROR, payload: json });
             return;
         }

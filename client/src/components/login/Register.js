@@ -11,7 +11,7 @@ const Register = ({ handleSubmit, handleAuthSubmit }) => {
             <Field component={AuthField} type='email' label='Email' name='email' />
             <Field component={AuthField} type='password' label='Password' name='password' />
             <Field component={AuthField} type='password' label='Retype password' name='retypepassword' />
-            <Button type='submit'>Register</Button>
+            <Button auth type='submit'>Register</Button>
         </form>
     );
 }
