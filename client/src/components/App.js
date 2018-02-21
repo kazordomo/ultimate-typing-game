@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import styled, { injectGlobal } from 'react-emotion';
 
+import Background from '../styles/Background';
 import Header from './Header';
 import FirstPage from './FirstPage';
 import Dashboard from './Dashboard';
@@ -14,14 +15,10 @@ import Practice from './gameModes/Practice';
 injectGlobal`
     * {
         box-sizing: border-box;
+        color: #20C20E;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 18px;
     }
-    @font-face {
-        font-family: 'kongtext';
-        src: local('kongtext'),
-          local('kongtext'),
-          url(../styles/fonts/kongtext.ttf)
-            format('ttf');
-      }
 `;
 
 const Container = styled('div')`
@@ -39,6 +36,7 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <Container>
+                    <Background />
                     <Header />
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />

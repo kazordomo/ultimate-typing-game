@@ -4,7 +4,7 @@ import errorReducer from './errorReducer';
 import { reducer as formReducer } from 'redux-form';
 
 export default combineReducers({
-    auth: authReducer,
+    user: authReducer,
     error: errorReducer,
     form: formReducer
 });

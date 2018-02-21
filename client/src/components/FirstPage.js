@@ -6,18 +6,18 @@ import Login from './login/Login';
 import Register from './login/Register';
 import SocialMedia from './login/SocialMedia';
 import Title from '../styles/Title';
-import Background from '../styles/Background';
 import * as actions from '../actions';
 
 const Wrapper = styled('div')`
     width: 500px;
-    margin: 0 auto
+    margin: 150px auto
 `;
 
 const AhrefButton = styled('a')`
     cursor: pointer;
     float: right;
     color: #FFFFFF;
+    font-size: 12px;
 `;
 
 const ErrorMessage = styled('div')`
@@ -60,10 +60,8 @@ class FirstPage extends Component {
     }
 
     render() {
-
         return(
             <div>
-                <Background />
                 <Title>Ultimate Typing Game</Title>
                 <Wrapper>
                     <SocialMedia />

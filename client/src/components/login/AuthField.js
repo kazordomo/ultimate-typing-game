@@ -1,11 +1,8 @@
 import React from 'react';
 import Input from '../../styles/Input';
-import styled, { css, keyframes } from 'react-emotion';
+import styled from 'react-emotion';
 
-// const Label = styled('label')({
-//     fontSize: '20px'
-// });
-
+//TODO: only show error message on submit.
 const FormGroup = styled('div')`
     position: relative;
     margin-bottom: 10px; 
@@ -13,28 +10,32 @@ const FormGroup = styled('div')`
 
 const ErrorMessage = styled('span')`
     position: absolute;
-    top: 20px;
+    top: -20px;
     color: red;
-`;
-
-const blink = keyframes`
-    from { opacity: 1; }
-    to { opacity: 0; }
-`;
-
-const cursor = css`
-    position: relative;
+    font-size: 15px;
     i {
-        position: absolute;
-        width: 1px;
-        height: 30%;
-        background-color: green;
-        left: 16px;
-        top: 20%;
-        animation ${blink} 1000ms infinite;
-        opacity: 1;
+        color: red;
     }
 `;
+
+// const blink = keyframes`
+//     from { opacity: 1; }
+//     to { opacity: 0; }
+// `;
+
+// const cursor = css`
+//     position: relative;
+//     i {
+//         position: absolute;
+//         width: 5px;
+//         height: 30%;
+//         background-color: #20C20E;
+//         left: 11px;
+//         top: 20%;
+//         animation ${blink} 800ms infinite;
+//         opacity: 1;
+//     }
+// `;
 
 export default ({ input, label, type, meta: { touched, error } }) => {
     function renderErrorMessage() {
@@ -44,12 +45,12 @@ export default ({ input, label, type, meta: { touched, error } }) => {
 
     return (
         <FormGroup>
-            {/* <div><Label>{label}</Label></div> */}
             {renderErrorMessage()}
-            <div className={cursor}>
+            <Input {...input} type={type} touchOnBlur={false} placeholder={label} />
+            {/* <div className={cursor}>
                 <Input {...input} type={type} touchOnBlur={false} placeholder={label} />
                 <i></i>
-            </div>
+            </div> */}
         </FormGroup>
     );
 }

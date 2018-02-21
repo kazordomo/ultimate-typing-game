@@ -1,4 +1,5 @@
 export default function(values) {
+    //TODO: only show error message when submitted.    
     const errors = {}
     if (!values.username) {
         errors.username = 'Required';
