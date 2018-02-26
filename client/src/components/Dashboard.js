@@ -123,9 +123,9 @@ const Dashboard = ({ user }) => {
             </GridItem>
             <GridItem className={playButtons}>
                 <ButtonGrid>
-                    <Link to="/game/single" className={LinkStyle}>Singleplayer</Link>   
-                    <Link to="/game/versus" className={LinkStyle}>Multiplayer</Link>   
-                    <Link to="/game/practice" className={LinkStyle}>Practice</Link>   
+                    <Link to="/play/single" className={LinkStyle}>Singleplayer</Link>   
+                    <Link to="/play/versus" className={LinkStyle}>Multiplayer</Link>   
+                    <Link to="/play/practice" className={LinkStyle}>Practice</Link>   
                 </ButtonGrid>                
             </GridItem>
             <GridItem className={randomStuff2}></GridItem>

@@ -40,9 +40,9 @@ class App extends Component {
                     <Header />
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />
-                    <Route exact path='/game/single' component={Single} />
-                    <Route exact path='/game/versus' component={Versus} />
-                    <Route exact path='/game/practice' component={Practice} />
+                    <Route exact path='/play/single' component={Single} />
+                    <Route exact path='/play/versus' component={Versus} />
+                    <Route exact path='/play/practice' component={Practice} />
                     <Route path='/error' component={Error} />
                 </Container>
             </BrowserRouter>
