@@ -1,27 +1,12 @@
 import React, { Component } from 'react';
-import styled from 'react-emotion';
-import _ from 'lodash';
-// import ActiveWords from './templates/ActiveWords';
+import ActiveWords from './templates/ActiveWords';
 import wordArray from '../../utils/words';
+import Wrapper from '../../styles/Wrapper';
 import Input from '../../styles/Input';
 
-const KEY_CODE_MIN = 65; //a
-const KEY_CODE_MAX = 90; //z
 const BACKSPACE = 8;
 const SPACE = 32;
 const ENTER = 13;
-
-const Wrapper = styled('div')`
-    width: 400px;
-    margin: 250px auto;
-`;
-
-const ActiveWord = styled('span')`
-    margin-right: 15px;
-`;
-
-//TODO: REFACTOR
-
 let textInput = null;
 let character = 0;
 
@@ -36,14 +21,22 @@ class PlayField extends Component {
             words: this.shuffleWords(wordArray),
             correctWords: 0,
             incorrectWords: 0,
-            message: ''
+            message: '',
+            gameIsReady: true
         }
         this.state = this.initialState;
-        this.timer();
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
         this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
-
     }
+
+    // componentWillMount() {
+    //     //TODO: this should only be viable in practice and single mode.
+    //     document.addEventListener('keydown', ({ keyCode }) => {
+    //         if(keyCode === ENTER) {
+    //             return this.resetGame();
+    //         }
+    //     });
+    // }
 
     shuffleWords(arr) {
         return arr
@@ -56,18 +49,12 @@ class PlayField extends Component {
         return this.state.words[0].slice(0, character) === textInput.value.slice(0, character);
     }
 
-    validateWord = (inputValue, activeWord) => {
-        if(inputValue !== activeWord) {
-            return false;
-        }
-        return true;
-    }
-
     timer() {
         let start = setInterval(() => {
             this.setState({ time: this.state.time - 1});
             if(this.state.time === 0) {
                 clearInterval(start);
+                //TODO: the message should be set by the parent.
                 this.setState({ message: 'GAME OVER. PRESS ENTER TO PLAY AGAIN'});
             }
         }, 1000);
@@ -75,16 +62,20 @@ class PlayField extends Component {
 
     resetGame() {
         textInput.value = '';
-        this.initialState.words = this.shuffleWords(wordArray);
+        this.initialState.words = this.shuffleWords(wordArray); //reshuffle
         this.setState(this.initialState);
     }
 
     //TODO: REFACTOR
     handleOnKeyDown({ keyCode }) {
-        if(keyCode === ENTER) {
-            return this.resetGame();
+        const { gameIsReady, keystrokes, correctWords, incorrectWords, words, time } = this.state;
+        //TODO: GAMEISREADY SHOULD BE MORE CONSISTENT.
+        if(gameIsReady) {
+            this.setState({ gameIsReady: false }, () => {
+                this.timer();
+            });
         }
-        if(this.state.time > 0) {
+        if(time > 0) {
             textInput.value=textInput.value.replace(/\s+/g,'');
             this.setState({ keystrokes: this.state.keystrokes + 1 });
             if(keyCode === BACKSPACE) {
@@ -94,15 +85,15 @@ class PlayField extends Component {
                 }
             } 
             else if(keyCode === SPACE) {
-                if(this.validateWord(textInput.value, this.state.words[0])) {
-                    this.correctWords++;
+                if(textInput.value === words[0]) {
+                    this.setState({ correctWords: correctWords + 1 });
                 } else {
-                    this.incorrectWords++;
+                    this.setState({ incorrectWords: incorrectWords + 1 });
                     textInput.style.border = '3px solid red';
                 }
                 textInput.value = '';
                 character = 0;
-                this.state.words.shift();
+                words.shift();
             } else {
                 character++;
             }
@@ -110,14 +101,15 @@ class PlayField extends Component {
     }
 
     handleOnKeyUp({ keyCode }) {
-        if(this.state.time > 0) {
+        const { words, time } = this.state;
+        if(time > 0) {
             if(textInput.value === '') {
                 character = 0;
             }
             if(keyCode !== 32) {
-                if(this.state.words[0].slice(0, character) !== textInput.value.slice(0, character)) {
+                if(!this.validateCharacter()) {
                     textInput.style.border = '3px solid red';
-                } else if(this.state.words[0].slice(0, character) === textInput.value.slice(0, character)) {
+                } else if(this.validateCharacter()) {
                     textInput.style.border = '3px solid transparent';
                 }
             }
@@ -133,17 +125,12 @@ class PlayField extends Component {
                     play 
                     type="text" 
                     autoFocus 
+                    disabled={!this.state.time}
                     onKeyDown={this.handleOnKeyDown} 
                     onKeyUp={this.handleOnKeyUp} 
                     innerRef={input => textInput = input} 
                 />
-                <div>
-                    <ActiveWord>{this.state.words[0]}</ActiveWord>
-                    <ActiveWord>{this.state.words[1]}</ActiveWord>
-                    <ActiveWord>{this.state.words[2]}</ActiveWord>
-                    <ActiveWord>{this.state.words[3]}</ActiveWord>
-                    <ActiveWord>{this.state.words[4]}</ActiveWord>
-                </div>
+                <ActiveWords words={this.state.words} />
             </Wrapper>
         );
     }

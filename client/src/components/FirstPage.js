@@ -5,13 +5,9 @@ import styled from 'react-emotion';
 import Login from './login/Login';
 import Register from './login/Register';
 import SocialMedia from './login/SocialMedia';
+import Wrapper from '../styles/Wrapper';
 import Title from '../styles/Title';
 import * as actions from '../actions';
-
-const Wrapper = styled('div')`
-    width: 500px;
-    margin: 150px auto
-`;
 
 const AhrefButton = styled('a')`
     cursor: pointer;

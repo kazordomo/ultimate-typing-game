@@ -1,10 +1,18 @@
 import React from 'react';
+import styled from 'react-emotion';
 
-let id = 1; //TODO: refactor
+const ActiveWord = styled('span')`
+    margin-right: 15px;
+`;
 
-export default ({words}) => {
-    return words.map(word => {
-        id++;
-        return <span key={id}>{word}</span>
-    });
+export default ({ words }) => {
+    return (
+        <div>
+            <ActiveWord>{words[0]}</ActiveWord>
+            <ActiveWord>{words[1]}</ActiveWord>
+            <ActiveWord>{words[2]}</ActiveWord>
+            <ActiveWord>{words[3]}</ActiveWord>
+            <ActiveWord>{words[4]}</ActiveWord>
+        </div>
+    );
 }
