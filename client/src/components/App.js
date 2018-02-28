@@ -3,14 +3,11 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import styled, { injectGlobal } from 'react-emotion';
-
 import Background from '../styles/Background';
 import Header from './Header';
 import FirstPage from './FirstPage';
 import Dashboard from './Dashboard';
-import Single from './gameModes/Single';
-import Versus from './gameModes/Versus';
-import Practice from './gameModes/Practice';
+import Game from './Game';
 
 injectGlobal`
     * {
@@ -40,10 +37,8 @@ class App extends Component {
                     <Header />
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />
-                    <Route exact path='/play/single' component={Single} />
-                    <Route exact path='/play/versus' component={Versus} />
-                    <Route exact path='/play/practice' component={Practice} />
-                    <Route path='/error' component={Error} />
+                    <Route exact path='/game' component={Game} />
+                    {/* <Route path='/error' component={Error} /> */}
                 </Container>
             </BrowserRouter>
         );

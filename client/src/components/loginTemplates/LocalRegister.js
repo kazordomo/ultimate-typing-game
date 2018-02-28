@@ -4,7 +4,7 @@ import AuthField from './AuthField';
 import Button from '../../styles/Button';
 import validate from './validateForm';
 
-const Register = ({ handleSubmit, handleAuthSubmit }) => {
+const LocalRegister = ({ handleSubmit, handleAuthSubmit }) => {
     return(
         <form onSubmit={handleSubmit(handleSubmit(handleAuthSubmit))} >
             <Field component={AuthField} type='text' label='Username' name='username' />
@@ -19,4 +19,4 @@ const Register = ({ handleSubmit, handleAuthSubmit }) => {
 export default reduxForm({
     validate,
     form: 'authForm'
-})(Register);
+})(LocalRegister);
