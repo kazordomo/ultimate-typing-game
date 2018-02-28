@@ -10,6 +10,13 @@ const ENTER = 13;
 let textInput = null;
 let character = 0;
 
+function shuffleWords(arr) {
+    return arr
+      .map(a => [Math.random(), a])
+      .sort((a, b) => a[0] - b[0])
+      .map(a => a[1])
+};
+
 class PlayField extends Component {
 
     constructor(props) {
@@ -18,36 +25,19 @@ class PlayField extends Component {
         this.initialState = {
             time: 10,
             keystrokes: 0,
-            words: this.shuffleWords(wordArray),
+            words: shuffleWords(wordArray),
             correctWords: 0,
             incorrectWords: 0,
             message: '',
-            gameIsReady: true
+            gameIsReady: true //TODO: change purpose of gameIsReady
         }
         this.state = this.initialState;
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
         this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
     }
 
-    // componentWillMount() {
-    //     //TODO: this should only be viable in practice and single mode.
-    //     document.addEventListener('keydown', ({ keyCode }) => {
-    //         if(keyCode === ENTER) {
-    //             return this.resetGame();
-    //         }
-    //     });
-    // }
-
-    shuffleWords(arr) {
-        return arr
-          .map(a => [Math.random(), a])
-          .sort((a, b) => a[0] - b[0])
-          .map(a => a[1])
-    };
-
-    validateCharacter() {
-        return this.state.words[0].slice(0, character) === textInput.value.slice(0, character);
-    }
+    //TODO: add lifecycle methods where we set up the props we get according to which game mode,
+    //and add the data to our local state. message for instance.
 
     timer() {
         let start = setInterval(() => {
@@ -62,14 +52,20 @@ class PlayField extends Component {
 
     resetGame() {
         textInput.value = '';
-        this.initialState.words = this.shuffleWords(wordArray); //reshuffle
+        this.initialState.words = shuffleWords(wordArray); //reshuffle
         this.setState(this.initialState);
+    }
+
+    validateCharacter() {
+        return this.state.words[0].slice(0, character) === textInput.value.slice(0, character);
     }
 
     //TODO: REFACTOR
     handleOnKeyDown({ keyCode }) {
         const { gameIsReady, keystrokes, correctWords, incorrectWords, words, time } = this.state;
-        //TODO: GAMEISREADY SHOULD BE MORE CONSISTENT.
+        if(keyCode === ENTER) { //should not be here...
+            return this.resetGame();
+        }
         if(gameIsReady) {
             this.setState({ gameIsReady: false }, () => {
                 this.timer();
