@@ -1,7 +1,7 @@
 import React from 'react';
-import Single from './gameModes/Single';
-import Versus from './gameModes/Versus';
-import Practice from './gameModes/Practice';
+// import Single from './gameModes/Single';
+// import Versus from './gameModes/Versus';
+// import Practice from './gameModes/Practice';
 import ActiveWords from './gameModes/templates/ActiveWords';
 import wordList from '../utils/words';
 

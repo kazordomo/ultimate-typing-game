@@ -9,6 +9,8 @@ import FirstPage from './FirstPage';
 import Dashboard from './Dashboard';
 import Game from './Game';
 
+//TODO: implement proptypes to all components.
+
 injectGlobal`
     * {
         box-sizing: border-box;
