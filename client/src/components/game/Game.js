@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ActiveWords from './templates/ActiveWords';
+import GameStats from './templates/GameStats';
 import Wrapper from '../../styles/Wrapper';
 import Input from '../../styles/Input';
 import Loading from '../../styles/Loading';
@@ -18,21 +19,8 @@ const Row = styled('div')`
 `
 
 const Counter = styled('div')`
-    float: left;
     margin-top 10px;
 `;
-
-const DisplayGameStats = ({ keystrokes, correctWords, incorrectWords }) => {
-    if(!keystrokes)
-        return null;
-    return (
-        <div>
-            <div>Total Keystrokes: {keystrokes}</div>
-            <div>Correct Words: {correctWords}</div>
-            <div>incorrect Words: {incorrectWords}</div>
-        </div>
-    );
-}
 
 const BACKSPACE = 8;
 const SPACE = 32;
@@ -66,8 +54,8 @@ class Game extends Component {
             correctWords: 0,
             incorrectWords: 0,
             gameOverMessage: '',
-            gameStats: '',
-            gameIsReady: true
+            gameIsReady: true,
+            gameOver: false
         }
         this.state = this.initialState;
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
@@ -86,10 +74,7 @@ class Game extends Component {
             if(this.state.time === 0) {
                 const { keystrokes, correctWords, incorrectWords } = this.state;
                 clearInterval(start);
-                const allgameStats = `Total keystroke: ${keystrokes}, 
-                                      correct words: ${correctWords}, 
-                                      incorrect words ${incorrectWords}`;
-                this.setState({ gameOverMessage: this.props.gameOverMessage, gameStats: allgameStats });
+                this.setState({ gameOverMessage: this.props.gameOverMessage, gameOver: true });
             }
         }, 1000);
     }
@@ -167,8 +152,10 @@ class Game extends Component {
                     <RestartButton onClick={this.resetGame}>Restart</RestartButton>
                     <Counter>{time}</Counter>
                 </Row>
-                <div>{gameOverMessage}</div>
-                <DisplayGameStats stats={this.state} />
+                <Row>
+                    {/* <div>{gameOverMessage}</div> */}
+                    <GameStats stats={this.state} />
+                </Row>
             </Wrapper>
         );
     }
