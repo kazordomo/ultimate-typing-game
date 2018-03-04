@@ -2,7 +2,7 @@ import styled from 'react-emotion';
 
 export default styled('input')`
     width: 100%;
-    margin-bottom: 20px;
+    margin-top: 20px;
     padding: 15px;
     background-color: ${props => props.play ? '#FFFFFF' :  '#000000'};
     color: #20C20E;

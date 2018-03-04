@@ -13,10 +13,9 @@ const linkStyle = css`
     text-align: center;
 `;
 
-const PlayButton = ({ mode }) => {
-    //TODO: either have seperate routes for each mode, our send some indicator to tell which mode to play.
-    // const href = `/game/${goTo}`;
-    return <Link to='/game' className={linkStyle}>{mode}</Link>
+const PlayButton = ({ goTo, mode }) => {
+    const href = `/game/${goTo}`;
+    return <Link to={href} className={linkStyle}>{mode}</Link>
 
 }
 
@@ -24,9 +23,9 @@ const PlayButtons = () => {
     //map the buttons if we would to add more.
     return (
         <div>
-            <PlayButton mode='Singleplayer' />
-            <PlayButton mode='Multiplayer' />
-            <PlayButton mode='Practice' />
+            <PlayButton goTo='singleplayer' mode='Singleplayer' />
+            <PlayButton goTo='multiplayer' mode='Multiplayer' />
+            <PlayButton goTo='pracitce' mode='Practice' />
         </div>
     );
 }

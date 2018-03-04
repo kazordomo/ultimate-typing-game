@@ -6,8 +6,11 @@ import styled, { injectGlobal } from 'react-emotion';
 import Background from '../styles/Background';
 import Header from './Header';
 import FirstPage from './FirstPage';
-import Dashboard from './Dashboard';
-import Game from './Game';
+import Dashboard from './dashboard/Dashboard';
+import SinglePlayer from './game/SinglePlayer';
+import MultiPlayer from './game/MultiPlayer';
+import Practice from './game/Practice';
+import Game from './game/Game';
 
 //TODO: implement proptypes to all components.
 
@@ -40,6 +43,9 @@ class App extends Component {
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />
                     <Route exact path='/game' component={Game} />
+                    <Route exact path='/game/singleplayer' component={SinglePlayer} />
+                    <Route exact path='/game/multiplayer' component={MultiPlayer} />
+                    <Route exact path='/game/practice' component={Practice} />
                     {/* <Route path='/error' component={Error} /> */}
                 </Container>
             </BrowserRouter>

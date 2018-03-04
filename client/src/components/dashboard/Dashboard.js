@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import StatsOverview from './dashboardTemplates/StatsOverview';
-import PlayButtons from './dashboardTemplates/PlayButtons';
-import Loading from '../styles/Loading';
-import CssGrid from '../styles/CssGrid';
+import StatsOverview from './StatsOverview';
+import PlayButtons from './PlayButtons';
+import Loading from '../../styles/Loading';
+import CssGrid from '../../styles/CssGrid';
 
 //TODO: should we connect Dashboard to store and settle with shouldComponentUpdate or connect children,
 //to avoid unneccasary renders?
