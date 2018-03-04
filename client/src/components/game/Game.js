@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ActiveWords from './templates/ActiveWords';
-import wordList from '../../utils/words';
 import Wrapper from '../../styles/Wrapper';
 import Input from '../../styles/Input';
+import Loading from '../../styles/Loading';
 import styled from 'react-emotion';
+import { fetchWords } from '../../actions';
 
 const RestartButton = styled('button')`
     float: right;
@@ -31,9 +33,6 @@ const DisplayGameStats = ({ keystrokes, correctWords, incorrectWords }) => {
         </div>
     );
 }
-
-//TODO: add lifecycle methods where we set up the props we get according to which game mode,
-//and add the data to our local state. gameOverMessage for instance.
 
 const BACKSPACE = 8;
 const SPACE = 32;
@@ -63,7 +62,7 @@ class Game extends Component {
         this.initialState = {
             time: 10,
             keystrokes: 0,
-            words: shuffleWords(wordList),
+            words: [],
             correctWords: 0,
             incorrectWords: 0,
             gameOverMessage: '',
@@ -74,6 +73,11 @@ class Game extends Component {
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
         this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
         this.resetGame = this.resetGame.bind(this);
+    }
+
+    async componentDidMount() {
+        await this.props.fetchWords();
+        this.setState({ words: shuffleWords(this.props.words) });
     }
 
     timer() {
@@ -92,7 +96,7 @@ class Game extends Component {
 
     resetGame() {
         textInput.value = '';
-        this.initialState.words = shuffleWords(wordList); //reshuffle
+        this.initialState.words = shuffleWords(this.props.words); //reshuffle
         this.setState(this.initialState);
     }
 
@@ -142,6 +146,9 @@ class Game extends Component {
 
     render() {
         let { time, words, gameOverMessage, gameStats } = this.state;
+        if(!this.props.words) {
+            return <Loading />
+        }
         return(
             <Wrapper>
                 <Row>
@@ -167,4 +174,8 @@ class Game extends Component {
     }
 }
 
-export default Game;
+function mapStateToProps({ wordsObj: { words }}) {
+    return { words };
+}
+
+export default connect(mapStateToProps, { fetchWords })(Game);

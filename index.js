@@ -5,6 +5,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 require('./models/User');
+require('./models/WordList');
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
@@ -22,6 +23,7 @@ app.use(passport.initialize());
 app.use(passport.session()); //tell passport to handle our session.
 
 require('./routes/authRoutes')(app);
+require('./routes/genericRoutes')(app);
 
 const port = process.env.PORT || 5000;
 app.listen(port);

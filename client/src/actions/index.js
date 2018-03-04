@@ -1,4 +1,4 @@
-import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR } from './types';
+import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR, FETCH_WORDS } from './types';
 
 export const fetchUser = () => async dispatch => {
     try {
@@ -34,4 +34,14 @@ export const submitAuthForm = (values, authType, history) => async dispatch => {
 
 export const clearError = () => dispatch => {
     dispatch({ type: CLEAR_ERROR, payload: null });
+}
+
+export const fetchWords = () => async dispatch => {
+    try {
+        const response = await fetch('/api/wordList');
+        const json = await response.json();
+        dispatch({ type: FETCH_WORDS, payload: json });
+    } catch(err) {
+        return;
+    }
 }
