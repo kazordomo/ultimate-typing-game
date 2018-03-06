@@ -1,4 +1,4 @@
-import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR, FETCH_WORDS } from './types';
+import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR, FETCH_WORDS, FETCH_SCORE } from './types';
 
 export const fetchUser = () => async dispatch => {
     try {
@@ -41,6 +41,32 @@ export const fetchWords = () => async dispatch => {
         const response = await fetch('/api/wordList');
         const json = await response.json();
         dispatch({ type: FETCH_WORDS, payload: json });
+    } catch(err) {
+        return;
+    }
+}
+
+export const fetchUserScores = (userId) => async dispatch => {
+    try {
+        const response = await fetch(`/api/scores/${userId}`);
+        const json = await response.json();
+        dispatch({ type: FETCH_SCORE, payload: json });
+    } catch(err) {
+
+    }
+}
+
+//TODO: create and fetch the score, not the user.
+export const submitScore = (score, userId) => async dispatch => {
+    try {
+        const response = fetch(`/api/scores/${userId}`, { 
+            // credentials: 'include', //remove?
+            method: 'post', 
+            body: JSON.stringify(score),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const json = await response.json();
+        dispatch({ type: FETCH_SCORE, payload: json }); //?
     } catch(err) {
         return;
     }

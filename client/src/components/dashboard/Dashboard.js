@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import StatsOverview from './StatsOverview';
 import PlayButtons from './PlayButtons';
+import TopScores from './TopScores';
 import Loading from '../../styles/Loading';
 import CssGrid from '../../styles/CssGrid';
 
@@ -41,7 +42,7 @@ const Dashboard = ({ user }) => {
                 
             </GridItem>
             <GridItem className={item6}>
-                
+                <TopScores />
             </GridItem>
         </GridContainer>
     );

@@ -24,7 +24,7 @@ module.exports = app => {
         passport.authenticate('local-login', (err, user, info) => {
             if(!user)
                 return res.status(401).json( info );
-            req.login(user, (err) => {
+            req.logIn(user, (err) => {
                 if(err)
                     return next(err);
                 res.send(user);
@@ -36,7 +36,7 @@ module.exports = app => {
         passport.authenticate('local-signup', (err, user, info) => {
             if(!user)
                 return res.status(401).json( info );
-            req.login(user, (err) => {
+            req.logIn(user, (err) => {
                 if(err)
                     return next(err);
                 res.send(user); //sending back credentials as well atm

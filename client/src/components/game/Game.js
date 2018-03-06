@@ -6,7 +6,7 @@ import Wrapper from '../../styles/Wrapper';
 import Input from '../../styles/Input';
 import Loading from '../../styles/Loading';
 import styled from 'react-emotion';
-import { fetchWords } from '../../actions';
+import { fetchWords, submitScore } from '../../actions';
 
 const RestartButton = styled('button')`
     float: right;
@@ -46,9 +46,9 @@ class Game extends Component {
 
     constructor(props) {
         super(props);
-
+        
         this.initialState = {
-            time: 10,
+            time: 5,
             keystrokes: 0,
             words: [],
             correctWords: 0,
@@ -60,6 +60,7 @@ class Game extends Component {
         this.state = this.initialState;
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
         this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
+        this.handleSubmitScore = this.handleSubmitScore.bind(this);
         this.resetGame = this.resetGame.bind(this);
     }
 
@@ -72,15 +73,16 @@ class Game extends Component {
         let start = setInterval(() => {
             this.setState({ time: this.state.time - 1});
             if(this.state.time === 0) {
-                const { keystrokes, correctWords, incorrectWords } = this.state;
                 clearInterval(start);
+                this.refs.scoreSubmitButton.click();
                 this.setState({ gameOverMessage: this.props.gameOverMessage, gameOver: true });
             }
         }, 1000);
     }
 
     resetGame() {
-        textInput.value = '';
+        textInput.value = this.props.gameOverMessage;
+        // textInput.value = '';
         this.initialState.words = shuffleWords(this.props.words); //reshuffle
         this.setState(this.initialState);
     }
@@ -117,9 +119,7 @@ class Game extends Component {
         }
     }
 
-    handleOnKeyUp({ keyCode }) {
-        const { words, time } = this.state;
-        
+    handleOnKeyUp({ keyCode }) {        
         if(textInput.value === '') {
             character = 0;
         }
@@ -129,8 +129,13 @@ class Game extends Component {
         }
     }
 
+    handleSubmitScore() {
+        const { correctWords, incorrectWords, keystrokes } = this.state; 
+        this.props.submitScore({ correctWords, incorrectWords, keystrokes }, this.props.user._id);
+    }
+
     render() {
-        let { time, words, gameOverMessage, gameStats } = this.state;
+        let { time, words } = this.state;
         if(!this.props.words) {
             return <Loading />
         }
@@ -149,11 +154,11 @@ class Game extends Component {
                         onKeyUp={this.handleOnKeyUp} 
                         innerRef={input => textInput = input} 
                         />
+                        <button ref='scoreSubmitButton' onClick={this.handleSubmitScore}>Submit</button>
                     <RestartButton onClick={this.resetGame}>Restart</RestartButton>
                     <Counter>{time}</Counter>
                 </Row>
                 <Row>
-                    {/* <div>{gameOverMessage}</div> */}
                     <GameStats stats={this.state} />
                 </Row>
             </Wrapper>
@@ -161,8 +166,8 @@ class Game extends Component {
     }
 }
 
-function mapStateToProps({ wordsObj: { words }}) {
-    return { words };
+function mapStateToProps({ wordsObj: { words }, user}) {
+    return { words, user };
 }
 
-export default connect(mapStateToProps, { fetchWords })(Game);
+export default connect(mapStateToProps, { fetchWords, submitScore })(Game);

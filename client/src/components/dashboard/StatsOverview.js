@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Stat from './Stat';
+import { fetchUserScores, fetchUser } from '../../actions';
 
-const StatsOverview = (props) => {
-    return (
-        <div>
-            <Stat />
-        </div>
-    );
+class StatsOverview extends Component {
+
+    render() {
+        return (
+            <div>
+                <Stat />
+            </div>
+        );
+    }
 }
 
-export default StatsOverview;
+function mapStateToProps(state) {
+    return state;
+}
+
+export default connect(mapStateToProps, { fetchUserScores, fetchUser })(StatsOverview)
