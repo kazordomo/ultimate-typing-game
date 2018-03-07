@@ -1,56 +1,22 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import styled from 'react-emotion';
-import { fetchUserScores } from '../../actions';
-import Loading from '../../styles/Loading';
+import React from 'react';
+import TopScore from './TopScore';
 
-const TopScoreRow = styled('div')`
-    margin: 20px 0px;
-`;
+const TopScores = ({ scores }) => {
 
-const TopScoreStatDivider = styled('span')`
-    margin: 0px 50px;
-`;
-
-const TopScore = ({topScores: { correctWords, scoreDate, _id }}) => {
-    return (
-        <TopScoreRow>
-            <span>{correctWords}</span>
-            <TopScoreStatDivider>-</TopScoreStatDivider>
-            <span>{scoreDate}</span>
-        </TopScoreRow>
-    );
-};
-
-class TopScores extends Component {
-
-    async componentDidMount() {
-        await this.props.fetchUserScores();
-    }
-
-    renderScores() {
-        return this.props.scores.sort((a, b) => {
+    function renderScores() {
+        return scores.sort((a, b) => {
             return b.correctWords - a.correctWords;
         })
         .splice(0, 5)
-        .map(score => <TopScore key={score._id} topScores={score} />);
+        .map(score => <TopScore key={score._id} topScore={score} />);
     }
 
-    render() {
-        if(!this.props.scores) {
-            return <Loading />
-        }
-        return (
-            <div>
-                TopFive
-                {this.renderScores()}
-            </div>
-        );
-    }
+    return (
+        <div>
+            TopFive
+            {renderScores()}
+        </div>
+    );
 }
 
-function mapStateToProps({ user, scores }) {
-    return { scores };
-}
-
-export default connect(mapStateToProps, { fetchUserScores })(TopScores)
+export default TopScores;
