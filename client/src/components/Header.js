@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { css } from 'react-emotion';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 
 const header = css`
     width: 100%;
@@ -19,16 +18,16 @@ const Ahref = styled('a')`
 class Header extends Component {
 
     render() {
-        let logout = this.props.auth ? <Ahref href='/api/logout'>Logout</Ahref> : '';
+        let logout = this.props.user ? <Ahref href='/api/logout'>Logout</Ahref> : '';
 
         return (
-            <div className={header}>This is our header!{logout}</div>
+            <div className={header}>Ultimate Typing Game!{logout}</div>
         )
     }
 }
 
-function mapStateToProps({ auth }) {
-    return { auth };
+function mapStateToProps({ user }) {
+    return { user };
 }
 
 export default connect(mapStateToProps)(Header);

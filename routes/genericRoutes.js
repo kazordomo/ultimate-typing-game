@@ -1,25 +1,25 @@
 //TODO. refactor into gameRoutes, statisticRoutes/leaderboardRoutes, userRoutes...
 const mongoose = require('mongoose');
-const requireAuth = require('../middlewares/requireAuth');
+const requireLogin = require('../middlewares/requireLogin');
 const WordList = mongoose.model('words');
 const Score = mongoose.model('scores');
 
 
 module.exports = app => {
-    //TODO: requireLogin middleware    
-    app.get('/api/scores/:userId', async (req, res) => {
-        const scores = await Score.find({ _user: req.params.userId });
+    //TODO: requireLogin middleware    .
+    //use req.user
+    app.get('/api/scores', requireLogin, async (req, res) => {
+        const scores = await Score.find({ _user: req.user.id });
         res.send(scores);
     });
 
-    app.post('/api/scores/:userId', async (req, res) => {
-        console.log(req.user);
+    app.post('/api/scores', requireLogin, async (req, res) => {
         const { correctWords, incorrectWords, keystrokes } = req.body;
         const newScore = new Score({
             correctWords,
             incorrectWords,
             keystrokes,
-            _user: req.params.userId
+            _user: req.user.id
         });
         await newScore.save();
         res.send(newScore);

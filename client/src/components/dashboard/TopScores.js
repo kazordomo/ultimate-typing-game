@@ -1,40 +1,56 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchUserScores, fetchUser } from '../../actions';
+import styled from 'react-emotion';
+import { fetchUserScores } from '../../actions';
+import Loading from '../../styles/Loading';
 
-const TopScore = (score) => {
-    return <div>{score.correctWords}</div>
+const TopScoreRow = styled('div')`
+    margin: 20px 0px;
+`;
+
+const TopScoreStatDivider = styled('span')`
+    margin: 0px 50px;
+`;
+
+const TopScore = ({topScores: { correctWords, scoreDate, _id }}) => {
+    return (
+        <TopScoreRow>
+            <span>{correctWords}</span>
+            <TopScoreStatDivider>-</TopScoreStatDivider>
+            <span>{scoreDate}</span>
+        </TopScoreRow>
+    );
 };
 
 class TopScores extends Component {
 
     async componentDidMount() {
-        // await this.props.fetchUserScores(this.props.user._id);
+        await this.props.fetchUserScores();
     }
 
-    // renderScores() {
-    //     if(!this.props.user)
-    //         return null;
-    //     //could do this on the server.
-    //     let topFive = this.props.scores.sort((a, b) => {
-    //         return a.correctWords - b.correctWords;
-    //     }).splice(0, 5);
-
-    //     console.log(topFive);
-    //     return topFive.map(score => <TopScore score={score} />);
-    // }
+    renderScores() {
+        return this.props.scores.sort((a, b) => {
+            return b.correctWords - a.correctWords;
+        })
+        .splice(0, 5)
+        .map(score => <TopScore key={score._id} topScores={score} />);
+    }
 
     render() {
+        if(!this.props.scores) {
+            return <Loading />
+        }
         return (
             <div>
                 TopFive
+                {this.renderScores()}
             </div>
         );
     }
 }
 
 function mapStateToProps({ user, scores }) {
-    return {user, scores};
+    return { scores };
 }
 
-export default connect(mapStateToProps, { fetchUserScores, fetchUser })(TopScores)
+export default connect(mapStateToProps, { fetchUserScores })(TopScores)

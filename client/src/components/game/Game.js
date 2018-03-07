@@ -131,7 +131,7 @@ class Game extends Component {
 
     handleSubmitScore() {
         const { correctWords, incorrectWords, keystrokes } = this.state; 
-        this.props.submitScore({ correctWords, incorrectWords, keystrokes }, this.props.user._id);
+        this.props.submitScore({ correctWords, incorrectWords, keystrokes });
     }
 
     render() {

@@ -2,26 +2,24 @@ import React from 'react';
 import styled from 'react-emotion';
 
 const Section = styled('div')`
-    margin-bottom: 60px;
+    margin-bottom: 25px;
 `;
 
 const Ahref = styled('a')`
-    display: block;
     width: 100%;
-    margin-bottom: 25px;
+    margin: 0px 25px 0px 0px;
     color: #20C20E;
     text-decoration: none;
+    i {
+        font-size: 60px;
+    }
 `;
 
 const SocialMedia = () => {
     return (
         <Section>
-            <div>
-                <Ahref href='/auth/google'>Login With Google</Ahref>
-            </div>
-            <div>
-                <Ahref href='/auth/facebook'>Login Wih Facebook</Ahref>
-            </div>
+            <Ahref href='/auth/google'><i className="fab fa-google-plus-square"></i></Ahref>
+            <Ahref href='/auth/facebook'><i className="fab fa-facebook"></i></Ahref>
         </Section>
     );
 };

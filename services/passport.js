@@ -55,16 +55,20 @@ passport.use('local-signup', new LocalStrategy({
     passReqToCallback: true, 
     proxy: true
 }, async (req, username, password, done) => {
-    const user = await User.findOne({ 'local.username': username });
-    if(user) {
-        return done(null, false, { success: false, message: 'User already exists.' });
+    try {
+        const user = await User.findOne({ 'local.username': username });
+        if(user) {
+            return done(null, false, { success: false, message: 'User already exists.' });
+        }
+        const newUser = new User();
+        newUser.local.username = username;
+        newUser.local.email = req.body.email;
+        newUser.local.password = newUser.generateHash(password);
+        await newUser.save();
+        return done(null, newUser);
+    } catch(err) {
+        return done(err);
     }
-    const newUser = new User();
-    newUser.local.username = username;
-    newUser.local.email = req.body.email;
-    newUser.local.password = newUser.generateHash(password);
-    await newUser.save();
-    return done(null, newUser);
 }));
 
 //LOCAL LOGIN
@@ -73,13 +77,16 @@ passport.use('local-login', new LocalStrategy({
     passwordField: 'password',
     proxy: true
 }, async (username, password, done) => {
-    const user = await User.findOne({ 'local.username': username });
-
-    if(!user) {
-        return done(null, false, { success: false, message: 'User does not exist.' });
+    try {
+        const user = await User.findOne({ 'local.username': username });
+        if(!user) {
+            return done(null, false, { success: false, message: 'User does not exist.' });
+        }
+        if(!user.validPassword(password, user.local.password)) {
+            return done(null, false, { success: false, message: 'Incorrect password' });
+        }
+        return done(null, user);
+    } catch(err) {
+        return done(err);
     }
-    if(!user.validPassword(password, user.local.password)) {
-        return done(null, false, { success: false, message: 'Invalid password' });
-    }
-    return done(null, user);
 }));

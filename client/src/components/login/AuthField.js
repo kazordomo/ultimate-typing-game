@@ -18,25 +18,6 @@ const ErrorMessage = styled('span')`
     }
 `;
 
-// const blink = keyframes`
-//     from { opacity: 1; }
-//     to { opacity: 0; }
-// `;
-
-// const cursor = css`
-//     position: relative;
-//     i {
-//         position: absolute;
-//         width: 5px;
-//         height: 30%;
-//         background-color: #20C20E;
-//         left: 11px;
-//         top: 20%;
-//         animation ${blink} 800ms infinite;
-//         opacity: 1;
-//     }
-// `;
-
 export default ({ input, label, type, meta: { touched, error } }) => {
     function renderErrorMessage() {
         return (touched && error) ? 
@@ -47,10 +28,6 @@ export default ({ input, label, type, meta: { touched, error } }) => {
         <FormGroup>
             {renderErrorMessage()}
             <Input {...input} type={type} touchOnBlur={false} placeholder={label} />
-            {/* <div className={cursor}>
-                <Input {...input} type={type} touchOnBlur={false} placeholder={label} />
-                <i></i>
-            </div> */}
         </FormGroup>
     );
 }

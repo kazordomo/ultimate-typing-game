@@ -25,7 +25,7 @@ class Login extends Component {
         return (
             <div>
                 <LocalLogin handleAuthSubmit={() => submitAuthForm(authForm.values, 'login', history)} />
-                <Ahref onClick={() => this.setState({showRegister: true})}>New? Register here!</Ahref>
+                <Ahref onClick={() => this.setState({showRegister: true})}>Back to register</Ahref>
             </div>
         );
     }
@@ -33,10 +33,6 @@ class Login extends Component {
     renderErrorMsg() {
         const { error, clearError } = this.props;
         if(error) {
-            //TODO: lol. for now. redo later please.
-            setTimeout(() => {
-                clearError();
-            },5000);
             return <ErrorMessage>{error.message}</ErrorMessage>;
         }
         return '';

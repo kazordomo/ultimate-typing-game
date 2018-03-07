@@ -6,9 +6,8 @@ import TopScores from './TopScores';
 import Loading from '../../styles/Loading';
 import CssGrid from '../../styles/CssGrid';
 
-//TODO: should we connect Dashboard to store and settle with shouldComponentUpdate or connect children,
-//to avoid unneccasary renders?
-//use Dashboard as a dum component, and map right invidually state as props to smart components?
+//TODO: This should be the container connected to redux.
+//all of the child comps will use the same schemas anyway.
 
 const Dashboard = ({ user }) => {
 

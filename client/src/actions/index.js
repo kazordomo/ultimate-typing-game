@@ -46,9 +46,9 @@ export const fetchWords = () => async dispatch => {
     }
 }
 
-export const fetchUserScores = (userId) => async dispatch => {
+export const fetchUserScores = () => async dispatch => {
     try {
-        const response = await fetch(`/api/scores/${userId}`);
+        const response = await fetch('/api/scores', { credentials: 'include' });
         const json = await response.json();
         dispatch({ type: FETCH_SCORE, payload: json });
     } catch(err) {
@@ -57,10 +57,10 @@ export const fetchUserScores = (userId) => async dispatch => {
 }
 
 //TODO: create and fetch the score, not the user.
-export const submitScore = (score, userId) => async dispatch => {
+export const submitScore = (score) => async dispatch => {
     try {
-        const response = fetch(`/api/scores/${userId}`, { 
-            // credentials: 'include', //remove?
+        const response = fetch(`/api/scores`, { 
+            credentials: 'include',
             method: 'post', 
             body: JSON.stringify(score),
             headers: { 'Content-Type': 'application/json' }
