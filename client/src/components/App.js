@@ -11,6 +11,7 @@ import SinglePlayer from './game/SinglePlayer';
 import MultiPlayer from './game/MultiPlayer';
 import Practice from './game/Practice';
 import Game from './game/Game';
+import AddEditWordList from './game/AddEditWordList';
 
 //TODO: implement proptypes to all components.
 
@@ -46,6 +47,7 @@ class App extends Component {
                     <Route exact path='/game/singleplayer' component={SinglePlayer} />
                     <Route exact path='/game/multiplayer' component={MultiPlayer} />
                     <Route exact path='/game/practice' component={Practice} />
+                    <Route exact path='/game/wordlist' component={AddEditWordList} />
                     {/* <Route path='/error' component={Error} /> */}
                 </Container>
             </BrowserRouter>

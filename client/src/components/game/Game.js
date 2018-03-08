@@ -6,6 +6,7 @@ import Wrapper from '../../styles/Wrapper';
 import Input from '../../styles/Input';
 import Loading from '../../styles/Loading';
 import styled from 'react-emotion';
+import wordList from '../../utils/words';
 import { fetchWords, submitScore } from '../../actions';
 
 const RestartButton = styled('button')`
@@ -64,9 +65,13 @@ class Game extends Component {
         this.resetGame = this.resetGame.bind(this);
     }
 
-    async componentDidMount() {
-        await this.props.fetchWords();
-        this.setState({ words: shuffleWords(this.props.words) });
+    // async componentDidMount() {
+    //     await this.props.fetchWords();
+    //     this.setState({ words: shuffleWords(this.props.words) });
+    // }
+
+    componentDidMount() {
+        this.setState({ words: shuffleWords(wordList)});
     }
 
     timer() {
@@ -83,7 +88,7 @@ class Game extends Component {
     resetGame() {
         textInput.value = this.props.gameOverMessage;
         // textInput.value = '';
-        this.initialState.words = shuffleWords(this.props.words); //reshuffle
+        this.initialState.words = shuffleWords(wordList); //reshuffle
         this.setState(this.initialState);
     }
 
@@ -136,9 +141,9 @@ class Game extends Component {
 
     render() {
         let { time, words } = this.state;
-        if(!this.props.words) {
-            return <Loading />
-        }
+        // if(!this.props.words) {
+        //     return <Loading />
+        // }
         return(
             <Wrapper>
                 <Row>

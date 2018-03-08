@@ -1,13 +1,11 @@
 //TODO. refactor into gameRoutes, statisticRoutes/leaderboardRoutes, userRoutes...
 const mongoose = require('mongoose');
 const requireLogin = require('../middlewares/requireLogin');
-const WordList = mongoose.model('words');
 const Score = mongoose.model('scores');
+const User = mongoose.model('users');
 
 
 module.exports = app => {
-    //TODO: requireLogin middleware    .
-    //use req.user
     app.get('/api/scores', requireLogin, async (req, res) => {
         const scores = await Score.find({ _user: req.user.id });
         res.send(scores);
@@ -26,8 +24,14 @@ module.exports = app => {
     });
 
     app.get('/api/wordList', async (req, res) => {
-        //TODO: create dynamic fetching for practice mode. standard will be used for single/multiplayer.
         const words = await WordList.findOne({ name: 'Standard' });
         res.send(words);
+    });
+
+    app.post('/api/wordList', requireLogin, (req, res) => {
+        const newWordList = req.body;
+        req.user.createdWordLists.push(newWordList);
+        req.user.save();
+        res.send(req.user.createdWordLists);
     });
 }

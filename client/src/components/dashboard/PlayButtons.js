@@ -25,7 +25,7 @@ const PlayButtons = () => {
         <div>
             <PlayButton goTo='singleplayer' mode='Singleplayer' />
             <PlayButton goTo='multiplayer' mode='Multiplayer' />
-            <PlayButton goTo='pracitce' mode='Practice' />
+            <PlayButton goTo='practice' mode='Practice' />
         </div>
     );
 }

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 const { Schema } = mongoose;
+const WordListSchema = require('./WordList');
 
 const userSchema = new Schema({
     facebook: {
@@ -24,13 +25,10 @@ const userSchema = new Schema({
         },
         password: String
     },
-    wpm: { type: Number, default: 0 },
-    correctWords: { type: Number, default: 0 },
-    wrongWords: { type: Number, default: 0 },
-    perfectGames: { type: Number, default: 0 },
     multiplayerWins: { type: Number, default: 0 },
     level: { type: Number, default: 0 },
-    createdDate: { type: Date, default: Date.now }
+    createdDate: { type: Date, default: Date.now },
+    createdWordLists: [WordListSchema]
 });
 
 

@@ -47,6 +47,7 @@ module.exports = app => {
     });
 
     app.get('/api/current_user', (req, res) => {
+        //TODO: think about pro/cons with exluding wordlists.
         res.send(req.user);
     });
 

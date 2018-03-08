@@ -2,10 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const wordListSchema = new Schema({
-    wordList: [{
-        name: String,
-        words: Array
-    }]
+    name: { type: String, required: true},
+    words: Array
 });
 
-mongoose.model('words', wordListSchema);
+module.exports = wordListSchema;
