@@ -1,4 +1,4 @@
-import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR, FETCH_WORD_LISTS, FETCH_WORD_LIST, FETCH_SCORE } from './types';
+import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR, FETCH_WORD_LISTS, FETCH_WORD_LIST, FETCH_ACTIVE_WORD_LIST, FETCH_SCORE } from './types';
 
 export const fetchUser = () => async dispatch => {
     try {
@@ -54,6 +54,10 @@ export const fetchWordList = (id) => async dispatch => {
     } catch(err) {
         return;
     }
+}
+
+export const fetchActiveWordList = (wordList) => dispatch => {
+    dispatch({ type: FETCH_ACTIVE_WORD_LIST, payload: wordList })
 }
 
 export const updateWordList = (wordList, id) => async dispatch => {

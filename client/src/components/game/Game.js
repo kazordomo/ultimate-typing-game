@@ -4,8 +4,8 @@ import ActiveWords from './templates/ActiveWords';
 import GameStats from './templates/GameStats';
 import Wrapper from '../../styles/Wrapper';
 import styled, { css } from 'react-emotion';
-import wordList from '../../utils/words';
-import { fetchWordLists, submitScore } from '../../actions';
+// import wordList from '../../utils/words';
+import { submitScore, fetchActiveWordList } from '../../actions';
 
 const inputStyle = css`
     width: 500px;
@@ -63,13 +63,10 @@ class Game extends Component {
         this.resetGame = this.resetGame.bind(this);
     }
 
-    // async componentDidMount() {
-    //     await this.props.fetchWordLists();
-    //     this.setState({ words: shuffleWords(this.props.words) });
-    // }
-
-    componentDidMount() {
-        this.setState({ words: shuffleWords(wordList)});
+    async componentDidMount() {
+        await this.props.fetchActiveWordList();
+        console.log(this.props);
+        this.setState({ words: shuffleWords(this.props.activeWordList)});
     }
 
     timer() {
@@ -86,7 +83,7 @@ class Game extends Component {
     resetGame() {
         this.refs.gameTextInput.value = this.props.gameOverMessage;
         // this.refs.gameTextInput.value = '';
-        this.initialState.words = shuffleWords(wordList); //reshuffle
+        this.initialState.words = shuffleWords(this.props.activeWordList); //reshuffle
         this.setState(this.initialState);
     }
 
@@ -133,7 +130,7 @@ class Game extends Component {
         if(this.refs.gameTextInput.value === '') {
             character = 0;
         }
-        //65 == a, 90 == z
+        //65 == a, 90 == z //TODO: should be able to use foreign keyCodes as well, when playing a self created wordlist.
         if(keyCode > 65 && keyCode < 90) {
             this.gameTextInputBorder(this.validateCharacter());
         }
@@ -175,8 +172,8 @@ class Game extends Component {
     }
 }
 
-function mapStateToProps({ wordLists: { words }, user}) {
-    return { words, user };
+function mapStateToProps({ user, activeWordList }) {
+    return { user, activeWordList };
 }
 
-export default connect(mapStateToProps, { fetchWordLists, submitScore })(Game);
+export default connect(mapStateToProps, { submitScore, fetchActiveWordList })(Game);

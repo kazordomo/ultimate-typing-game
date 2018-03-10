@@ -3,6 +3,7 @@ import authReducer from './authReducer';
 import errorReducer from './errorReducer';
 import wordsReducer from './wordsReducer';
 import scoreReducer from './scoreReducer';
+import activeWordListReducer from './activeWordListReducer';
 import { reducer as formReducer } from 'redux-form';
 
 export default combineReducers({
@@ -10,5 +11,6 @@ export default combineReducers({
     error: errorReducer,
     form: formReducer,
     wordLists: wordsReducer,
+    activeWordList: activeWordListReducer,
     scores: scoreReducer
 });

@@ -13,12 +13,12 @@ const linkStyle = css`
     text-align: center;
 `;
 
-export default ({ wordListObj: { name, _id } }) => {
+export default ({ wordListObj: { name, _id }, chooseWordList }) => {
     const href = `/game/wordList/edit/${_id}`;
     return(
         <div>
             <Link className={linkStyle} to={href} >{name}</Link>
-            <button>Choose List</button>
+            <button onClick={ () => chooseWordList() }>Choose List</button>
         </div>
     );
 }

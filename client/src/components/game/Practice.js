@@ -5,7 +5,7 @@ import Game from './Game';
 import WordListItem from './WordListItem';
 import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
-import { fetchWordLists } from '../../actions';
+import { fetchWordLists, fetchActiveWordList } from '../../actions';
 import { Link } from 'react-router-dom';
 
 
@@ -15,12 +15,24 @@ const ChooseListWrapper = styled('div')`
 
 class Practice extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            words: []
+        }
+    }
+
     async componentDidMount() {
-        await this.props.fetchWordLists();
+        await this.props.fetchWordLists(null);
+    }
+
+    handleChooseWordList(wordListObj) {
+        this.props.fetchActiveWordList(wordListObj);
     }
 
     renderWordLists() {
-        return this.props.wordLists.map(list => <WordListItem key={list._id} wordListObj={list}></WordListItem>);
+        return this.props.wordLists.map(list => <WordListItem key={list._id} chooseWordList={ () => this.handleChooseWordList(list.words) } wordListObj={list}></WordListItem>);
     }
 
     render() {
@@ -43,4 +55,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { fetchWordLists })(Practice);
+export default connect(mapStateToProps, { fetchWordLists, fetchActiveWordList })(Practice);
