@@ -60,12 +60,12 @@ class AddEditWordList extends Component {
 
     handleSaveList() {
         const { name, words } = this.state;
-        const { match, updateWordList, postWords } = this.props;
+        const { match, updateWordList, postWordList } = this.props;
         const wordList = { name, words };
         if(match.params.id) {
             updateWordList(wordList, match.params.id);
         } else {
-            postWords(wordList);
+            postWordList(wordList);
         }
     }
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ActiveWords from './templates/ActiveWords';
 import GameStats from './templates/GameStats';
 import Wrapper from '../../styles/Wrapper';
+import Loading from '../../styles/Loading';
 import styled, { css } from 'react-emotion';
 // import wordList from '../../utils/words';
 import { submitScore, fetchActiveWordList } from '../../actions';
@@ -34,13 +35,6 @@ const SPACE = 32;
 const RED = 'red';
 let character = 0;
 
-function shuffleWords(arr) {
-    return arr
-      .map(a => [Math.random(), a])
-      .sort((a, b) => a[0] - b[0])
-      .map(a => a[1])
-};
-
 class Game extends Component {
 
     constructor(props) {
@@ -49,7 +43,6 @@ class Game extends Component {
         this.initialState = {
             time: 5,
             keystrokes: 0,
-            words: [],
             correctWords: 0,
             incorrectWords: 0,
             gameOverMessage: '',
@@ -65,8 +58,6 @@ class Game extends Component {
 
     async componentDidMount() {
         await this.props.fetchActiveWordList();
-        console.log(this.props);
-        this.setState({ words: shuffleWords(this.props.activeWordList)});
     }
 
     timer() {
@@ -80,16 +71,15 @@ class Game extends Component {
         }, 1000);
     }
 
-    resetGame() {
-        this.refs.gameTextInput.value = this.props.gameOverMessage;
-        // this.refs.gameTextInput.value = '';
-        this.initialState.words = shuffleWords(this.props.activeWordList); //reshuffle
+    async resetGame() {
+        await this.props.fetchActiveWordList();
+        this.refs.gameTextInput.value = '';
         this.setState(this.initialState);
     }
 
     
     validateCharacter() {
-        return this.state.words[0].slice(0, character) === this.refs.gameTextInput.value.slice(0, character);
+        return this.props.activeWordList[0].slice(0, character) === this.refs.gameTextInput.value.slice(0, character);
     }
     
     gameTextInputBorder(validate) {
@@ -99,7 +89,8 @@ class Game extends Component {
     }
 
     handleOnKeyDown({ keyCode }) {
-        const { gameIsReady, keystrokes, correctWords, incorrectWords, words } = this.state;
+        // console.log(this.props.activeWordList);
+        const { gameIsReady, keystrokes, correctWords, incorrectWords } = this.state;
         this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
 
         if(gameIsReady) {
@@ -112,7 +103,7 @@ class Game extends Component {
             character--;
             this.validateCharacter() && this.gameTextInputBorder(true);
         } else if(keyCode === SPACE) {
-            if(this.refs.gameTextInput.value === words[0]) {
+            if(this.refs.gameTextInput.value === this.props.activeWordList[0]) {
                 this.setState({ correctWords: correctWords + 1 });
             } else {
                 this.setState({ incorrectWords: incorrectWords + 1 });
@@ -120,7 +111,7 @@ class Game extends Component {
             }
             this.refs.gameTextInput.value = '';
             character = 0;
-            words.shift();
+            this.props.activeWordList.shift();
         } else {
             character++;
         }
@@ -142,14 +133,14 @@ class Game extends Component {
     }
 
     render() {
-        let { time, words } = this.state;
-        // if(!this.props.words) {
-        //     return <Loading />
-        // }
+        let { time } = this.state;
+        if(!this.props.activeWordList) {
+            return <Loading />;
+        }
         return(
             <Wrapper>
                 <Row>
-                    <ActiveWords words={words} />
+                    <ActiveWords words={this.props.activeWordList} />
                 </Row>
                 <Row>
                     <input
