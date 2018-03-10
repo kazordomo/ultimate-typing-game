@@ -3,11 +3,16 @@ import { connect } from 'react-redux';
 import ActiveWords from './templates/ActiveWords';
 import GameStats from './templates/GameStats';
 import Wrapper from '../../styles/Wrapper';
-import Input from '../../styles/Input';
-import Loading from '../../styles/Loading';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import wordList from '../../utils/words';
-import { fetchWords, submitScore } from '../../actions';
+import { fetchWordLists, submitScore } from '../../actions';
+
+const inputStyle = css`
+    width: 500px;
+    padding: 15px;
+    background: #FFFFFF;
+    font-size: 20px;
+`;
 
 const RestartButton = styled('button')`
     float: right;
@@ -25,9 +30,8 @@ const Counter = styled('div')`
 
 const BACKSPACE = 8;
 const SPACE = 32;
-const ENTER = 13;
+// const ENTER = 13;
 const RED = 'red';
-let textInput = null;
 let character = 0;
 
 function shuffleWords(arr) {
@@ -36,12 +40,6 @@ function shuffleWords(arr) {
       .sort((a, b) => a[0] - b[0])
       .map(a => a[1])
 };
-
-function textInputBorder(validate) {
-    return validate ? 
-        textInput.style.border = '3px solid transparent' : 
-        textInput.style.border = `3px solid ${RED}`;
-}
 
 class Game extends Component {
 
@@ -66,7 +64,7 @@ class Game extends Component {
     }
 
     // async componentDidMount() {
-    //     await this.props.fetchWords();
+    //     await this.props.fetchWordLists();
     //     this.setState({ words: shuffleWords(this.props.words) });
     // }
 
@@ -86,19 +84,26 @@ class Game extends Component {
     }
 
     resetGame() {
-        textInput.value = this.props.gameOverMessage;
-        // textInput.value = '';
+        this.refs.gameTextInput.value = this.props.gameOverMessage;
+        // this.refs.gameTextInput.value = '';
         this.initialState.words = shuffleWords(wordList); //reshuffle
         this.setState(this.initialState);
     }
 
+    
     validateCharacter() {
-        return this.state.words[0].slice(0, character) === textInput.value.slice(0, character);
+        return this.state.words[0].slice(0, character) === this.refs.gameTextInput.value.slice(0, character);
     }
     
+    gameTextInputBorder(validate) {
+        return validate ? 
+            this.refs.gameTextInput.style.border = '3px solid transparent' : 
+            this.refs.gameTextInput.style.border = `3px solid ${RED}`;
+    }
+
     handleOnKeyDown({ keyCode }) {
         const { gameIsReady, keystrokes, correctWords, incorrectWords, words } = this.state;
-        textInput.value = textInput.value.replace(/\s+/g,'');
+        this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
 
         if(gameIsReady) {
             this.setState({ gameIsReady: false }, () => {
@@ -108,15 +113,15 @@ class Game extends Component {
         this.setState({ keystrokes: keystrokes + 1 });
         if(keyCode === BACKSPACE) {
             character--;
-            this.validateCharacter() && textInputBorder(true);
+            this.validateCharacter() && this.gameTextInputBorder(true);
         } else if(keyCode === SPACE) {
-            if(textInput.value === words[0]) {
+            if(this.refs.gameTextInput.value === words[0]) {
                 this.setState({ correctWords: correctWords + 1 });
             } else {
                 this.setState({ incorrectWords: incorrectWords + 1 });
-                textInputBorder(false);
+                this.gameTextInputBorder(false);
             }
-            textInput.value = '';
+            this.refs.gameTextInput.value = '';
             character = 0;
             words.shift();
         } else {
@@ -125,12 +130,12 @@ class Game extends Component {
     }
 
     handleOnKeyUp({ keyCode }) {        
-        if(textInput.value === '') {
+        if(this.refs.gameTextInput.value === '') {
             character = 0;
         }
         //65 == a, 90 == z
         if(keyCode > 65 && keyCode < 90) {
-            textInputBorder(this.validateCharacter());
+            this.gameTextInputBorder(this.validateCharacter());
         }
     }
 
@@ -150,15 +155,14 @@ class Game extends Component {
                     <ActiveWords words={words} />
                 </Row>
                 <Row>
-                    <Input 
-                        play 
+                    <input
                         type="text" 
-                        autoFocus 
+                        className={inputStyle}
+                        autoFocus
                         disabled={!time}
                         onKeyDown={this.handleOnKeyDown} 
                         onKeyUp={this.handleOnKeyUp} 
-                        innerRef={input => textInput = input} 
-                        />
+                        ref='gameTextInput' />
                         <button ref='scoreSubmitButton' onClick={this.handleSubmitScore}>Submit</button>
                     <RestartButton onClick={this.resetGame}>Restart</RestartButton>
                     <Counter>{time}</Counter>
@@ -171,8 +175,8 @@ class Game extends Component {
     }
 }
 
-function mapStateToProps({ wordsObj: { words }, user}) {
+function mapStateToProps({ wordLists: { words }, user}) {
     return { words, user };
 }
 
-export default connect(mapStateToProps, { fetchWords, submitScore })(Game);
+export default connect(mapStateToProps, { fetchWordLists, submitScore })(Game);

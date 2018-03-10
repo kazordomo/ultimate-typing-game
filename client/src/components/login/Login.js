@@ -31,7 +31,7 @@ class Login extends Component {
     }
 
     renderErrorMsg() {
-        const { error, clearError } = this.props;
+        const { error } = this.props;
         if(error) {
             return <ErrorMessage>{error.message}</ErrorMessage>;
         }

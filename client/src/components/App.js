@@ -47,7 +47,8 @@ class App extends Component {
                     <Route exact path='/game/singleplayer' component={SinglePlayer} />
                     <Route exact path='/game/multiplayer' component={MultiPlayer} />
                     <Route exact path='/game/practice' component={Practice} />
-                    <Route exact path='/game/wordlist' component={AddEditWordList} />
+                    <Route exact path='/game/wordlist/new' component={AddEditWordList} />
+                    <Route exact path='/game/wordlist/edit/:id' component={AddEditWordList} />
                     {/* <Route path='/error' component={Error} /> */}
                 </Container>
             </BrowserRouter>

@@ -1,4 +1,4 @@
-import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR, FETCH_WORDS, FETCH_SCORE, POST_WORDS } from './types';
+import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR, FETCH_WORD_LISTS, FETCH_WORD_LIST, FETCH_SCORE } from './types';
 
 export const fetchUser = () => async dispatch => {
     try {
@@ -36,17 +36,42 @@ export const clearError = () => dispatch => {
     dispatch({ type: CLEAR_ERROR, payload: null });
 }
 
-export const fetchWords = () => async dispatch => {
+export const fetchWordLists = () => async dispatch => {
     try {
-        const response = await fetch('/api/wordList');
+        const response = await fetch('/api/wordList', { credentials: 'include' });
         const json = await response.json();
-        dispatch({ type: FETCH_WORDS, payload: json });
+        dispatch({ type: FETCH_WORD_LISTS, payload: json });
     } catch(err) {
         return;
     }
 }
 
-export const postWords = (wordList) => async dispatch => {
+export const fetchWordList = (id) => async dispatch => {
+    try {
+        const response = await fetch(`/api/wordList/${id}`, { credentials: 'include' });
+        const json = await response.json();
+        dispatch({ type: FETCH_WORD_LIST, payload: json });
+    } catch(err) {
+        return;
+    }
+}
+
+export const updateWordList = (wordList, id) => async dispatch => {
+    try {
+        const response = fetch(`/api/wordList/${id}`, { 
+            credentials: 'include',
+            method: 'post', 
+            body: JSON.stringify(wordList),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const json = await response.json();
+        dispatch({ type: FETCH_WORD_LISTS, payload: json });
+    } catch(err) {
+        return;
+    }
+}
+
+export const postWordList = (wordList) => async dispatch => {
     try {
         const response = fetch('/api/wordList', { 
             credentials: 'include',
@@ -55,7 +80,7 @@ export const postWords = (wordList) => async dispatch => {
             headers: { 'Content-Type': 'application/json' }
         });
         const json = await response.json();
-        dispatch({ type: FETCH_WORDS, payload: json });
+        dispatch({ type: FETCH_WORD_LISTS, payload: json });
     } catch(err) {
         return;
     }

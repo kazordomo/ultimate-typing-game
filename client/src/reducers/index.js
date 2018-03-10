@@ -9,6 +9,6 @@ export default combineReducers({
     user: authReducer,
     error: errorReducer,
     form: formReducer,
-    wordsObj: wordsReducer,
+    wordLists: wordsReducer,
     scores: scoreReducer
 });

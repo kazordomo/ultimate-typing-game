@@ -23,10 +23,21 @@ module.exports = app => {
         res.send(newScore);
     });
 
-    app.get('/api/wordList', async (req, res) => {
-        const words = await WordList.findOne({ name: 'Standard' });
-        res.send(words);
+    app.get('/api/wordList', (req, res) => {
+        res.send(req.user.createdWordLists);
     });
+
+    app.get('/api/wordList/:id', (req, res) => {
+        const wordList = req.user.createdWordLists.find(list => list.id === req.params.id);
+        res.send(wordList);
+    });
+
+    app.post('/api/wordList/:id', requireLogin, (req, res) => {
+        let wordList = req.user.createdWordLists.find(list => list.id === req.params.id);
+        wordList.name = req.body.name;
+        wordList.words = req.body.words;
+        req.user.save();
+    })
 
     app.post('/api/wordList', requireLogin, (req, res) => {
         const newWordList = req.body;

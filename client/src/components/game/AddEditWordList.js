@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled, { css } from 'react-emotion';
-import { postWords } from '../../actions';
+import { postWordList, fetchWordList, updateWordList } from '../../actions';
 import Wrapper from '../../styles/Wrapper';
 import Button from '../../styles/Button';
 
@@ -21,6 +21,7 @@ const WordsContainer = styled('div')`
 
 const WordInList = styled('span')`
     margin-right: 10px;
+    font-size: 15px;
 `;
 
 
@@ -38,6 +39,15 @@ class AddEditWordList extends Component {
         this.handleSaveList = this.handleSaveList.bind(this);
     }
 
+    async componentDidMount() {
+        const { match, fetchWordList } = this.props;
+        if(match.params.id) {
+            await fetchWordList(match.params.id);
+            const { wordLists: { name, words } } = this.props;
+            this.setState({ name, words }, () => this.refs.nameTextInput.value = this.state.name);
+        }    
+    }
+
     handleAddListName() {
         this.setState({ name: this.refs.nameTextInput.value });
     }
@@ -50,8 +60,13 @@ class AddEditWordList extends Component {
 
     handleSaveList() {
         const { name, words } = this.state;
+        const { match, updateWordList, postWords } = this.props;
         const wordList = { name, words };
-        this.props.postWords(wordList)
+        if(match.params.id) {
+            updateWordList(wordList, match.params.id);
+        } else {
+            postWords(wordList);
+        }
     }
 
     renderWords() {
@@ -66,8 +81,8 @@ class AddEditWordList extends Component {
         return(
             <div>
                 <Wrapper>
-                <input type='text' ref='nameTextInput' onChange={this.handleAddListName} placeholder='List Name' className={inputStyle} />
-                    <input type='text' ref='wordTextInput' placeholder='Word To Add' className={inputStyle} />
+                    <input type='text' ref='nameTextInput' onChange={this.handleAddListName} placeholder='List Name' className={inputStyle} />
+                    <input type='text' ref='wordTextInput' onKeyPress={event => (event.key === 'Enter') && this.handleAddWord()}  placeholder='Word To Add' className={inputStyle} />
                     <div>
                         <Button onClick={this.handleAddWord}>Add Word</Button>
                     </div>
@@ -75,6 +90,7 @@ class AddEditWordList extends Component {
                         <Button onClick={this.handleSaveList}>Save List</Button>
                     </div>
                 </Wrapper>
+                <span>{this.state.name}</span>
                 <WordsContainer>
                     {this.renderWords()}
                 </WordsContainer>
@@ -83,4 +99,8 @@ class AddEditWordList extends Component {
     }
 }
 
-export default connect(null, { postWords })(AddEditWordList);
+function mapStateToProps({ wordLists }) {
+    return { wordLists };
+}
+
+export default connect(mapStateToProps, { postWordList, fetchWordList, updateWordList })(AddEditWordList);
