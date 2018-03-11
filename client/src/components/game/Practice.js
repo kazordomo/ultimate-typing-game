@@ -40,13 +40,16 @@ class Practice extends Component {
             return <Loading />
         }
         return (
-            <Wrapper>
-                <Game gameOverMessage='Practice gameover' />
-                <ChooseListWrapper>
-                    <Link to='/game/wordlist/new'>Add new list</Link>
-                </ChooseListWrapper>
-                {this.renderWordLists()}
-            </Wrapper>
+            <div>
+                <Link to='/dashboard'>Back to Dashboard</Link>
+                <Wrapper>
+                    <Game gameOverMessage='Practice gameover' />
+                    <ChooseListWrapper>
+                        <Link to='/game/wordlist/new'>Add new list</Link>
+                    </ChooseListWrapper>
+                    {this.renderWordLists()}
+                </Wrapper>
+            </div>
         );
     }
 }

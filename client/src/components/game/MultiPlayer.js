@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Versus extends Component {
     render() {
         return(
-            <div>Versus</div>
+            <div>
+                <Link to='/dashboard'>Back to Dashboard</Link>
+            </div>
         );
     }
 }
