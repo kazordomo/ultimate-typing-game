@@ -6,7 +6,9 @@ import Wrapper from '../../styles/Wrapper';
 import Loading from '../../styles/Loading';
 import styled, { css } from 'react-emotion';
 // import wordList from '../../utils/words';
-import { submitScore, fetchActiveWordList } from '../../actions';
+import { submitScore, fetchActiveWordList, fetchUser } from '../../actions';
+import { newPlayer, updatePlayerScores } from '../../player';
+
 
 const inputStyle = css`
     width: 500px;
@@ -41,7 +43,7 @@ class Game extends Component {
         super(props);
         
         this.initialState = {
-            time: 5,
+            time: 60,
             keystrokes: 0,
             correctWords: 0,
             incorrectWords: 0,
@@ -58,6 +60,25 @@ class Game extends Component {
 
     async componentDidMount() {
         await this.props.fetchActiveWordList();
+        await this.props.fetchUser();
+        if(this.props.multiplayer) {
+            newPlayer(this.props.user._id);
+            this.startMultiplayerGame();
+        }
+    }
+
+    startMultiplayerGame() {
+        const { user: { _id } } = this.props;
+
+        setInterval(() => {
+            updatePlayerScores({ user: _id, wpm: this.state.correctWords}, (err, data) => {
+                if(data.user === this.props.user._id) {
+                    this.props.userWpm(data.wpm);
+                } else {
+                    this.props.opponentWpm(data.wpm);
+                }
+            });
+        }, 2000);
     }
 
     timer() {
@@ -93,7 +114,7 @@ class Game extends Component {
         const { gameIsReady, keystrokes, correctWords, incorrectWords } = this.state;
         this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
 
-        if(gameIsReady) {
+        if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
             this.setState({ gameIsReady: false }, () => {
                 this.timer();
             });
@@ -167,4 +188,4 @@ function mapStateToProps({ user, activeWordList }) {
     return { user, activeWordList };
 }
 
-export default connect(mapStateToProps, { submitScore, fetchActiveWordList })(Game);
+export default connect(mapStateToProps, { submitScore, fetchActiveWordList, fetchUser })(Game);

@@ -1,16 +1,23 @@
-const io = require('socket.io')();
+const socketIO = require('socket.io');
 
-//connect to client
-io.on('connection', client => {
-    //client subscription. func closure for every client
-    client.on('subscribeToVersus', multiplayerGame => {
-        //use a timer interval (multiplayerGame will act as it for now) to test in client
-        console.log(`client is subscribing to timer with interval ${multiplayerGame}`);
-        setInterval(() =>{
-            client.emit('versus', new Date());
-        }, multiplayerGame);
-    })
-})
-
-const port = 8000;
-io.listen(port);
+module.exports = (server) => {
+    const players = {};
+    const io = socketIO(server);
+    io.on('connection', socket => {
+        socket.on('new player', state => {
+            console.log('New player jouned whit state: ' + state);
+            //TODO: the key will be the id of the user. if we are going to display the user name, we will need to add it to the state and use state._id as the key.
+            players[state] = state;
+            // io.emit('update players');
+        });
+        socket.on('update score', data => {
+            
+            io.emit('update score', data);
+        });
+        socket.on('disconnect', () => { 
+            // delete player[socket.id]; 
+            console.log('remove user'); 
+            // io.emit('update players');
+        });
+    });
+}
