@@ -12,9 +12,10 @@ const Percent = styled('div')`
     background-color: #20C20E;
 `;
 
-export default ({ wpm }) => {
+export default ({ player: { name, wpm } }) => {
     return (
         <TrackerWrapper>
+            <div>{name}</div>
             <Percent width={wpm} />
         </TrackerWrapper>
     );

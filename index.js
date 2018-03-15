@@ -32,4 +32,4 @@ const port = process.env.PORT || 5000;
 app.set('port', port);
 server.listen(port);
 
-require('./services/websocket')(server);
+require('./services/socket')(server);

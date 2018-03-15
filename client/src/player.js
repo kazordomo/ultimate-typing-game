@@ -1,9 +1,10 @@
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:5000');
 
-function newPlayer(playerId) {
-    //TODO: send in username/user.id instead of socket.id.
-    socket.emit('new player', playerId);
+function newPlayer(player, cb) {
+    socket.emit('subscribe to room');
+    socket.on('new player', playerJoined => cb(null, playerJoined));
+    socket.emit('new player', player);
 }
 
 function updatePlayerScores(data, cb) {

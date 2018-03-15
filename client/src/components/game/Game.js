@@ -62,14 +62,17 @@ class Game extends Component {
         await this.props.fetchActiveWordList();
         await this.props.fetchUser();
         if(this.props.multiplayer) {
-            newPlayer(this.props.user._id);
             this.startMultiplayerGame();
         }
     }
 
     startMultiplayerGame() {
-        const { user: { _id } } = this.props;
-
+        const { user: { _id, local: { username } } } = this.props;
+        newPlayer(this.props.user, (err, playerName) => {
+            if(username !== playerName) {
+                this.props.opponentName(playerName);        
+            }
+        });
         setInterval(() => {
             updatePlayerScores({ user: _id, wpm: this.state.correctWords}, (err, data) => {
                 if(data.user === this.props.user._id) {
