@@ -48,8 +48,7 @@ class Game extends Component {
             correctWords: 0,
             incorrectWords: 0,
             gameOverMessage: '',
-            gameIsReady: true,
-            gameOver: false
+            gameIsReady: false
         }
         this.state = this.initialState;
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
@@ -63,6 +62,8 @@ class Game extends Component {
         await this.props.fetchUser();
         if(this.props.multiplayer) {
             this.startMultiplayerGame();
+        } else {
+            this.setState({ gameIsReady: true });
         }
     }
 
@@ -90,7 +91,7 @@ class Game extends Component {
             if(this.state.time === 0) {
                 clearInterval(start);
                 this.refs.scoreSubmitButton.click();
-                this.setState({ gameOverMessage: this.props.gameOverMessage, gameOver: true });
+                this.setState({ gameOverMessage: this.props.gameOverMessage, gameIsReady: false });
             }
         }, 1000);
     }
@@ -113,11 +114,10 @@ class Game extends Component {
     }
 
     handleOnKeyDown({ keyCode }) {
-        // console.log(this.props.activeWordList);
         const { gameIsReady, keystrokes, correctWords, incorrectWords } = this.state;
         this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
 
-        if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
+        if(gameIsReady && (keyCode > 65 && keyCode < 90) && !this.props.multiplayer) {
             this.setState({ gameIsReady: false }, () => {
                 this.timer();
             });
@@ -157,7 +157,7 @@ class Game extends Component {
     }
 
     render() {
-        let { time } = this.state;
+        let { time, gameIsReady } = this.state;
         if(!this.props.activeWordList) {
             return <Loading />;
         }
@@ -171,11 +171,11 @@ class Game extends Component {
                         type="text" 
                         className={inputStyle}
                         autoFocus
-                        disabled={!time}
+                        disabled={!gameIsReady}
                         onKeyDown={this.handleOnKeyDown} 
                         onKeyUp={this.handleOnKeyUp} 
                         ref='gameTextInput' />
-                        <button ref='scoreSubmitButton' onClick={this.handleSubmitScore}>Submit</button>
+                    <button ref='scoreSubmitButton' onClick={this.handleSubmitScore}>Submit</button>
                     <RestartButton onClick={this.resetGame}>Restart</RestartButton>
                     <Counter>{time}</Counter>
                 </Row>

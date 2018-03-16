@@ -35,7 +35,7 @@ module.exports = (server) => {
         });
 
         socket.on('update score', data => {
-            console.log(`update in room: room-${roomno}`);
+            // console.log(`update in room: room-${roomno}`);
             io.sockets.in(`room-${roomno}`).emit('update score', data);
         });
 
