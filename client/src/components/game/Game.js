@@ -6,9 +6,7 @@ import Wrapper from '../../styles/Wrapper';
 import Loading from '../../styles/Loading';
 import styled, { css } from 'react-emotion';
 // import wordList from '../../utils/words';
-import { submitScore, fetchActiveWordList, fetchUser } from '../../actions';
-import { newPlayer, updatePlayerScores, unsubscribe } from '../../player';
-
+import {fetchActiveWordList, fetchUser } from '../../actions';
 
 const inputStyle = css`
     width: 500px;
@@ -43,59 +41,22 @@ class Game extends Component {
         super(props);
         
         this.initialState = {
-            time: 60,
+            time: 5,
             keystrokes: 0,
             correctWords: 0,
             incorrectWords: 0,
             gameOverMessage: '',
-            gameIsReady: false
+            gameIsReady: true
         }
         this.state = this.initialState;
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
         this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
-        this.handleSubmitScore = this.handleSubmitScore.bind(this);
         this.resetGame = this.resetGame.bind(this);
-        this.startUpdateInterval = null;
     }
 
     async componentDidMount() {
         await this.props.fetchActiveWordList();
         await this.props.fetchUser();
-        if(this.props.multiplayer) {
-            this.startMultiplayerGame();
-        } else {
-            this.setState({ gameIsReady: true });
-        }
-    }
-
-    componentWillUnmount() {
-        this.startUpdateInterval && clearInterval(this.startUpdateInterval);
-        unsubscribe();
-    }
-
-    startMultiplayerGame() {
-        const { user: { _id, local: { username } } } = this.props;
-        newPlayer(this.props.user, (err, playerName) => {
-            if(username !== playerName) {
-                this.props.opponentName(playerName);        
-            }
-        });
-        this.startUpdateInterval = setInterval(() => {
-            //TODO: check the security of this, we do not want players to be able to send their own data to the server.
-            //TODO: refactor. we do not want to update the state if the game is not in the play (player leaves the component or room).
-            updatePlayerScores({ user: _id, wpm: this.state.correctWords}, (err, data) => {
-                if(data.gameIsReady) {
-                    this.setState({ gameIsReady: true });
-                } else {
-                    this.setState({ gameIsReady: false });
-                }
-                if(data.user === this.props.user._id) {
-                    this.props.userWpm(data.wpm);
-                } else {
-                    this.props.opponentWpm(data.wpm);
-                }
-            });
-        }, 1000); //5000
     }
 
     timer() {
@@ -103,7 +64,7 @@ class Game extends Component {
             this.setState({ time: this.state.time - 1});
             if(this.state.time === 0) {
                 clearInterval(start);
-                this.refs.scoreSubmitButton.click();
+                !this.props.practice && this.refs.scoreSubmitButton.click();
                 this.setState({ gameOverMessage: this.props.gameOverMessage, gameIsReady: false });
             }
         }, 1000);
@@ -114,7 +75,6 @@ class Game extends Component {
         this.refs.gameTextInput.value = '';
         this.setState(this.initialState);
     }
-
     
     validateCharacter() {
         return this.props.activeWordList[0].slice(0, character) === this.refs.gameTextInput.value.slice(0, character);
@@ -124,10 +84,6 @@ class Game extends Component {
         return validate ? 
             this.refs.gameTextInput.style.border = '3px solid transparent' : 
             this.refs.gameTextInput.style.border = `3px solid ${RED}`;
-    }
-
-    renderWaitingForPlayer() {
-        return this.state.gameIsReady ? '' : 'Waiting on opponent...';
     }
 
     handleOnKeyDown({ keyCode }) {
@@ -168,19 +124,14 @@ class Game extends Component {
         }
     }
 
-    handleSubmitScore() {
-        const { correctWords, incorrectWords, keystrokes } = this.state; 
-        this.props.submitScore({ correctWords, incorrectWords, keystrokes });
-    }
-
     render() {
-        let { time, gameIsReady } = this.state;
         if(!this.props.activeWordList) {
             return <Loading />;
         }
+        let { time, gameIsReady, correctWords, incorrectWords, keystrokes } = this.state;
+        let score = { correctWords, incorrectWords, keystrokes };
         return(
             <Wrapper>
-                {this.props.multiplayer && this.renderWaitingForPlayer()}
                 <Row>
                     <ActiveWords words={this.props.activeWordList} />
                 </Row>
@@ -189,11 +140,11 @@ class Game extends Component {
                         type="text" 
                         className={inputStyle}
                         autoFocus
-                        disabled={!gameIsReady}
+                        disabled={!true}
                         onKeyDown={this.handleOnKeyDown} 
                         onKeyUp={this.handleOnKeyUp} 
                         ref='gameTextInput' />
-                    <button ref='scoreSubmitButton' onClick={this.handleSubmitScore}>Submit</button>
+                    <button ref='scoreSubmitButton' onClick={() => this.props.submitScore(score)}>Submit</button>
                     <RestartButton onClick={this.resetGame}>Restart</RestartButton>
                     <Counter>{time}</Counter>
                 </Row>
@@ -209,4 +160,4 @@ function mapStateToProps({ user, activeWordList }) {
     return { user, activeWordList };
 }
 
-export default connect(mapStateToProps, { submitScore, fetchActiveWordList, fetchUser })(Game);
+export default connect(mapStateToProps, {fetchActiveWordList, fetchUser })(Game);

@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { submitScore } from '../../actions';
 import Game from './Game';
 import { Link } from 'react-router-dom';
 
-const SinglePlayer = () => {
-    return (
-        <div>
-            <Link to='/dashboard'>Back to Dashboard</Link>
-            <Game gameOverMessage='SingplePlayer gameover' />
-        </div>
-    );
+class SinglePlayer extends Component {
+
+    handleSubmitScore({ correctWords, incorrectWords, keystrokes }) {
+        this.props.submitScore({ correctWords, incorrectWords, keystrokes });
+    }
+
+    render() {
+        return (
+            <div>
+                <Link to='/dashboard'>Back to Dashboard</Link>
+                <Game 
+                    gameOverMessage='SingplePlayer gameover' 
+                    submitScore={this.handleSubmitScore.bind(this)}/>
+            </div>
+        );
+    }
 }
 
-export default SinglePlayer;
+function mapStateToProps({ submitScore }) {
+    return { submitScore };
+}
+
+export default connect(mapStateToProps, { submitScore })(SinglePlayer);

@@ -28,10 +28,9 @@ module.exports = (server) => {
         });
 
         socket.on('new player', user => {
-            //TODO: the key will be the id of the user. if we are going to display the user name, we will need to add it to the state and use state._id as the key.
             console.log('new user: ' + user.local.username);
             players[socket.id] = user.local.username;
-            io.sockets.in(`room-${roomno}`).emit('new player', players[socket.id]);
+            // io.sockets.in(`room-${roomno}`).emit('new player', players[socket.id]); //use this to dispaly players.
             // io.emit('update players');
         });
 
@@ -44,6 +43,11 @@ module.exports = (server) => {
                 gameIsReady = false;
             }
             data.gameIsReady = gameIsReady;
+            io.sockets.in(`room-${roomno}`).emit('get score', data);
+        });
+
+        socket.on('submit score', data => {
+            console.log(data);
             io.sockets.in(`room-${roomno}`).emit('get score', data);
         });
 

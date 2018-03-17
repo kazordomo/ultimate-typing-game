@@ -43,7 +43,7 @@ class Practice extends Component {
             <div>
                 <Link to='/dashboard'>Back to Dashboard</Link>
                 <Wrapper>
-                    <Game gameOverMessage='Practice gameover' />
+                    <Game practice={true} gameOverMessage='Practice gameover' />
                     <ChooseListWrapper>
                         <Link to='/game/wordlist/new'>Add new list</Link>
                     </ChooseListWrapper>
