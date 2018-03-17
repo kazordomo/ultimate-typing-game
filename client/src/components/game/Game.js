@@ -7,7 +7,7 @@ import Loading from '../../styles/Loading';
 import styled, { css } from 'react-emotion';
 // import wordList from '../../utils/words';
 import { submitScore, fetchActiveWordList, fetchUser } from '../../actions';
-import { newPlayer, updatePlayerScores } from '../../player';
+import { newPlayer, updatePlayerScores, unsubscribe } from '../../player';
 
 
 const inputStyle = css`
@@ -55,6 +55,7 @@ class Game extends Component {
         this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
         this.handleSubmitScore = this.handleSubmitScore.bind(this);
         this.resetGame = this.resetGame.bind(this);
+        this.startUpdateInterval = null;
     }
 
     async componentDidMount() {
@@ -67,6 +68,11 @@ class Game extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.startUpdateInterval && clearInterval(this.startUpdateInterval);
+        unsubscribe();
+    }
+
     startMultiplayerGame() {
         const { user: { _id, local: { username } } } = this.props;
         newPlayer(this.props.user, (err, playerName) => {
@@ -74,15 +80,22 @@ class Game extends Component {
                 this.props.opponentName(playerName);        
             }
         });
-        setInterval(() => {
+        this.startUpdateInterval = setInterval(() => {
+            //TODO: check the security of this, we do not want players to be able to send their own data to the server.
+            //TODO: refactor. we do not want to update the state if the game is not in the play (player leaves the component or room).
             updatePlayerScores({ user: _id, wpm: this.state.correctWords}, (err, data) => {
+                if(data.gameIsReady) {
+                    this.setState({ gameIsReady: true });
+                } else {
+                    this.setState({ gameIsReady: false });
+                }
                 if(data.user === this.props.user._id) {
                     this.props.userWpm(data.wpm);
                 } else {
                     this.props.opponentWpm(data.wpm);
                 }
             });
-        }, 2000);
+        }, 1000); //5000
     }
 
     timer() {
@@ -113,11 +126,15 @@ class Game extends Component {
             this.refs.gameTextInput.style.border = `3px solid ${RED}`;
     }
 
+    renderWaitingForPlayer() {
+        return this.state.gameIsReady ? '' : 'Waiting on opponent...';
+    }
+
     handleOnKeyDown({ keyCode }) {
         const { gameIsReady, keystrokes, correctWords, incorrectWords } = this.state;
         this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
 
-        if(gameIsReady && (keyCode > 65 && keyCode < 90) && !this.props.multiplayer) {
+        if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
             this.setState({ gameIsReady: false }, () => {
                 this.timer();
             });
@@ -163,6 +180,7 @@ class Game extends Component {
         }
         return(
             <Wrapper>
+                {this.props.multiplayer && this.renderWaitingForPlayer()}
                 <Row>
                     <ActiveWords words={this.props.activeWordList} />
                 </Row>

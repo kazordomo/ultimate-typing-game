@@ -10,6 +10,7 @@ module.exports = (server) => {
 
     const players = {};
     let roomno = 1;
+    let gameIsReady = false;
     const io = socketIO(server);
     io.on('connection', socket => {
 
@@ -20,8 +21,8 @@ module.exports = (server) => {
             socket.join(`room-${roomno}`);
         });
 
-        socket.on('unsubscribe', room => {
-            console.log('leaving room: ' + room);
+        socket.on('unsubscribe', () => {
+            console.log('leaving room: ' + roomno);
             socket.leave(`room-${roomno}`);
             delete players[socket.id]; //?
         });
@@ -35,12 +36,20 @@ module.exports = (server) => {
         });
 
         socket.on('update score', data => {
-            // console.log(`update in room: room-${roomno}`);
-            io.sockets.in(`room-${roomno}`).emit('update score', data);
+            //TODO: use a stream/buffer to send back the data? a bit laggy atm.
+            let playersInRoom = Object.keys(io.sockets.sockets);
+            if(playersInRoom.length === 2) {
+                gameIsReady = true;
+            } else {
+                gameIsReady = false;
+            }
+            data.gameIsReady = gameIsReady;
+            io.sockets.in(`room-${roomno}`).emit('get score', data);
         });
 
         socket.on('disconnect', () => { 
-            console.log('removed user: ' + players[socket.id]); 
+            console.log('removed user: ' + players[socket.id]);
+            socket.leave(`room-${roomno}`);
             delete players[socket.id]; 
             // io.emit('update players');
         });

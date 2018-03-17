@@ -8,9 +8,13 @@ function newPlayer(player, cb) {
 }
 
 function updatePlayerScores(data, cb) {
-    socket.on('update score', data => cb(null, data));
+    socket.on('get score', data => cb(null, data));
     socket.emit('update score', data);
 }
 
+function unsubscribe() {
+    socket.emit('unsubscribe');
+}
 
-export { newPlayer, updatePlayerScores };
+
+export { newPlayer, updatePlayerScores, unsubscribe };
