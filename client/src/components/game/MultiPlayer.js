@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Game from './Game';
+import WaitingOnOpponent from './WaitingOnOpponent';
 // import WpmTracker from './WpmTracker';
 import Wrapper from '../../styles/Wrapper';
 import { submitScore, fetchUser } from '../../actions';
-import { newPlayer, getPlayerScores, unsubscribe } from '../../player';
+import { newPlayer, updatePlayerScores, unsubscribe } from '../../player';
 
 class Multiplayer extends Component {
 
@@ -20,7 +21,10 @@ class Multiplayer extends Component {
             opponent: {
                 name: 'Opponent',
                 wpm: 0
-            }
+            },
+            gameIsReady: false,
+            waitingOnOpponentText: '-'
+
         };
         this.handleSubmitScore = this.handleSubmitScore.bind(this);
     }
@@ -38,34 +42,48 @@ class Multiplayer extends Component {
         unsubscribe();
     }
 
+    //TODO: get the counter from server and send it to the game component.
+
     startMultiplayerGame() {
         // const { user: { _id, local: { username } } } = this.props;
-        newPlayer(this.props.user);
-    }
-
-    countPlayerScores(wpm) {
-        getPlayerScores({ user: this.props.user._id, wpm }, (err, data) => {
-            if(data.user === this.props.user._id) {
-                const user = this.state.user;
-                user.wpm = data.wpm;
-                this.setState({ user });
-            } else {
-                const opponent = this.state.opponent;
-                opponent.wpm = data.wpm;
-                this.setState({ opponent });
+        newPlayer(this.props.user, (err, gameIsReady) => {
+            if(gameIsReady) {
+                let timer = 3;
+                let countDown = setInterval(() => {
+                    this.setState({ waitingOnOpponentText: timer })
+                    if(timer === 0) {
+                        this.setState({ gameIsReady }, () => {
+                            return clearInterval(countDown);
+                        })
+                    }
+                    timer--;
+                }, 1000)
             }
         });
     }
 
+    renderWaitingForPlayer() {
+        return this.state.gameIsReady ? '' : 'Waiting on opponent...';
+    }
 
-    // renderWaitingForPlayer() {
-    //     return this.state.gameIsReady ? '' : 'Waiting on opponent...';
-    // }
-
-    
+    renderGameField() {
+        //return game directly to not see the countdown each time..
+        // return <Game 
+        //             multiplayer={true}
+        //             submitScore={this.handleSubmitScore}
+        //             gameIsReady={this.state.gameIsReady}/>
+        if(!this.state.gameIsReady) {
+            return <WaitingOnOpponent text={this.state.waitingOnOpponentText} />;
+        } else {
+            return <Game 
+                        multiplayer={true}
+                        submitScore={this.handleSubmitScore}
+                        updateScore={() => updatePlayerScores()}
+                        gameIsReady={this.state.gameIsReady}/>
+        }
+    }
 
     handleSubmitScore({ correctWords, incorrectWords, keystrokes }) {
-        this.countPlayerScores(correctWords);
         // this.props.submitScore({ correctWords, incorrectWords, keystrokes });
     }
 
@@ -76,9 +94,7 @@ class Multiplayer extends Component {
                 <Wrapper>
                     {this.state.user.wpm}
                     {this.state.opponent.wpm}
-                    <Game 
-                        multiplayer 
-                        submitScore={this.handleSubmitScore}/>
+                    {this.renderGameField()}
                 </Wrapper>
             </div>
         );

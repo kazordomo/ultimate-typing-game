@@ -11,6 +11,7 @@ module.exports = (server) => {
     const players = {};
     let roomno = 1;
     let gameIsReady = false;
+    let counter = 60;
     const io = socketIO(server);
     io.on('connection', socket => {
 
@@ -29,7 +30,13 @@ module.exports = (server) => {
 
         socket.on('new player', user => {
             console.log('new user: ' + user.local.username);
+            let playersInRoom = Object.keys(io.sockets.sockets);
             players[socket.id] = user.local.username;
+            if(playersInRoom.length === 2) {
+                io.sockets.in(`room-${roomno}`).emit('new player', true);                
+            } else {
+                io.sockets.in(`room-${roomno}`).emit('new player', false);
+            }
             // io.sockets.in(`room-${roomno}`).emit('new player', players[socket.id]); //use this to dispaly players.
             // io.emit('update players');
         });
@@ -37,18 +44,12 @@ module.exports = (server) => {
         socket.on('update score', data => {
             //TODO: use a stream/buffer to send back the data? a bit laggy atm.
             let playersInRoom = Object.keys(io.sockets.sockets);
-            if(playersInRoom.length === 2) {
-                gameIsReady = true;
-            } else {
-                gameIsReady = false;
-            }
-            data.gameIsReady = gameIsReady;
-            io.sockets.in(`room-${roomno}`).emit('get score', data);
-        });
-
-        socket.on('submit score', data => {
-            console.log(data);
-            io.sockets.in(`room-${roomno}`).emit('get score', data);
+            let interval = setInterval(() => {
+                data.counter = counter;
+                console.log(data);
+                io.sockets.in(`room-${roomno}`).emit('get score', data);
+                counter--;
+            }, 1000);
         });
 
         socket.on('disconnect', () => { 

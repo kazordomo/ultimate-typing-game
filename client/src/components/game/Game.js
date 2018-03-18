@@ -7,6 +7,7 @@ import Loading from '../../styles/Loading';
 import styled, { css } from 'react-emotion';
 // import wordList from '../../utils/words';
 import {fetchActiveWordList, fetchUser } from '../../actions';
+import { updatePlayerScores } from '../../player';
 
 const inputStyle = css`
     width: 500px;
@@ -41,7 +42,7 @@ class Game extends Component {
         super(props);
         
         this.initialState = {
-            time: 5,
+            time: 10,
             keystrokes: 0,
             correctWords: 0,
             incorrectWords: 0,
@@ -57,11 +58,17 @@ class Game extends Component {
     async componentDidMount() {
         await this.props.fetchActiveWordList();
         await this.props.fetchUser();
+        if(this.props.multiplayer) { //TODO: set gameisready according to multiplayer comp.
+            updatePlayerScores({wpm: this.state.correctWords, user: this.props.user._id} ,(err, data) => {
+                console.log(data);
+                this.setState({ time: data.counter });
+            });
+        }
     }
 
     timer() {
         let start = setInterval(() => {
-            this.setState({ time: this.state.time - 1});
+            // this.setState({ time: this.state.time - 1});
             if(this.state.time === 0) {
                 clearInterval(start);
                 !this.props.practice && this.refs.scoreSubmitButton.click();
@@ -90,11 +97,11 @@ class Game extends Component {
         const { gameIsReady, keystrokes, correctWords, incorrectWords } = this.state;
         this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
 
-        if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
-            this.setState({ gameIsReady: false }, () => {
-                this.timer();
-            });
-        }
+        // if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
+        //     this.setState({ gameIsReady: false }, () => {
+        //         this.timer();
+        //     });
+        // }
         this.setState({ keystrokes: keystrokes + 1 });
         if(keyCode === BACKSPACE) {
             character--;
