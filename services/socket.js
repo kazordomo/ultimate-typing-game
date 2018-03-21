@@ -37,19 +37,20 @@ module.exports = (server) => {
             io.sockets.in(`room-${roomno}`).emit('player is ready', players);
         })
 
-        socket.on('update score', data => {
+        socket.on('timer', () => {
             let counter = 60;
             interval = setInterval(() => {
+                socket.broadcast.emit('get time', counter);
                 if(counter === 0) {
                     clearInterval(interval);
                     io.sockets.in(`room-${roomno}`).emit('final score', data); //?
                 }
-                console.log(data);
-                data.counter = counter;
-                data.player = players[socket.id];
-                io.sockets.in(`room-${roomno}`).emit('get score', data);
                 counter--;
             }, 1000);
+        });
+
+        socket.on('update wpm', wpm => {
+            socket.broadcast.emit('get wpm', wpm);            
         });
 
         socket.on('disconnect', () => { 

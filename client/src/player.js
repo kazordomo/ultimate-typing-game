@@ -12,12 +12,15 @@ function playerIsReady(cb) {
     socket.emit('player is ready');
 }
 
-function updatePlayerScores(data, cb) {
-    socket.on('get score', data => cb(null, data));
-    socket.emit('update score', data);    
-    // setInterval(() => {
-    //     socket.emit('update score', data);
-    // }, 1000);
+function updateWpm(wpm, cb) {
+    socket.on('get wpm', data => cb(null, data));
+    // socket.emit('update wpm', wpm);    
+    socket.emit('update wpm', wpm);
+}
+
+function updateTime(cb) {
+    socket.on('get time', time => cb(null, time));
+    socket.emit('timer');
 }
 
 function unsubscribe() {
@@ -25,4 +28,4 @@ function unsubscribe() {
 }
 
 
-export { newPlayer, playerIsReady, updatePlayerScores, unsubscribe };
+export { newPlayer, playerIsReady, updateTime, updateWpm, unsubscribe };

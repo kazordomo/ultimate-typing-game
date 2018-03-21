@@ -7,7 +7,7 @@ import Loading from '../../styles/Loading';
 import styled, { css } from 'react-emotion';
 // import wordList from '../../utils/words';
 import {fetchActiveWordList, fetchUser } from '../../actions';
-import { updatePlayerScores } from '../../player';
+import { updateTime } from '../../player';
 
 const inputStyle = css`
     width: 500px;
@@ -60,10 +60,13 @@ class Game extends Component {
         await this.props.fetchUser();
         if(this.props.multiplayer) {
             //TODO: if we dynaically wanna keep track of the players wpm, we need to ping our server each second with the wpm as well...
-            updatePlayerScores({wpm: this.state.correctWords} ,(err, data) => {
-                console.log(data);
-                this.setState({ time: data.counter });
+            updateTime((err, time) => {
+                console.log(time);
+                this.setState({ time });
             });
+            let updateScore = setInterval(() => {
+                this.props.updatePlayersWpm(this.state.correctWords);
+            }, 1000);
         }
     }
 

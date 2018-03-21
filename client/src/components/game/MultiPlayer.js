@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Game from './Game';
 import WaitingOnOpponent from './WaitingOnOpponent';
-// import WpmTracker from './WpmTracker';
+import WpmTracker from './WpmTracker';
 import Wrapper from '../../styles/Wrapper';
 import { submitScore, fetchUser } from '../../actions';
-import { newPlayer, playerIsReady, updatePlayerScores, unsubscribe } from '../../player';
+import { newPlayer, playerIsReady, updateWpm, unsubscribe } from '../../player';
 
 class Multiplayer extends Component {
 
@@ -28,6 +28,7 @@ class Multiplayer extends Component {
         };
         this.handleSubmitScore = this.handleSubmitScore.bind(this);
         this.handlePlayerIsReady = this.handlePlayerIsReady.bind(this);
+        this.updatePlayersWpm = this.updatePlayersWpm.bind(this);
     }
 
     async componentDidMount() {
@@ -73,6 +74,16 @@ class Multiplayer extends Component {
         });
     }
 
+    updatePlayersWpm(wpm) {
+        let user = this.state.user;
+        user.wpm = wpm;
+        updateWpm(wpm, (err, data) => {
+            let opponent = this.state.opponent;
+            opponent.wpm = data;
+            this.setState({ opponent, user });
+        })
+    }
+
     renderWaitingForPlayer() {
         return this.state.gameIsReady ? '' : 'Waiting on opponent...';
     }
@@ -91,7 +102,7 @@ class Multiplayer extends Component {
             return <Game 
                         multiplayer={true}
                         submitScore={this.handleSubmitScore}
-                        updateScore={() => updatePlayerScores()}
+                        updatePlayersWpm={this.updatePlayersWpm}
                         gameIsReady={this.state.gameIsReady}/>
         }
     }
@@ -109,6 +120,8 @@ class Multiplayer extends Component {
                     {this.state.user.wpm}
                     {this.state.opponent.wpm}
                     {this.renderGameField()}
+                    <WpmTracker player={this.state.user} />
+                    <WpmTracker player={this.state.opponent} />
                 </Wrapper>
             </div>
         );
