@@ -6,7 +6,7 @@ import WaitingOnOpponent from './WaitingOnOpponent';
 // import WpmTracker from './WpmTracker';
 import Wrapper from '../../styles/Wrapper';
 import { submitScore, fetchUser } from '../../actions';
-import { newPlayer, updatePlayerScores, unsubscribe } from '../../player';
+import { newPlayer, playerIsReady, updatePlayerScores, unsubscribe } from '../../player';
 
 class Multiplayer extends Component {
 
@@ -27,6 +27,7 @@ class Multiplayer extends Component {
 
         };
         this.handleSubmitScore = this.handleSubmitScore.bind(this);
+        this.handlePlayerIsReady = this.handlePlayerIsReady.bind(this);
     }
 
     async componentDidMount() {
@@ -34,30 +35,40 @@ class Multiplayer extends Component {
         let user = {};
         user.name = this.props.user.local.username;
         user.wpm = 0;
-        this.setState({ user });
-        this.startMultiplayerGame();
+        newPlayer(this.props.user, (err, player) => {
+            let opponent = this.state.opponent;
+            opponent.name = player.name;
+            this.setState({ opponent, user }, () => console.log(this.state));
+        });
     }
 
     componentWillUnmount() {
         unsubscribe();
     }
 
-    //TODO: get the counter from server and send it to the game component.
-
     startMultiplayerGame() {
-        // const { user: { _id, local: { username } } } = this.props;
-        newPlayer(this.props.user, (err, gameIsReady) => {
-            if(gameIsReady) {
-                let timer = 3;
-                let countDown = setInterval(() => {
-                    this.setState({ waitingOnOpponentText: timer })
-                    if(timer === 0) {
-                        this.setState({ gameIsReady }, () => {
-                            return clearInterval(countDown);
-                        })
-                    }
-                    timer--;
-                }, 1000)
+        let timer = 3;
+        let countDown = setInterval(() => {
+            this.setState({ waitingOnOpponentText: timer })
+            if(timer === 0) {
+                this.setState({ gameIsReady: true }, () => {
+                    return clearInterval(countDown);
+                })
+            }
+            timer--;
+        }, 1000)
+    }
+
+    handlePlayerIsReady() {
+        playerIsReady((err, players) => {
+            const playersReady = Object.keys(players).map(playerId => {
+                return players[playerId].isReady;
+            }).filter(value => value);
+            
+            console.log(playersReady);
+            if(playersReady.length === 2) {
+                console.log("LETS GO!");
+                this.startMultiplayerGame();
             }
         });
     }
@@ -75,6 +86,8 @@ class Multiplayer extends Component {
         if(!this.state.gameIsReady) {
             return <WaitingOnOpponent text={this.state.waitingOnOpponentText} />;
         } else {
+            //Game opponent will be in charge of setting the Multiplayer local/component state.
+            //no need for dispatching
             return <Game 
                         multiplayer={true}
                         submitScore={this.handleSubmitScore}
@@ -92,6 +105,7 @@ class Multiplayer extends Component {
             <div>
                 <Link to='/dashboard'>Back to Dashboard</Link>
                 <Wrapper>
+                    <button onClick={this.handlePlayerIsReady}>Ready?</button>
                     {this.state.user.wpm}
                     {this.state.opponent.wpm}
                     {this.renderGameField()}

@@ -42,7 +42,7 @@ class Game extends Component {
         super(props);
         
         this.initialState = {
-            time: 10,
+            time: 60,
             keystrokes: 0,
             correctWords: 0,
             incorrectWords: 0,
@@ -58,8 +58,9 @@ class Game extends Component {
     async componentDidMount() {
         await this.props.fetchActiveWordList();
         await this.props.fetchUser();
-        if(this.props.multiplayer) { //TODO: set gameisready according to multiplayer comp.
-            updatePlayerScores({wpm: this.state.correctWords, user: this.props.user._id} ,(err, data) => {
+        if(this.props.multiplayer) {
+            //TODO: if we dynaically wanna keep track of the players wpm, we need to ping our server each second with the wpm as well...
+            updatePlayerScores({wpm: this.state.correctWords} ,(err, data) => {
                 console.log(data);
                 this.setState({ time: data.counter });
             });
@@ -68,7 +69,8 @@ class Game extends Component {
 
     timer() {
         let start = setInterval(() => {
-            // this.setState({ time: this.state.time - 1});
+            if(!this.props.multiplayer)
+                this.setState({ time: this.state.time - 1});
             if(this.state.time === 0) {
                 clearInterval(start);
                 !this.props.practice && this.refs.scoreSubmitButton.click();
@@ -97,11 +99,12 @@ class Game extends Component {
         const { gameIsReady, keystrokes, correctWords, incorrectWords } = this.state;
         this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
 
-        // if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
-        //     this.setState({ gameIsReady: false }, () => {
-        //         this.timer();
-        //     });
-        // }
+        //TODO: we need to change how we start the game.
+        if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
+            this.setState({ gameIsReady: false }, () => {
+                this.timer();
+            });
+        }
         this.setState({ keystrokes: keystrokes + 1 });
         if(keyCode === BACKSPACE) {
             character--;

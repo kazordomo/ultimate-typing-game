@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled, { css } from 'react-emotion';
+import logoURL from '../images/utglogo.png';
 
 const header = css`
     width: 100%;
     padding: 20px;
     color: #20C20E;
     box-sizing: border-box;
+    img {
+        width: 75px;
+    }
 `;
 
 const Ahref = styled('a')`
@@ -21,7 +25,7 @@ class Header extends Component {
         let logout = this.props.user ? <Ahref href='/api/logout'>Logout</Ahref> : '';
 
         return (
-            <div className={header}>Ultimate Typing Game!{logout}</div>
+            <div className={header}><img src={logoURL} alt='UTG' />{logout}</div>
         )
     }
 }

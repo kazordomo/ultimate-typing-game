@@ -7,9 +7,17 @@ function newPlayer(player, cb) {
     socket.emit('new player', player);
 }
 
+function playerIsReady(cb) {
+    socket.on('player is ready', player => cb(null, player));
+    socket.emit('player is ready');
+}
+
 function updatePlayerScores(data, cb) {
     socket.on('get score', data => cb(null, data));
-    socket.emit('update score', data);
+    socket.emit('update score', data);    
+    // setInterval(() => {
+    //     socket.emit('update score', data);
+    // }, 1000);
 }
 
 function unsubscribe() {
@@ -17,4 +25,4 @@ function unsubscribe() {
 }
 
 
-export { newPlayer, updatePlayerScores, unsubscribe };
+export { newPlayer, playerIsReady, updatePlayerScores, unsubscribe };
