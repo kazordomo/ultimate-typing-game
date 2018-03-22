@@ -59,24 +59,31 @@ class Game extends Component {
         await this.props.fetchActiveWordList();
         await this.props.fetchUser();
         if(this.props.multiplayer) {
-            //TODO: if we dynaically wanna keep track of the players wpm, we need to ping our server each second with the wpm as well...
-            updateTime((err, time) => {
-                console.log(time);
-                this.setState({ time });
-            });
-            let updateScore = setInterval(() => {
-                this.props.updatePlayersWpm(this.state.correctWords);
-            }, 1000);
+            this.initMultiplayer();
         }
+    }
+
+    initMultiplayer() {
+        let updateScore = setInterval(() => {
+            this.props.updatePlayersWpm(this.state.correctWords);
+        }, 1000);
+        updateTime((err, time) => {
+            this.setState({ time });
+            if(this.state.time === 0) {
+                clearInterval(updateScore);
+            }
+        });
     }
 
     timer() {
         let start = setInterval(() => {
+            const { correctWords, incorrectWords, keystrokes } = this.state;
             if(!this.props.multiplayer)
                 this.setState({ time: this.state.time - 1});
             if(this.state.time === 0) {
                 clearInterval(start);
-                !this.props.practice && this.refs.scoreSubmitButton.click();
+                console.log(correctWords);
+                this.props.submitScore(correctWords, incorrectWords, keystrokes);
                 this.setState({ gameOverMessage: this.props.gameOverMessage, gameIsReady: false });
             }
         }, 1000);
@@ -142,7 +149,6 @@ class Game extends Component {
             return <Loading />;
         }
         let { time, gameIsReady, correctWords, incorrectWords, keystrokes } = this.state;
-        let score = { correctWords, incorrectWords, keystrokes };
         return(
             <Wrapper>
                 <Row>
@@ -157,7 +163,6 @@ class Game extends Component {
                         onKeyDown={this.handleOnKeyDown} 
                         onKeyUp={this.handleOnKeyUp} 
                         ref='gameTextInput' />
-                    <button ref='scoreSubmitButton' onClick={() => this.props.submitScore(score)}>Submit</button>
                     <RestartButton onClick={this.resetGame}>Restart</RestartButton>
                     <Counter>{time}</Counter>
                 </Row>

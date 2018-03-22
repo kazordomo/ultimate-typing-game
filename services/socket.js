@@ -38,12 +38,11 @@ module.exports = (server) => {
         })
 
         socket.on('timer', () => {
-            let counter = 60;
+            let counter = 10;
             interval = setInterval(() => {
-                socket.broadcast.emit('get time', counter);
+                socket.broadcast.emit('get time', counter); //could just emit instead of broadcasting...
                 if(counter === 0) {
                     clearInterval(interval);
-                    io.sockets.in(`room-${roomno}`).emit('final score', data); //?
                 }
                 counter--;
             }, 1000);

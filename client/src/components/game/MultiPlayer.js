@@ -39,7 +39,7 @@ class Multiplayer extends Component {
         newPlayer(this.props.user, (err, player) => {
             let opponent = this.state.opponent;
             opponent.name = player.name;
-            this.setState({ opponent, user }, () => console.log(this.state));
+            this.setState({ opponent, user });
         });
     }
 
@@ -66,9 +66,7 @@ class Multiplayer extends Component {
                 return players[playerId].isReady;
             }).filter(value => value);
             
-            console.log(playersReady);
             if(playersReady.length === 2) {
-                console.log("LETS GO!");
                 this.startMultiplayerGame();
             }
         });
@@ -89,11 +87,6 @@ class Multiplayer extends Component {
     }
 
     renderGameField() {
-        //return game directly to not see the countdown each time..
-        // return <Game 
-        //             multiplayer={true}
-        //             submitScore={this.handleSubmitScore}
-        //             gameIsReady={this.state.gameIsReady}/>
         if(!this.state.gameIsReady) {
             return <WaitingOnOpponent text={this.state.waitingOnOpponentText} />;
         } else {
@@ -107,8 +100,14 @@ class Multiplayer extends Component {
         }
     }
 
-    handleSubmitScore({ correctWords, incorrectWords, keystrokes }) {
-        // this.props.submitScore({ correctWords, incorrectWords, keystrokes });
+    handleSubmitScore(correctWords, incorrectWords, keystrokes) {
+        const { user, opponent } = this.state;
+        let win = 0;
+        if(user.wpm > opponent.wpm) {
+            win = 1;
+        }
+        console.log(correctWords);
+        this.props.submitScore({ correctWords, incorrectWords, keystrokes, win });
     }
 
     render() {
@@ -117,8 +116,6 @@ class Multiplayer extends Component {
                 <Link to='/dashboard'>Back to Dashboard</Link>
                 <Wrapper>
                     <button onClick={this.handlePlayerIsReady}>Ready?</button>
-                    {this.state.user.wpm}
-                    {this.state.opponent.wpm}
                     {this.renderGameField()}
                     <WpmTracker player={this.state.user} />
                     <WpmTracker player={this.state.opponent} />

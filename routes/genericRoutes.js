@@ -12,7 +12,7 @@ module.exports = app => {
     });
 
     app.post('/api/scores', requireLogin, async (req, res) => {
-        const { correctWords, incorrectWords, keystrokes } = req.body;
+        const { correctWords, incorrectWords, keystrokes, win } = req.body;
         const newScore = new Score({
             correctWords,
             incorrectWords,
@@ -20,6 +20,10 @@ module.exports = app => {
             _user: req.user.id
         });
         await newScore.save();
+        if(win) {
+            req.user.multiplayerWins = req.user.multiplayerWins + 1; 
+            req.user.save();
+        }
         res.send(newScore);
     });
 
