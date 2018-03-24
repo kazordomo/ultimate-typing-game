@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 class SinglePlayer extends Component {
 
-    handleSubmitScore({ correctWords, incorrectWords, keystrokes }) {
+    handleSubmitScore(correctWords, incorrectWords, keystrokes) {
         this.props.submitScore({ correctWords, incorrectWords, keystrokes });
     }
 

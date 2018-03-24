@@ -6,9 +6,23 @@ const User = mongoose.model('users');
 
 
 module.exports = app => {
+
+    //TODO: api/scores/user, api/scores/all
+    app.get('/api/scores/user', requireLogin, async (req, res) => {
+        await Score.find({ _user: req.user.id }).sort({'correctWords': -1}).limit(5).exec((err, userScores) => {
+            if(err)
+                return err; //TODO: ERROR HANDLING
+            res.send(userScores);
+        });
+        
+    });
+
     app.get('/api/scores', requireLogin, async (req, res) => {
-        const scores = await Score.find({ _user: req.user.id });
-        res.send(scores);
+        await Score.find({}).sort({'correctWords': -1}).limit(50).exec((err, scores) => {
+            if(err)
+                return err; //TODO: ERROR HANDLING
+            res.send(scores);
+        });
     });
 
     app.post('/api/scores', requireLogin, async (req, res) => {

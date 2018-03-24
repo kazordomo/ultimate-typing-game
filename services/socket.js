@@ -40,7 +40,7 @@ module.exports = (server) => {
         socket.on('timer', () => {
             let counter = 10;
             interval = setInterval(() => {
-                socket.broadcast.emit('get time', counter); //could just emit instead of broadcasting...
+                socket.emit('get time', counter);
                 if(counter === 0) {
                     clearInterval(interval);
                 }

@@ -9,7 +9,7 @@ const header = css`
     color: #20C20E;
     box-sizing: border-box;
     img {
-        width: 75px;
+        width: 40px;
     }
 `;
 

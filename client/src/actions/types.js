@@ -6,4 +6,5 @@ export const FETCH_WORD_LISTS = 'fetch_word_lists';
 export const FETCH_WORD_LIST = 'fetch_word_list';
 export const FETCH_ACTIVE_WORD_LIST = 'fetch_active_word_list';
 export const POST_WORDS = 'post_words';
-export const FETCH_SCORE = 'fetch_score';
+export const FETCH_USER_TOP_SCORES = 'fetch_user_top_scores';
+export const FETCH_TOP_SCORES = 'fetch_top_scores';

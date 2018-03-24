@@ -4,6 +4,7 @@ import styled, { css } from 'react-emotion';
 import { postWordList, fetchWordList, updateWordList } from '../../actions';
 import Wrapper from '../../styles/Wrapper';
 import Button from '../../styles/Button';
+import { Link } from 'react-router-dom';
 
 const inputStyle = css`
     width: 500px;
@@ -80,6 +81,7 @@ class AddEditWordList extends Component {
     render() {
         return(
             <div>
+                <Link to='/dashboard'>Back to Dashboard</Link>
                 <Wrapper>
                     <input type='text' ref='nameTextInput' onChange={this.handleAddListName} placeholder='List Name' className={inputStyle} />
                     <input type='text' ref='wordTextInput' onKeyPress={event => (event.key === 'Enter') && this.handleAddWord()}  placeholder='Word To Add' className={inputStyle} />

@@ -6,6 +6,7 @@ import PlayButtons from './PlayButtons';
 import TopScores from './TopScores';
 import Loading from '../../styles/Loading';
 import CssGrid from '../../styles/CssGrid';
+import { Link } from 'react-router-dom';
 
 const { 
     GridContainer, 
@@ -37,7 +38,7 @@ class Dashboard extends Component {
                     <PlayButtons />
                 </GridItem>
                 <GridItem className={item3}>
-                    
+                    <Link to='/leaderboard' >Leaderboard</Link>
                 </GridItem>
                 <GridItem className={item4}>
                     

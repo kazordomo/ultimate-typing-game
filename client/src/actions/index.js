@@ -1,4 +1,11 @@
-import { FETCH_USER, AUTH_ERROR, CLEAR_ERROR, FETCH_WORD_LISTS, FETCH_WORD_LIST, FETCH_ACTIVE_WORD_LIST, FETCH_SCORE } from './types';
+import { FETCH_USER, 
+         AUTH_ERROR, 
+         CLEAR_ERROR, 
+         FETCH_WORD_LISTS, 
+         FETCH_WORD_LIST, 
+         FETCH_ACTIVE_WORD_LIST, 
+         FETCH_USER_TOP_SCORES, 
+         FETCH_TOP_SCORES } from './types';
 
 export const fetchUser = () => async dispatch => {
     try {
@@ -92,11 +99,21 @@ export const postWordList = (wordList) => async dispatch => {
 
 export const fetchUserScores = () => async dispatch => {
     try {
+        const response = await fetch('/api/scores/user', { credentials: 'include' });
+        const json = await response.json();
+        dispatch({ type: FETCH_USER_TOP_SCORES, payload: json });
+    } catch(err) {
+        return;
+    }
+}
+
+export const fetchLeaderboardScores = () => async dispatch => {
+    try {
         const response = await fetch('/api/scores', { credentials: 'include' });
         const json = await response.json();
-        dispatch({ type: FETCH_SCORE, payload: json });
+        dispatch({ type: FETCH_TOP_SCORES, payload: json });
     } catch(err) {
-
+        return;
     }
 }
 
@@ -110,7 +127,7 @@ export const submitScore = (score) => async dispatch => {
             headers: { 'Content-Type': 'application/json' }
         });
         const json = await response.json();
-        dispatch({ type: FETCH_SCORE, payload: json }); //?
+        dispatch({ type: FETCH_USER_TOP_SCORES, payload: json }); //?
     } catch(err) {
         return;
     }

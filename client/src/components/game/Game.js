@@ -42,7 +42,7 @@ class Game extends Component {
         super(props);
         
         this.initialState = {
-            time: 60,
+            time: 20,
             keystrokes: 0,
             correctWords: 0,
             incorrectWords: 0,
@@ -83,7 +83,7 @@ class Game extends Component {
             if(this.state.time === 0) {
                 clearInterval(start);
                 console.log(correctWords);
-                this.props.submitScore(correctWords, incorrectWords, keystrokes);
+                !this.props.practice && this.props.submitScore(correctWords, incorrectWords, keystrokes);
                 this.setState({ gameOverMessage: this.props.gameOverMessage, gameIsReady: false });
             }
         }, 1000);
