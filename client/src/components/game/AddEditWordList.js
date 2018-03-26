@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled, { css } from 'react-emotion';
-import { postWordList, fetchWordList, updateWordList } from '../../actions';
+import { postWordList, fetchWordList, updateWordList, deleteWordList } from '../../actions';
 import Wrapper from '../../styles/Wrapper';
 import Button from '../../styles/Button';
-import { Link } from 'react-router-dom';
+import Loading from '../../styles/Loading';
+import { Link, withRouter } from 'react-router-dom';
 
 const inputStyle = css`
     width: 500px;
@@ -38,13 +39,15 @@ class AddEditWordList extends Component {
         this.handleAddListName = this.handleAddListName.bind(this);
         this.handleAddWord = this.handleAddWord.bind(this);
         this.handleSaveList = this.handleSaveList.bind(this);
+        this.handleDeleteList = this.handleDeleteList.bind(this);
+        this.handleDeleteWord = this.handleDeleteWord.bind(this);
     }
 
     async componentDidMount() {
         const { match, fetchWordList } = this.props;
         if(match.params.id) {
             await fetchWordList(match.params.id);
-            const { wordLists: { name, words } } = this.props;
+            const { wordList: { name, words } } = this.props;
             this.setState({ name, words }, () => this.refs.nameTextInput.value = this.state.name);
         }    
     }
@@ -59,6 +62,12 @@ class AddEditWordList extends Component {
         this.setState({ words }, () => { this.refs.wordTextInput.value = '';});
     }
 
+    handleDeleteWord(index) {
+        const words = this.state.words;
+        words.splice(index, 1);
+        this.setState({ words });
+    }
+
     handleSaveList() {
         const { name, words } = this.state;
         const { match, updateWordList, postWordList } = this.props;
@@ -70,18 +79,27 @@ class AddEditWordList extends Component {
         }
     }
 
+    handleDeleteList() {
+        const { match, history } = this.props;
+        this.props.deleteWordList(match.params.id, history);
+    }
+
     renderWords() {
+        const { words } = this.state;
         let id = 0;
-        return this.state.words.map(word => {
+        return words.map(word => {
             id++;
-            return <WordInList key={id}>{word}</WordInList>;
+            return <WordInList key={id}>{word}<span onClick={() => this.handleDeleteWord(words.indexOf(word))}>x</span></WordInList>;
         });
     }
 
     render() {
+        if(!this.props.wordList) {
+            return <Loading />
+        }
         return(
             <div>
-                <Link to='/dashboard'>Back to Dashboard</Link>
+                <Link to='/game/practice'>Back to Practice</Link>
                 <Wrapper>
                     <input type='text' ref='nameTextInput' onChange={this.handleAddListName} placeholder='List Name' className={inputStyle} />
                     <input type='text' ref='wordTextInput' onKeyPress={event => (event.key === 'Enter') && this.handleAddWord()}  placeholder='Word To Add' className={inputStyle} />
@@ -96,13 +114,14 @@ class AddEditWordList extends Component {
                 <WordsContainer>
                     {this.renderWords()}
                 </WordsContainer>
+                <Button onClick={this.handleDeleteList}>DELETE LIST</Button>
             </div>
         );
     }
 }
 
-function mapStateToProps({ wordLists }) {
-    return { wordLists };
+function mapStateToProps({ wordList }) {
+    return { wordList };
 }
 
-export default connect(mapStateToProps, { postWordList, fetchWordList, updateWordList })(AddEditWordList);
+export default connect(mapStateToProps, { postWordList, fetchWordList, updateWordList, deleteWordList })(withRouter(AddEditWordList));

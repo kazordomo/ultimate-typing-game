@@ -53,7 +53,7 @@ export const fetchWordLists = () => async dispatch => {
     }
 }
 
-export const fetchWordList = (id) => async dispatch => {
+export const fetchWordList = id => async dispatch => {
     try {
         const response = await fetch(`/api/wordList/${id}`, { credentials: 'include' });
         const json = await response.json();
@@ -63,7 +63,7 @@ export const fetchWordList = (id) => async dispatch => {
     }
 }
 
-export const fetchActiveWordList = (wordList) => dispatch => {
+export const fetchActiveWordList = wordList => dispatch => {
     dispatch({ type: FETCH_ACTIVE_WORD_LIST, payload: wordList })
 }
 
@@ -82,7 +82,7 @@ export const updateWordList = (wordList, id) => async dispatch => {
     }
 }
 
-export const postWordList = (wordList) => async dispatch => {
+export const postWordList = wordList => async dispatch => {
     try {
         const response = fetch('/api/wordList', { 
             credentials: 'include',
@@ -91,6 +91,21 @@ export const postWordList = (wordList) => async dispatch => {
             headers: { 'Content-Type': 'application/json' }
         });
         const json = await response.json();
+        dispatch({ type: FETCH_WORD_LISTS, payload: json });
+    } catch(err) {
+        return;
+    }
+}
+
+export const deleteWordList = (id, history) => async dispatch => {
+    try {
+        const response = await fetch(`/api/wordList/${id}`, {
+            credentials: 'include',
+            method: 'delete',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const json = await response.json();
+        history.push('/game/practice');
         dispatch({ type: FETCH_WORD_LISTS, payload: json });
     } catch(err) {
         return;

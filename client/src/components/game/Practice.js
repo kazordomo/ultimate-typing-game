@@ -23,8 +23,8 @@ class Practice extends Component {
         }
     }
 
-    async componentDidMount() {
-        await this.props.fetchWordLists(null);
+    componentDidMount() {
+        this.props.fetchWordLists(null);
     }
 
     handleChooseWordList(wordListObj) {
@@ -32,6 +32,7 @@ class Practice extends Component {
     }
 
     renderWordLists() {
+        //TODO: wordlist will become an object when entering a list.
         return this.props.wordLists.map(list => <WordListItem key={list._id} chooseWordList={ () => this.handleChooseWordList(list.words) } wordListObj={list}></WordListItem>);
     }
 

@@ -63,4 +63,13 @@ module.exports = app => {
         req.user.save();
         res.send(req.user.createdWordLists);
     });
+
+    app.delete('/api/wordList/:id', requireLogin, (req, res) => {
+        let wordLists = req.user.createdWordLists;
+        let wordList = wordLists.find(list => list.id === req.params.id);
+        wordLists.splice(wordLists.indexOf(wordList), 1);
+        req.user.save(); //async?
+        console.log(wordLists);
+        res.send(wordLists);
+    });
 }
