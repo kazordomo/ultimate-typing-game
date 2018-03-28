@@ -6,27 +6,61 @@ import LocalRegister from './LocalRegister';
 import LocalLogin from './LocalLogin';
 import Ahref from '../../styles/Ahref';
 import ErrorMessage from '../../styles/ErrorMessage';
+import Row from '../../styles/Row';
 import * as actions from '../../actions';
+import styled from 'react-emotion';
+
+const localStyles = {
+    I: styled('div')`
+        color: #5A7D7C;
+    `,
+    TextInput: styled('div')`
+        display: flex;
+        margin-top: 20px;
+        align-items: baseline;
+        border-bottom: 1px solid #5A7D7C;
+    `,
+    FlexItemLong: styled('div')`
+        font-size: 25px;
+        flex-basis: 90%;
+    `,
+    FlexItemShort: styled('div')`
+        flex-basis: 10%;
+    `,
+    Row,
+    FlexRow: styled('div')`
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    `,
+    FlexRowItem: styled('div')`
+        padding: ${ props => props.white ? '0px 5px' : '0px' };
+        color: ${props => props.white ? '#FFFFFF' : '#5A7D7C'};
+        border-bottom: ${props => props.white ? '2px solid #FFFFFF' : 'none'};
+        cursor: pointer;
+    `
+};
 
 class Login extends Component {
-    state = { showRegister: true };
+
+    constructor() {
+        super();
+
+        this.state = { showRegister: false };
+    }
 
     renderAuthType() {
         const {submitAuthForm, authForm, history } = this.props;
-
-        if(this.state.showRegister) {
-            return (
-                <div>
-                    <LocalRegister handleAuthSubmit={() => submitAuthForm(authForm.values, 'signup', history)}></LocalRegister>
-                    <Ahref onClick={() => this.setState({showRegister: false})}>Already a member?</Ahref>
-                </div>
-            );
-        }
         return (
-            <div>
-                <LocalLogin handleAuthSubmit={() => submitAuthForm(authForm.values, 'login', history)} />
-                <Ahref onClick={() => this.setState({showRegister: true})}>Back to register</Ahref>
-            </div>
+            this.state.showRegister ? 
+                <LocalRegister 
+                    handleAuthSubmit={() => submitAuthForm(authForm.values, 'signup', history)}
+                    getLogin={() => this.toggleRegisterLogin.bind(this)} 
+                    styles={localStyles} /> :
+                <LocalLogin 
+                    handleAuthSubmit={() => submitAuthForm(authForm.values, 'login', history)} 
+                    getRegister={() => this.toggleRegisterLogin.bind(this)} 
+                    styles={localStyles} />
         );
     }
 
@@ -38,12 +72,16 @@ class Login extends Component {
         return '';
     }
 
+    toggleRegisterLogin() {
+        this.setState({ showRegister: !this.state.showRegister });
+    }
+
     render() {
         return(
             <div>
-                <SocialMediaLogin />
                 {this.renderErrorMsg()}
                 {this.renderAuthType()}
+                <SocialMediaLogin />
             </div>
         );
     }

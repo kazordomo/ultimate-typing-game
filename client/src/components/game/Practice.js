@@ -5,12 +5,31 @@ import Game from './Game';
 import WordListItem from './WordListItem';
 import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
+import GoBack from '../utils/GoBack';
 import { fetchWordLists, fetchActiveWordList } from '../../actions';
 import { Link } from 'react-router-dom';
 
 
-const ChooseListWrapper = styled('div')`
-    background-color: pink;
+const CreatedListsContainer = styled('div')`
+    width: 350px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #232C33;
+    color: #FFFFFF;
+`;
+
+const SubTitle = styled('h1')`
+    padding: 25px 0px;
+    color: #FFFFFF;
+    font-size: 25px;
+    text-align: center;
+    letter-spacing: 1.2px;
+`;
+
+const List = styled('div')`
+
 `;
 
 class Practice extends Component {
@@ -42,13 +61,14 @@ class Practice extends Component {
         }
         return (
             <div>
-                <Link to='/dashboard'>Back to Dashboard</Link>
+                <GoBack goTo='/dashboard' />
                 <Wrapper>
                     <Game practice={true} gameOverMessage='Practice gameover' />
-                    <ChooseListWrapper>
+                    <CreatedListsContainer>
+                        <SubTitle>Created Lists</SubTitle>
                         <Link to='/game/wordlist/new'>Add new list</Link>
-                    </ChooseListWrapper>
-                    {this.renderWordLists()}
+                        {this.renderWordLists()}
+                    </CreatedListsContainer>
                 </Wrapper>
             </div>
         );

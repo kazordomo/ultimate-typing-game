@@ -2,30 +2,69 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled, { css } from 'react-emotion';
 import { postWordList, fetchWordList, updateWordList, deleteWordList } from '../../actions';
+import GoBack from '../utils/GoBack';
 import Wrapper from '../../styles/Wrapper';
 import Button from '../../styles/Button';
 import Loading from '../../styles/Loading';
-import { Link, withRouter } from 'react-router-dom';
-
-const inputStyle = css`
-    width: 500px;
-    padding: 15px;
-    background: #FFFFFF;
-    font-size: 20px;
-`;
+import Title from '../../styles/Title';
+import Row from '../../styles/Row';
+import textInputStyle from '../../styles/textInput';
+import { withRouter } from 'react-router-dom';
 
 const WordsContainer = styled('div')`
-    width: 60%;
+    width: 500px;
     margin: 0 auto;
-    padding: 40px;
-    border: 1px solid #ffffff;
+    margin-top: 40px;
+`;
+
+const WordsInnerContainer = styled('div')`
+    display: grid;
+    grid-gap: 10px;
+    grid-template: repeat(8, 1fr) / repeat(5, 1fr);
+    grid-auto-flow: row;
 `;
 
 const WordInList = styled('span')`
-    margin-right: 10px;
+    position: relative;
+    padding: 4px;
+    font-size: 15px;
+    background-color: #232C33;
+    color: #FFFFFF;
+    text-align: center;
+    border-radius: 2px;
+    i {
+        position: absolute;
+        top: -3px;
+        left: -3px;
+        color: #5A7D7C;
+        font-size: 13px;
+        cursor: pointer;
+    }
+`;
+
+const DeleteButton = styled('button')`
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 150px;
+    padding: 5px;
+    background-color: red;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+`;
+
+const WordListInfo = styled('div')`
+    margin: 20px 0px;
+    padding-bottom: 5px;
+    color: #5A7D7C;
+    border-bottom: 1px solid #5A7D7C;
     font-size: 15px;
 `;
 
+//TODO: SAVE LIST ON UNMOUNT?!
 
 class AddEditWordList extends Component {
 
@@ -89,32 +128,45 @@ class AddEditWordList extends Component {
         let id = 0;
         return words.map(word => {
             id++;
-            return <WordInList key={id}>{word}<span onClick={() => this.handleDeleteWord(words.indexOf(word))}>x</span></WordInList>;
+            return (
+                <WordInList key={id}>{word}
+                    <span onClick={() => this.handleDeleteWord(words.indexOf(word))}>
+                        <i className="fas fa-times"></i>
+                    </span>
+                </WordInList>
+            );
         });
     }
 
     render() {
-        if(!this.props.wordList) {
+        if(!this.state.words.length) {
             return <Loading />
         }
         return(
             <div>
-                <Link to='/game/practice'>Back to Practice</Link>
+                <GoBack goTo='/game/practice' />
+                <Title>Edit {this.state.name}</Title>
                 <Wrapper>
-                    <input type='text' ref='nameTextInput' onChange={this.handleAddListName} placeholder='List Name' className={inputStyle} />
-                    <input type='text' ref='wordTextInput' onKeyPress={event => (event.key === 'Enter') && this.handleAddWord()}  placeholder='Word To Add' className={inputStyle} />
-                    <div>
+                    <Row>
+                        <input type='text' ref='nameTextInput' onChange={this.handleAddListName} placeholder='List Name' className={textInputStyle} />
+                    </Row>
+                    <Row>
+                        <input type='text' ref='wordTextInput' onKeyPress={event => (event.key === 'Enter') && this.handleAddWord()}  placeholder='Word To Add' className={textInputStyle} />
+                    </Row>
+                    <Row>
                         <Button onClick={this.handleAddWord}>Add Word</Button>
-                    </div>
-                    <div>
+                    </Row>
+                    {/* <div>
                         <Button onClick={this.handleSaveList}>Save List</Button>
-                    </div>
+                    </div> */}
                 </Wrapper>
-                <span>{this.state.name}</span>
                 <WordsContainer>
-                    {this.renderWords()}
+                    <WordListInfo>Total words: {this.state.words.length}</WordListInfo>
+                    <WordsInnerContainer>
+                        {this.renderWords()}
+                    </WordsInnerContainer>
                 </WordsContainer>
-                <Button onClick={this.handleDeleteList}>DELETE LIST</Button>
+                <DeleteButton onClick={this.handleDeleteList}>DELETE LIST</DeleteButton>
             </div>
         );
     }

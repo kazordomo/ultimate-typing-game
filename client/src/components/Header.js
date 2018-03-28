@@ -8,9 +8,6 @@ const header = css`
     padding: 20px;
     color: #20C20E;
     box-sizing: border-box;
-    img {
-        width: 40px;
-    }
 `;
 
 const Ahref = styled('a')`
@@ -25,7 +22,7 @@ class Header extends Component {
         let logout = this.props.user ? <Ahref href='/api/logout'>Logout</Ahref> : '';
 
         return (
-            <div className={header}><img src={logoURL} alt='UTG' />{logout}</div>
+            <div className={header}>{logout}</div>
         )
     }
 }

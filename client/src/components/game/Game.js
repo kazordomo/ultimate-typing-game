@@ -4,17 +4,12 @@ import ActiveWords from './templates/ActiveWords';
 import GameStats from './templates/GameStats';
 import Wrapper from '../../styles/Wrapper';
 import Loading from '../../styles/Loading';
+import Title from '../../styles/Title';
+import textInputStyle from '../../styles/textInput';
 import styled, { css } from 'react-emotion';
 // import wordList from '../../utils/words';
 import {fetchActiveWordList, fetchUser } from '../../actions';
 import { updateTime } from '../../player';
-
-const inputStyle = css`
-    width: 500px;
-    padding: 15px;
-    background: #FFFFFF;
-    font-size: 20px;
-`;
 
 const RestartButton = styled('button')`
     float: right;
@@ -23,11 +18,14 @@ const RestartButton = styled('button')`
 
 const Row = styled('div')`
     width: 100%;
-    margin: 5px 0px;
+    padding: 20px 0px;
 `
 
 const Counter = styled('div')`
     margin-top 10px;
+    color: #5A7D7C;
+    font-size: 40px;
+    text-align: center;
 `;
 
 const BACKSPACE = 8;
@@ -100,9 +98,13 @@ class Game extends Component {
     }
     
     gameTextInputBorder(validate) {
-        return validate ? 
-            this.refs.gameTextInput.style.border = '3px solid transparent' : 
-            this.refs.gameTextInput.style.border = `3px solid ${RED}`;
+        if(validate) {
+            this.refs.gameTextInput.style.borderBottom = '1px solid #5A7D7C';
+            this.refs.gameTextInput.style.color = '#5A7D7C';
+        }  else {
+            this.refs.gameTextInput.style.borderBottom = `1px solid ${RED}`;
+            this.refs.gameTextInput.style.color = `${RED}`;
+        }
     }
 
     handleOnKeyDown({ keyCode }) {
@@ -150,26 +152,29 @@ class Game extends Component {
         }
         let { time, gameIsReady, correctWords, incorrectWords, keystrokes } = this.state;
         return(
-            <Wrapper>
-                <Row>
-                    <ActiveWords words={this.props.activeWordList} />
-                </Row>
-                <Row>
-                    <input
-                        type="text" 
-                        className={inputStyle}
-                        autoFocus
-                        disabled={!true}
-                        onKeyDown={this.handleOnKeyDown} 
-                        onKeyUp={this.handleOnKeyUp} 
-                        ref='gameTextInput' />
-                    <RestartButton onClick={this.resetGame}>Restart</RestartButton>
-                    <Counter>{time}</Counter>
-                </Row>
-                <Row>
-                    <GameStats stats={this.state} />
-                </Row>
-            </Wrapper>
+            <div>
+                <Title>Singleplayer</Title>
+                <Wrapper>
+                    <Row>
+                        <ActiveWords words={this.props.activeWordList} />
+                    </Row>
+                    <Row>
+                        <input
+                            type="text" 
+                            className={textInputStyle}
+                            autoFocus
+                            disabled={!true}
+                            onKeyDown={this.handleOnKeyDown} 
+                            onKeyUp={this.handleOnKeyUp} 
+                            ref='gameTextInput' />
+                        {/* <RestartButton onClick={this.resetGame}>Restart</RestartButton> */}
+                        <Counter>{time}</Counter>
+                    </Row>
+                    <Row>
+                        <GameStats stats={this.state} />
+                    </Row>
+                </Wrapper>
+            </div>
         );
     }
 }

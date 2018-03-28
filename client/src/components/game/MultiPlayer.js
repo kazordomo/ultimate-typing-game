@@ -5,6 +5,7 @@ import Game from './Game';
 import WaitingOnOpponent from './WaitingOnOpponent';
 import WpmTracker from './WpmTracker';
 import Wrapper from '../../styles/Wrapper';
+import GoBack from '../utils/GoBack';
 import { submitScore, fetchUser } from '../../actions';
 import { newPlayer, playerIsReady, updateWpm, unsubscribe } from '../../player';
 
@@ -113,7 +114,7 @@ class Multiplayer extends Component {
     render() {
         return(
             <div>
-                <Link to='/dashboard'>Back to Dashboard</Link>
+                <GoBack goTo='/dashboard' />
                 <Wrapper>
                     <button onClick={this.handlePlayerIsReady}>Ready?</button>
                     {this.renderGameField()}

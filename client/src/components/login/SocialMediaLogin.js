@@ -1,25 +1,46 @@
 import React from 'react';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 
 const Section = styled('div')`
-    margin-bottom: 25px;
+    margin-top: 40px;
+`;
+
+const SubTitle = styled('div')`
+    color: #5A7D7C;
+    text-align: center;
+    // font-size: 20px;
 `;
 
 const Ahref = styled('a')`
-    width: 100%;
-    margin: 0px 25px 0px 0px;
-    color: #20C20E;
+    margin: 0 auto;
     text-decoration: none;
     i {
-        font-size: 60px;
+        color: #5A7D7C;
+        font-size: 40px;
     }
+`;
+
+const SocialMediaWrapper = styled('div')`
+    width: 40%;
+    margin: 0 auto;
+`;
+
+const Icons = styled('div')`
+    display: flex;
+    // justify-content: space-around;
+    margin-top: 20px;
 `;
 
 const SocialMedia = () => {
     return (
         <Section>
-            <Ahref href='/auth/google'><i className="fab fa-google-plus-square"></i></Ahref>
-            <Ahref href='/auth/facebook'><i className="fab fa-facebook"></i></Ahref>
+            <SubTitle>Social Media Login</SubTitle>
+            <SocialMediaWrapper>
+                <Icons>
+                    <Ahref href='/auth/google'><i className='fab fa-facebook-square'></i></Ahref>
+                    <Ahref href='/auth/facebook'><i className='fab fa-google-plus-square'></i></Ahref>
+                </Icons>
+            </SocialMediaWrapper>
         </Section>
     );
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { submitScore } from '../../actions';
 import Game from './Game';
-import { Link } from 'react-router-dom';
+import GoBack from '../utils/GoBack';
 
 class SinglePlayer extends Component {
 
@@ -13,7 +13,7 @@ class SinglePlayer extends Component {
     render() {
         return (
             <div>
-                <Link to='/dashboard'>Back to Dashboard</Link>
+                <GoBack goTo='/dashboard' />
                 <Game 
                     gameOverMessage='SingplePlayer gameover' 
                     submitScore={this.handleSubmitScore.bind(this)}/>

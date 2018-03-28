@@ -14,13 +14,12 @@ import Game from './game/Game';
 import Leaderboard from './dashboard/Leaderboard';
 import AddEditWordList from './game/AddEditWordList';
 
-//TODO: implement proptypes to all components.
-
+//RENDERS 100 TIMES?!
 injectGlobal`
     * {
-        box-sizing: border-box;
-        color: #20C20E;
-        font-family: 'Press Start 2P', cursive;
+        // box-sizing: border-box;
+        // color: #FFFFF;
+        font-family: 'Anton', sans-serif;
         font-size: 18px;
     }
 `;
@@ -29,6 +28,7 @@ const Container = styled('div')`
     width: 2000px;
     max-width: 90%;
     margin: 0 auto;
+    margin-top: 50px;
 `;
 
 class App extends Component {
@@ -41,7 +41,7 @@ class App extends Component {
             <BrowserRouter>
                 <Container>
                     <Background />
-                    <Header />
+                    {/* <Header /> */}
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />
                     <Route exact path='/leaderboard' component={Leaderboard} />

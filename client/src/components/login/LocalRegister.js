@@ -4,14 +4,48 @@ import AuthField from './AuthField';
 import Button from '../../styles/Button';
 import validate from './validateForm';
 
-const LocalRegister = ({ handleSubmit, handleAuthSubmit }) => {
+const LocalRegister = ({ handleSubmit, handleAuthSubmit, getLogin, styles }) => {
+    const { I, TextInput, FlexItemLong, FlexItemShort, FlexRow, FlexRowItem, ButtonWrapper, Row } = styles;
     return(
         <form onSubmit={handleSubmit(handleSubmit(handleAuthSubmit))} >
-            <Field component={AuthField} type='text' label='Username' name='username' />
-            <Field component={AuthField} type='email' label='Email' name='email' />
-            <Field component={AuthField} type='password' label='Password' name='password' />
-            <Field component={AuthField} type='password' label='Retype password' name='retypepassword' />
-            <Button auth type='submit'>Register</Button>
+            <TextInput>
+                <FlexItemShort>
+                    <I className='fas fa-user'></I>
+                </FlexItemShort>
+                <FlexItemLong>
+                    <Field component={AuthField} type='text' label='Username' name='username' />
+                </FlexItemLong>
+            </TextInput>
+            {/* <TextInput>
+                <FlexItemShort>
+                    <I className='fas fa-user'></I>
+                </FlexItemShort>
+                <FlexItemLong>
+                    <Field component={AuthField} type='email' label='Email' name='email' />
+                </FlexItemLong>
+            </TextInput> */}
+            <TextInput>
+                <FlexItemShort>
+                    <I className='fas fa-unlock-alt'></I>
+                </FlexItemShort>
+                <FlexItemLong>
+                    <Field component={AuthField} type='password' label='Password' name='password' />                    
+                </FlexItemLong>
+            </TextInput>
+            <TextInput>
+                <FlexItemShort>
+                    <I className='fas fa-unlock-alt'></I>
+                </FlexItemShort>
+                <FlexItemLong>
+                    <Field component={AuthField} type='password' label='Retype password' name='retypepassword' />                    
+                </FlexItemLong>
+            </TextInput>
+            <Row>
+                <Button auth type='submit'>Register</Button>
+            </Row>
+            <FlexRow>
+                <FlexRowItem white onClick={getLogin()}>Already got an account?</FlexRowItem>
+            </FlexRow>
         </form>
     );
 }

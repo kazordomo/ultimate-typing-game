@@ -7,5 +7,5 @@ export default styled('div')`
     left: 0;
     bottom: 0;
     z-index: -1;
-    background-color: ${props => props.main ? '#111c2d' : '#000000'};
+    background: linear-gradient(#232C33, #000000);
 `;
