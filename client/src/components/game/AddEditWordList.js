@@ -91,6 +91,10 @@ class AddEditWordList extends Component {
         }    
     }
 
+    componentWillUnmount() {
+        // this.handleSaveList();
+    }
+
     handleAddListName() {
         this.setState({ name: this.refs.nameTextInput.value });
     }
@@ -139,13 +143,13 @@ class AddEditWordList extends Component {
     }
 
     render() {
-        if(!this.state.words.length) {
-            return <Loading />
-        }
+        // if(!this.state.words.length) {
+        //     return <Loading />
+        // }
         return(
             <div>
                 <GoBack goTo='/game/practice' />
-                <Title>Edit {this.state.name}</Title>
+                <Title>{this.state.name}</Title>
                 <Wrapper>
                     <Row>
                         <input type='text' ref='nameTextInput' onChange={this.handleAddListName} placeholder='List Name' className={textInputStyle} />
