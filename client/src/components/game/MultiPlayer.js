@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Game from './Game';
 import WaitingOnOpponent from './WaitingOnOpponent';
 import WpmTracker from './WpmTracker';

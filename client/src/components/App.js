@@ -12,7 +12,8 @@ import MultiPlayer from './game/MultiPlayer';
 import Practice from './game/Practice';
 import Game from './game/Game';
 import Leaderboard from './dashboard/Leaderboard';
-import AddEditWordList from './game/AddEditWordList';
+import AddWordList from './game/AddWordList';
+import EditWordList from './game/EditWordList';
 
 //RENDERS 100 TIMES?!
 injectGlobal`
@@ -49,8 +50,8 @@ class App extends Component {
                     <Route exact path='/game/singleplayer' component={SinglePlayer} />
                     <Route exact path='/game/multiplayer' component={MultiPlayer} />
                     <Route exact path='/game/practice' component={Practice} />
-                    <Route exact path='/game/wordlist/new' component={AddEditWordList} />
-                    <Route exact path='/game/wordlist/edit/:id' component={AddEditWordList} />
+                    <Route exact path='/game/wordlist/new' component={AddWordList} />
+                    <Route exact path='/game/wordlist/edit/:id' component={EditWordList} />
                     {/* <Route path='/error' component={Error} /> */}
                 </Container>
             </BrowserRouter>

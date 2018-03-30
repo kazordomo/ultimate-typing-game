@@ -5,7 +5,7 @@ import Button from '../../styles/Button';
 import validate from './validateForm';
 
 const LocalRegister = ({ handleSubmit, handleAuthSubmit, getLogin, styles }) => {
-    const { I, TextInput, FlexItemLong, FlexItemShort, FlexRow, FlexRowItem, ButtonWrapper, Row } = styles;
+    const { I, TextInput, FlexItemLong, FlexItemShort, FlexRow, FlexRowItem, Row } = styles;
     return(
         <form onSubmit={handleSubmit(handleSubmit(handleAuthSubmit))} >
             <TextInput>

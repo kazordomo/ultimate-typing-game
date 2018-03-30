@@ -69,7 +69,6 @@ module.exports = app => {
         let wordList = wordLists.find(list => list.id === req.params.id);
         wordLists.splice(wordLists.indexOf(wordList), 1);
         req.user.save(); //async?
-        console.log(wordLists);
         res.send(wordLists);
     });
 }

@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import SocialMediaLogin from './SocialMediaLogin';
 import LocalRegister from './LocalRegister';
 import LocalLogin from './LocalLogin';
-import Ahref from '../../styles/Ahref';
 import ErrorMessage from '../../styles/ErrorMessage';
 import Row from '../../styles/Row';
 import * as actions from '../../actions';

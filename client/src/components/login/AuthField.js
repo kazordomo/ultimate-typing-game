@@ -7,15 +7,15 @@ const FormGroup = styled('div')`
 `;
 
 //unused atm.
-const ErrorMessage = styled('span')`
-    position: absolute;
-    left: -20px;
-    color: red;
-    font-size: 15px;
-    i {
-        color: red;
-    }
-`;
+// const ErrorMessage = styled('span')`
+//     position: absolute;
+//     left: -20px;
+//     color: red;
+//     font-size: 15px;
+//     i {
+//         color: red;
+//     }
+// `;
 
 const textInputStyle = css`
     width: 100%;
@@ -28,10 +28,10 @@ const textInputStyle = css`
 
 //unused atm.
 export default ({ input, label, type, meta: { touched, error } }) => {
-    function renderErrorMessage() {
-        return (touched && error) ? 
-            <ErrorMessage><i className="fas fa-exclamation-triangle"></i></ErrorMessage> : '';
-    }
+    // function renderErrorMessage() {
+    //     return (touched && error) ? 
+    //         <ErrorMessage><i className="fas fa-exclamation-triangle"></i></ErrorMessage> : '';
+    // }
 
     return (
         <FormGroup>

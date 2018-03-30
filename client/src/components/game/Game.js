@@ -6,15 +6,10 @@ import Wrapper from '../../styles/Wrapper';
 import Loading from '../../styles/Loading';
 import Title from '../../styles/Title';
 import textInputStyle from '../../styles/textInput';
-import styled, { css } from 'react-emotion';
+import styled from 'react-emotion';
 // import wordList from '../../utils/words';
 import {fetchActiveWordList, fetchUser } from '../../actions';
 import { updateTime } from '../../player';
-
-const RestartButton = styled('button')`
-    float: right;
-    margin-top 4px;
-`;
 
 const Row = styled('div')`
     width: 100%;
@@ -150,7 +145,7 @@ class Game extends Component {
         if(!this.props.activeWordList) {
             return <Loading />;
         }
-        let { time, gameIsReady, correctWords, incorrectWords, keystrokes } = this.state;
+        let { time } = this.state;
         return(
             <div>
                 <Title>Singleplayer</Title>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Login from './login/Login';
-import styled, { css } from 'react-emotion';
+import styled from 'react-emotion';
 import Wrapper from '../styles/Wrapper';
 
 const TitleWrapper = styled('div')`

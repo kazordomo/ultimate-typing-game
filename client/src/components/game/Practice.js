@@ -23,11 +23,11 @@ const CreatedListsContainer = styled('div')`
     box-shadow: -8px -1px 14px -2px rgba(0,0,0,0.65);
 `;
 
-const OpenClose = styled('div')`
-    position: absolute;
-    left: -10px;
-    top: 49%;
-`;
+// const OpenClose = styled('div')`
+//     position: absolute;
+//     left: -10px;
+//     top: 49%;
+// `;
 
 const FlexContainer = styled('div')`
     display: flex;
@@ -59,10 +59,6 @@ const ListWrapper = styled('div')`
     min-height: 70%;
 `;
 
-const List = styled('div')`
-
-`;
-
 class Practice extends Component {
 
     constructor(props) {
@@ -87,9 +83,9 @@ class Practice extends Component {
         return this.props.wordLists.map(list => <WordListItem key={list._id} chooseWordList={ () => this.handleChooseWordList(list.words) } wordListObj={list}></WordListItem>);
     }
 
-    openCloseWordList() {
-        this.setState({ wordListActive: !this.state.wordListActive });
-    }
+    // openCloseWordList() {
+    //     this.setState({ wordListActive: !this.state.wordListActive });
+    // }
 
     render() {
         if(!this.props.wordLists) {

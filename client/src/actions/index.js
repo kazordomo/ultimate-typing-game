@@ -82,7 +82,7 @@ export const updateWordList = (wordList, id) => async dispatch => {
     }
 }
 
-export const postWordList = wordList => async dispatch => {
+export const postWordList = (wordList, history) => async dispatch => {
     try {
         const response = fetch('/api/wordList', { 
             credentials: 'include',
@@ -91,6 +91,7 @@ export const postWordList = wordList => async dispatch => {
             headers: { 'Content-Type': 'application/json' }
         });
         const json = await response.json();
+        history.push('/game/practice');
         dispatch({ type: FETCH_WORD_LISTS, payload: json });
     } catch(err) {
         return;

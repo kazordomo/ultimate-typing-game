@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import styled, { css } from 'react-emotion';
-import { postWordList, fetchWordList, updateWordList, deleteWordList } from '../../actions';
+import styled from 'react-emotion';
 import GoBack from '../utils/GoBack';
 import Wrapper from '../../styles/Wrapper';
 import Button from '../../styles/Button';
-import Loading from '../../styles/Loading';
-import Title from '../../styles/Title';
 import Row from '../../styles/Row';
 import textInputStyle from '../../styles/textInput';
-import { withRouter } from 'react-router-dom';
 
 const WordsContainer = styled('div')`
     width: 500px;
@@ -28,7 +23,7 @@ const WordInList = styled('span')`
     position: relative;
     padding: 4px;
     font-size: 15px;
-    background-color: #232C33;
+    background-color: rgba(35, 44, 51, 0.3);
     color: #FFFFFF;
     text-align: center;
     border-radius: 2px;
@@ -40,20 +35,6 @@ const WordInList = styled('span')`
         font-size: 13px;
         cursor: pointer;
     }
-`;
-
-const DeleteButton = styled('button')`
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    width: 150px;
-    padding: 5px;
-    background-color: red;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 2px;
-    outline: none;
-    cursor: pointer;
 `;
 
 const WordListInfo = styled('div')`
@@ -70,29 +51,26 @@ class AddEditWordList extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
-            name: '',
-            words: []
+            name: props.wordList ? props.wordList.name : '',
+            words: props.wordList ? props.wordList.words : []
         }
         this.handleAddListName = this.handleAddListName.bind(this);
         this.handleAddWord = this.handleAddWord.bind(this);
-        this.handleSaveList = this.handleSaveList.bind(this);
-        this.handleDeleteList = this.handleDeleteList.bind(this);
         this.handleDeleteWord = this.handleDeleteWord.bind(this);
     }
 
-    async componentDidMount() {
-        const { match, fetchWordList } = this.props;
-        if(match.params.id) {
-            await fetchWordList(match.params.id);
-            const { wordList: { name, words } } = this.props;
-            this.setState({ name, words }, () => this.refs.nameTextInput.value = this.state.name);
-        }    
+    componentDidMount() {
+        this.refs.nameTextInput.value = this.state.name;
     }
 
     componentWillUnmount() {
-        // this.handleSaveList();
+        //TODO: remake. will kick of the post even if the list gets deleted.
+        if(this.props.edit) {
+            const { name, words } = this.state;
+            this.props.saveList({name, words});
+        }
+
     }
 
     handleAddListName() {
@@ -111,20 +89,11 @@ class AddEditWordList extends Component {
         this.setState({ words });
     }
 
-    handleSaveList() {
+    renderCreateList() {
+        if(!this.props.add)
+            return '';
         const { name, words } = this.state;
-        const { match, updateWordList, postWordList } = this.props;
-        const wordList = { name, words };
-        if(match.params.id) {
-            updateWordList(wordList, match.params.id);
-        } else {
-            postWordList(wordList);
-        }
-    }
-
-    handleDeleteList() {
-        const { match, history } = this.props;
-        this.props.deleteWordList(match.params.id, history);
+        return <Button onClick={() => this.props.saveList({name, words})}>Create List</Button>
     }
 
     renderWords() {
@@ -143,13 +112,9 @@ class AddEditWordList extends Component {
     }
 
     render() {
-        // if(!this.state.words.length) {
-        //     return <Loading />
-        // }
         return(
             <div>
                 <GoBack goTo='/game/practice' />
-                <Title>{this.state.name}</Title>
                 <Wrapper>
                     <Row>
                         <input type='text' ref='nameTextInput' onChange={this.handleAddListName} placeholder='List Name' className={textInputStyle} />
@@ -160,9 +125,9 @@ class AddEditWordList extends Component {
                     <Row>
                         <Button onClick={this.handleAddWord}>Add Word</Button>
                     </Row>
-                    {/* <div>
-                        <Button onClick={this.handleSaveList}>Save List</Button>
-                    </div> */}
+                    <Row>
+                        {this.renderCreateList()}
+                    </Row>
                 </Wrapper>
                 <WordsContainer>
                     <WordListInfo>Total words: {this.state.words.length}</WordListInfo>
@@ -170,14 +135,9 @@ class AddEditWordList extends Component {
                         {this.renderWords()}
                     </WordsInnerContainer>
                 </WordsContainer>
-                <DeleteButton onClick={this.handleDeleteList}>DELETE LIST</DeleteButton>
             </div>
         );
     }
 }
 
-function mapStateToProps({ wordList }) {
-    return { wordList };
-}
-
-export default connect(mapStateToProps, { postWordList, fetchWordList, updateWordList, deleteWordList })(withRouter(AddEditWordList));
+export default AddEditWordList;
