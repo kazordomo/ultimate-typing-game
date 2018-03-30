@@ -20,21 +20,14 @@ const WordsInnerContainer = styled('div')`
 `;
 
 const WordInList = styled('span')`
-    position: relative;
     padding: 4px;
     font-size: 15px;
-    background-color: rgba(35, 44, 51, 0.3);
+    // background-color: rgba(35, 44, 51, 0.2);
+    background-color: #232C33;
     color: #FFFFFF;
     text-align: center;
     border-radius: 2px;
-    i {
-        position: absolute;
-        top: -3px;
-        left: -3px;
-        color: #5A7D7C;
-        font-size: 13px;
-        cursor: pointer;
-    }
+    cursor: pointer;
 `;
 
 const WordListInfo = styled('div')`
@@ -44,8 +37,6 @@ const WordListInfo = styled('div')`
     border-bottom: 1px solid #5A7D7C;
     font-size: 15px;
 `;
-
-//TODO: SAVE LIST ON UNMOUNT?!
 
 class AddEditWordList extends Component {
 
@@ -101,13 +92,7 @@ class AddEditWordList extends Component {
         let id = 0;
         return words.map(word => {
             id++;
-            return (
-                <WordInList key={id}>{word}
-                    <span onClick={() => this.handleDeleteWord(words.indexOf(word))}>
-                        <i className="fas fa-times"></i>
-                    </span>
-                </WordInList>
-            );
+            return <WordInList onClick={() => this.handleDeleteWord(words.indexOf(word))} key={id}>{word}</WordInList>;
         });
     }
 

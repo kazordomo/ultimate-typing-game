@@ -5,6 +5,7 @@ import Game from './Game';
 import WordListItem from './WordListItem';
 import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
+import FlexContainer from '../../styles/FlexContainer';
 import GoBack from '../utils/GoBack';
 import { fetchWordLists, fetchActiveWordList } from '../../actions';
 import { Link } from 'react-router-dom';
@@ -28,13 +29,6 @@ const CreatedListsContainer = styled('div')`
 //     left: -10px;
 //     top: 49%;
 // `;
-
-const FlexContainer = styled('div')`
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: space-between;
-`;
 
 const SubTitle = styled('h1')`
     // padding: 25px 0px;
@@ -99,7 +93,7 @@ class Practice extends Component {
             <div>
                 <GoBack goTo='/dashboard' />
                 <Wrapper>
-                    <Game practice={true} gameOverMessage='Practice gameover' />
+                    <Game practice gameModeTitle='Practice' />
                     <CreatedListsContainer>
                         {/* <OpenClose onClick={this.openCloseWordList.bind(this)}>x</OpenClose> */}
                         <FlexContainer>

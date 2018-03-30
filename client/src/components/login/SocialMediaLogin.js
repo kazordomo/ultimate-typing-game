@@ -6,7 +6,7 @@ const Section = styled('div')`
 `;
 
 const SubTitle = styled('div')`
-    color: #5A7D7C;
+    color: #B5B2C2;
     text-align: center;
     // font-size: 20px;
 `;
@@ -15,7 +15,7 @@ const Ahref = styled('a')`
     margin: 0 auto;
     text-decoration: none;
     i {
-        color: #5A7D7C;
+        color: #B5B2C2;
         font-size: 40px;
     }
 `;

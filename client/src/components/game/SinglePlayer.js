@@ -15,7 +15,7 @@ class SinglePlayer extends Component {
             <div>
                 <GoBack goTo='/dashboard' />
                 <Game 
-                    gameOverMessage='SingplePlayer gameover' 
+                    gameModeTitle={'Singleplayer'}
                     submitScore={this.handleSubmitScore.bind(this)}/>
             </div>
         );

@@ -148,7 +148,7 @@ class Game extends Component {
         let { time } = this.state;
         return(
             <div>
-                <Title>Singleplayer</Title>
+                <Title>{this.props.gameModeTitle}</Title>
                 <Wrapper>
                     <Row>
                         <ActiveWords words={this.props.activeWordList} />

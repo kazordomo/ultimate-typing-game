@@ -22,6 +22,7 @@ class Multiplayer extends Component {
                 name: 'Opponent',
                 wpm: 0
             },
+            playerIsReady: false,
             gameIsReady: false,
             waitingOnOpponentText: '-'
 
@@ -61,6 +62,9 @@ class Multiplayer extends Component {
     }
 
     handlePlayerIsReady() {
+        if(!this.state.playerIsReady) {
+            this.setState({ playerIsReady: true });
+        }
         playerIsReady((err, players) => {
             const playersReady = Object.keys(players).map(playerId => {
                 return players[playerId].isReady;
@@ -88,15 +92,23 @@ class Multiplayer extends Component {
 
     renderGameField() {
         if(!this.state.gameIsReady) {
-            return <WaitingOnOpponent text={this.state.waitingOnOpponentText} />;
+            return <WaitingOnOpponent counter={this.state.waitingOnOpponentText} playerIsReady={this.handlePlayerIsReady} playerIsReadyBool={this.state.playerIsReady} />;
         } else {
             //Game opponent will be in charge of setting the Multiplayer local/component state.
             //no need for dispatching
-            return <Game 
-                        multiplayer={true}
-                        submitScore={this.handleSubmitScore}
-                        updatePlayersWpm={this.updatePlayersWpm}
-                        gameIsReady={this.state.gameIsReady}/>
+            return (
+                <div>
+                    <Game 
+                            multiplayer
+                            gameModeTitle={'Multiplayer'}
+                            submitScore={this.handleSubmitScore}
+                            updatePlayersWpm={this.updatePlayersWpm}
+                            gameIsReady={this.state.gameIsReady}/>
+                    <WpmTracker player={this.state.user} />
+                    <WpmTracker player={this.state.opponent} />
+                </div>
+
+            );
         }
     }
 
@@ -106,7 +118,6 @@ class Multiplayer extends Component {
         if(user.wpm > opponent.wpm) {
             win = 1;
         }
-        console.log(correctWords);
         this.props.submitScore({ correctWords, incorrectWords, keystrokes, win });
     }
 
@@ -115,10 +126,7 @@ class Multiplayer extends Component {
             <div>
                 <GoBack goTo='/dashboard' />
                 <Wrapper>
-                    <button onClick={this.handlePlayerIsReady}>Ready?</button>
                     {this.renderGameField()}
-                    <WpmTracker player={this.state.user} />
-                    <WpmTracker player={this.state.opponent} />
                 </Wrapper>
             </div>
         );

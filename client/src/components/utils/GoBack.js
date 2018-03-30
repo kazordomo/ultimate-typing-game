@@ -7,11 +7,11 @@ const linkStyle = css`
     top: 30px;
     left: 30px;
     i {
-        color: #5A7D7C;
+        color: #DADFF7;
         font-size: 30px;
     }
 `;
 
 export default ({ goTo }) => {
-    return <Link className={linkStyle} to={goTo}><i className='fas fa-arrow-alt-circle-left'></i></Link>
+    return <Link className={linkStyle} to={goTo}><i className="fas fa-angle-left"></i></Link>
 }
