@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { fetchLeaderboardScores } from '../../actions';
+import styled from 'react-emotion';
 import TopScore from './TopScore';
 import Loading from '../../styles/Loading';
+import Title from '../../styles/Title';
+import GoBack from '../utils/GoBack';
 import { Link } from 'react-router-dom';
+
+const LeaderboardContainer = styled('div')`
+    max-width: 500px;
+    width: 80%;
+    margin: 0 auto;
+    color: #FFFFFF;
+`;
 
 class Leaderboard extends Component {
 
@@ -12,7 +22,8 @@ class Leaderboard extends Component {
     }
 
     renderScores() {
-        return this.props.scores.map(score => <TopScore key={score._id} topScore={score} />)
+        let position = 0;
+        return this.props.scores.map(score => { position++; return <TopScore key={score._id} topScore={score} />; });
     }
 
     render() {
@@ -21,8 +32,11 @@ class Leaderboard extends Component {
         }
         return (
             <div>
-                <Link to='/dashboard'>Back to Dashboard</Link>
-                {this.renderScores()}
+                <GoBack goTo='/dashboard' />
+                <Title>Leaderboard</Title>
+                <LeaderboardContainer>
+                    {this.renderScores()}
+                </LeaderboardContainer>
             </div>
         );
     }
