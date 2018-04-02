@@ -28,9 +28,9 @@ function updateWpm(wpm, cb) {
     socket.emit('update wpm', wpm);
 }
 
-function updateTime(cb) {
+function updateTime(start, cb) {
     socket.on('get time', time => cb(null, time));
-    socket.emit('timer');
+    socket.emit('timer', start);
 }
 
 function unsubscribe() {

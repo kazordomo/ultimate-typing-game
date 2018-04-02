@@ -23,9 +23,14 @@ const Counter = styled('div')`
     text-align: center;
 `;
 
+const CountDown = styled('div')`
+    font-size: 64px;
+    color: red;
+    text-align: center;
+`;
+
 const BACKSPACE = 8;
 const SPACE = 32;
-// const ENTER = 13;
 const RED = 'red';
 let character = 0;
 
@@ -35,12 +40,13 @@ class Game extends Component {
         super(props);
         
         this.initialState = {
-            time: 20,
+            time: 10,
             keystrokes: 0,
             correctWords: 0,
             incorrectWords: 0,
             gameOverMessage: '',
-            gameIsReady: true
+            gameIsReady: true,
+            multiPlayerCountDown: 3
         }
         this.state = this.initialState;
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
@@ -52,7 +58,15 @@ class Game extends Component {
         await this.props.fetchActiveWordList();
         await this.props.fetchUser();
         if(this.props.multiplayer) {
-            this.initMultiplayer();
+            let countDown = setInterval(() => {
+                let { multiPlayerCountDown } = this.state;
+                this.setState({multiPlayerCountDown: multiPlayerCountDown - 1});
+                if(multiPlayerCountDown === 0) {
+                    clearInterval(countDown);
+                    this.setState({multiPlayerCountDown: ''});
+                    this.initMultiplayer();
+                }
+            }, 1000);
         }
     }
 
@@ -60,11 +74,10 @@ class Game extends Component {
         let updateScore = setInterval(() => {
             this.props.updatePlayersWpm(this.state.correctWords);
         }, 1000);
-        updateTime((err, time) => {
+        updateTime(true, (err, time) => {
             this.setState({ time });
-            if(this.state.time === 0) {
+            if(this.state.time === 0)
                 clearInterval(updateScore);
-            }
         });
     }
 
@@ -75,7 +88,6 @@ class Game extends Component {
                 this.setState({ time: this.state.time - 1});
             if(this.state.time === 0) {
                 clearInterval(start);
-                console.log(correctWords);
                 !this.props.practice && this.props.submitScore(correctWords, incorrectWords, keystrokes);
                 this.setState({ gameOverMessage: this.props.gameOverMessage, gameIsReady: false });
             }
@@ -132,18 +144,18 @@ class Game extends Component {
     }
 
     handleOnKeyUp({ keyCode }) {        
-        if(this.refs.gameTextInput.value === '') {
+        if(this.refs.gameTextInput.value === '')
             character = 0;
-        }
-        //65 == a, 90 == z //TODO: should be able to use foreign keyCodes as well, when playing a self created wordlist.
-        if(keyCode > 65 && keyCode < 90) {
+        if(keyCode > 65 && keyCode < 90)
             this.gameTextInputBorder(this.validateCharacter());
-        }
     }
 
     render() {
-        if(!this.props.activeWordList) {
+        if(!this.props.activeWordList)
             return <Loading />;
+
+        if(this.props.multiplayer && this.state.multiPlayerCountDown) {
+            return <CountDown>{this.state.multiPlayerCountDown}</CountDown>;
         }
         let { time } = this.state;
         return(

@@ -35,15 +35,19 @@ module.exports = (server) => {
             io.sockets.in(`room-${roomno}`).emit('player is ready', players);
         })
 
-        socket.on('timer', () => {
+        socket.on('timer', start => {
             let counter = 10;
-            interval = setInterval(() => {
+            if(start) {
+                interval = setInterval(() => {
+                    counter--;
+                    socket.emit('get time', counter);
+                    if(counter === 0) {
+                        clearInterval(interval);
+                    }
+                }, 1000);
+            } else {
                 socket.emit('get time', counter);
-                if(counter === 0) {
-                    clearInterval(interval);
-                }
-                counter--;
-            }, 1000);
+            }
         });
 
         socket.on('update wpm', wpm => {
