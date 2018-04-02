@@ -8,7 +8,6 @@ module.exports = (server) => {
     let roomno = 1;
 
     io.on('connection', socket => {
-        let gameIsReady = false;
         let interval = null;
 
         socket.on('subscribe to room', room => {
@@ -19,13 +18,12 @@ module.exports = (server) => {
 
         socket.on('unsubscribe', () => {
             socket.leave(`room-${roomno}`);
-            // delete players[socket.id];
+            delete players[socket.id];
         });
 
         socket.on('new player', user => {
             players[socket.id] = { user: user.local.username, isReady: false };
-            socket.broadcast.emit('new player', players[socket.id]);
-            // io.sockets.in(`room-${roomno}`).emit('new player', players[socket.id]); //use this to dispaly players.
+            io.sockets.in(`room-${roomno}`).emit('new player', players);
         });
 
         socket.on('player is ready', () => {

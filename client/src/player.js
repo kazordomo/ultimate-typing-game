@@ -3,7 +3,17 @@ const socket = openSocket('http://localhost:5000');
 
 function newPlayer(player, cb) {
     socket.emit('subscribe to room');
-    socket.on('new player', playerJoined => cb(null, playerJoined));
+    socket.on('new player', players => {
+        let structuredPlayers = {user: '', opponent: ''};
+        Object.keys(players).forEach(key => {
+            if(socket.id === key) {
+                structuredPlayers.user = players[key].user;
+            } else {
+                structuredPlayers.opponent = players[key].user;
+            }
+        });
+        cb(null, structuredPlayers);
+    });
     socket.emit('new player', player);
 }
 

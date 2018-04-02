@@ -22,7 +22,7 @@ export default ({ player: { name, wpm } }) => {
         <TrackerWrapper>
             {/* <div>{name}</div> */}
             <Row>
-                <PlayerName>Karizmatisk</PlayerName>
+                <PlayerName>{name}</PlayerName>
                 <Percent width={wpm} />
             </Row>
         </TrackerWrapper>

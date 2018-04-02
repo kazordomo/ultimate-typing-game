@@ -15,7 +15,7 @@ class Multiplayer extends Component {
 
         this.state = { 
             user: {
-                name: '',
+                name: 'You',
                 wpm: 0
             },
             opponent: {
@@ -34,12 +34,11 @@ class Multiplayer extends Component {
 
     async componentDidMount() {
         await this.props.fetchUser();
-        let user = {};
-        user.name = this.props.user.local.username;
-        user.wpm = 0;
-        newPlayer(this.props.user, (err, player) => {
+        newPlayer(this.props.user, (err, players) => {
             let opponent = this.state.opponent;
-            opponent.name = player.name;
+            let user = this.state.user;
+            opponent.name = players['opponent'];
+            user.name = players['user'];
             this.setState({ opponent, user });
         });
     }
