@@ -33,6 +33,8 @@ const BACKSPACE = 8;
 const SPACE = 32;
 const RED = 'red';
 let character = 0;
+let countDown = null;
+let updateScore = null;
 
 class Game extends Component {
 
@@ -58,7 +60,7 @@ class Game extends Component {
         await this.props.fetchActiveWordList();
         await this.props.fetchUser();
         if(this.props.multiplayer) {
-            let countDown = setInterval(() => {
+            countDown = setInterval(() => {
                 let { multiPlayerCountDown } = this.state;
                 this.setState({multiPlayerCountDown: multiPlayerCountDown - 1});
                 if(multiPlayerCountDown === 0) {
@@ -70,8 +72,17 @@ class Game extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.clearInterval();
+    }
+
+    clearInterval() {
+        clearInterval(countDown);
+        clearInterval(updateScore);
+    }
+
     initMultiplayer() {
-        let updateScore = setInterval(() => {
+        updateScore = setInterval(() => {
             this.props.updatePlayersWpm(this.state.correctWords);
         }, 1000);
         updateTime(true, (err, time) => {
