@@ -18,11 +18,16 @@ module.exports = app => {
     });
 
     app.get('/api/scores', requireLogin, async (req, res) => {
-        await Score.find({}).sort({'correctWords': -1}).limit(50).exec((err, scores) => {
-            if(err)
-                return err; //TODO: ERROR HANDLING
-            res.send(scores);
-        });
+        let start = new Date(); //TODO: UTC, will get 22:00 the day before in swedenland
+        start.setHours(0,0,0,0);
+        let end = new Date();
+        end.setHours(23,59,59,999);
+
+        //TODO: fetch and limit twice, or check all and then seperate the scores? what is best for resources?
+        const topScores = await Score.find({}).sort({'correctWords': -1}).limit(50).exec();
+        const topScoresToday = await Score.find({"scoreDate": {"$gte": start, "$lt": end}}).sort({'correctWords': -1}).limit(50).exec();
+        const leaderboards = { topScores, topScoresToday };
+        res.send(leaderboards);
     });
 
     app.post('/api/scores', requireLogin, async (req, res) => {

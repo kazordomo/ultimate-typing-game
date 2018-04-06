@@ -6,7 +6,7 @@ import WpmTracker from './WpmTracker';
 import Wrapper from '../../styles/Wrapper';
 import GoBack from '../utils/GoBack';
 import styled from 'react-emotion';
-import { submitScore, fetchUser } from '../../actions';
+import { submitScore, fetchUserIfNeeded } from '../../actions';
 import { newPlayer, playerIsReady, updateWpm, unsubscribe } from '../../player';
 
 const WaitingOnOpponentDiv = styled('div')`
@@ -39,7 +39,7 @@ class Multiplayer extends Component {
     }
 
     async componentDidMount() {
-        await this.props.fetchUser();
+        await this.props.fetchUserIfNeeded();
         newPlayer(this.props.user, (err, players) => {
             let opponent = this.state.opponent;
             let user = this.state.user;
@@ -119,4 +119,4 @@ function mapStateToProps({ user }) {
     return { user };
 }
 
-export default connect(mapStateToProps, { fetchUser, submitScore })(Multiplayer);
+export default connect(mapStateToProps, { fetchUserIfNeeded, submitScore })(Multiplayer);

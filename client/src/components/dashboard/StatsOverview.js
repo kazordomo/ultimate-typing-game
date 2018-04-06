@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Stat from './Stat';
-import { fetchUserScores, fetchUser } from '../../actions';
+import { fetchUserScores, fetchUserIfNeeded } from '../../actions';
 
 class StatsOverview extends Component {
 
@@ -18,4 +18,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { fetchUserScores, fetchUser })(StatsOverview)
+export default connect(mapStateToProps, { fetchUserScores, fetchUserIfNeeded })(StatsOverview)

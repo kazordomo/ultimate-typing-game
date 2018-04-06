@@ -23,10 +23,11 @@ class Dashboard extends Component {
 
     async componentDidMount() {
         await this.props.fetchUserScores();
+        console.log(this.props);
     }
 
     render() {
-        if(!this.props.user || !this.props.scores) {
+        if(this.props.user.isFetching) {
             return <Loading />;
         }
         return(
@@ -46,9 +47,9 @@ class Dashboard extends Component {
                 <GridItem className={item5}>
                     
                 </GridItem>
-                <GridItem className={item6}>
+                {/* <GridItem className={item6}>
                     <TopScores scores={this.props.scores} />
-                </GridItem>
+                </GridItem> */}
             </GridContainer>
         );
     }

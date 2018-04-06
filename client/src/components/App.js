@@ -34,7 +34,7 @@ const Container = styled('div')`
 
 class App extends Component {
     componentDidMount() {
-        this.props.fetchUser();
+        this.props.fetchUserIfNeeded();
     }
 
     render() {

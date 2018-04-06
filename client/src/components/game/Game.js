@@ -8,7 +8,7 @@ import Title from '../../styles/Title';
 import textInputStyle from '../../styles/textInput';
 import styled from 'react-emotion';
 // import wordList from '../../utils/words';
-import {fetchActiveWordList, fetchUser } from '../../actions';
+import {fetchActiveWordList, fetchUserIfNeeded } from '../../actions';
 import { updateTime } from '../../player';
 
 const Row = styled('div')`
@@ -58,7 +58,7 @@ class Game extends Component {
 
     async componentDidMount() {
         await this.props.fetchActiveWordList();
-        await this.props.fetchUser();
+        await this.props.fetchUserIfNeeded();
         if(this.props.multiplayer) {
             countDown = setInterval(() => {
                 let { multiPlayerCountDown } = this.state;
@@ -201,4 +201,4 @@ function mapStateToProps({ user, activeWordList }) {
     return { user, activeWordList };
 }
 
-export default connect(mapStateToProps, {fetchActiveWordList, fetchUser })(Game);
+export default connect(mapStateToProps, {fetchActiveWordList, fetchUserIfNeeded })(Game);

@@ -5,17 +5,20 @@ import { FETCH_USER,
          FETCH_WORD_LIST, 
          FETCH_ACTIVE_WORD_LIST, 
          FETCH_USER_TOP_SCORES, 
-         FETCH_TOP_SCORES } from './types';
+         FETCH_TOP_SCORES,
+         FETCH_USER_SUCCESS } from './types';
+export * from './userActions';
+export * from './leaderboardsActions';
 
-export const fetchUser = () => async dispatch => {
-    try {
-        const response = await fetch('/api/current_user', {credentials: 'include'});
-        const json = await response.json();
-        dispatch({ type: FETCH_USER, payload: json });
-    } catch(err) {
-        return;
-    }
-};
+// export const fetchUser = () => async dispatch => {
+//     try {
+//         const response = await fetch('/api/current_user', {credentials: 'include'});
+//         const json = await response.json();
+//         dispatch({ type: FETCH_USER, payload: json });
+//     } catch(err) {
+//         return;
+//     }
+// };
 
 export const submitAuthForm = (values, authType, history) => async dispatch => {
     try {
@@ -28,7 +31,7 @@ export const submitAuthForm = (values, authType, history) => async dispatch => {
         });
         const json = await response.json();
         if(response.status === 200) {
-            dispatch({ type: FETCH_USER, payload: json });       
+            dispatch({ type: FETCH_USER_SUCCESS, payload: json });       
             history.push('/dashboard');
         } else {
             dispatch({ type: AUTH_ERROR, payload: json });
