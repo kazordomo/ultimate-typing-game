@@ -33,12 +33,12 @@ class Leaderboard extends Component {
         return leaderboards[this.state.currentLeaderboard].map(score => { position++; return <TopScore key={score._id} topScore={score} />; });
     }
 
-    // handleChangeLeaderboard(leaderboard) {
-    //     this.props.selectLeaderboard(leaderboard);
-    // }
+    handleChangeLeaderboard(leaderboard) {
+        console.log(leaderboard);
+    }
 
     render() {
-        if(this.props.leaderboards.isFetching) {
+        if(!this.props.leaderboards.isFetched) {
             return <Loading />
         }
         return (
@@ -46,6 +46,10 @@ class Leaderboard extends Component {
                 <GoBack goTo='/dashboard' />
                 <Title>Leaderboard</Title>
                 <LeaderboardContainer>
+                    <div>
+                        <button>TopScores</button>
+                        <button>TopToday</button>
+                    </div>
                     {this.renderScores()}
                 </LeaderboardContainer>
             </div>

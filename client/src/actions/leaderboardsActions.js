@@ -15,11 +15,9 @@ const receiveLeaderboards = data => ({
     payload: data
 });
 
-export const fetchLeaderboards = () => {
-    return async dispatch => {
-        dispatch(requestLeaderboards());
-        const response = await fetch('/api/scores', { credentials: 'include' });
-        const json = await response.json();
-        return dispatch(receiveLeaderboards(json));
-    }
+export const fetchLeaderboards = () => async dispatch => {
+    dispatch(requestLeaderboards());
+    const response = await fetch('/api/scores', { credentials: 'include' });
+    const json = await response.json();
+    dispatch(receiveLeaderboards(json));
 }

@@ -15,13 +15,11 @@ const receiveUser = user => ({
 //update it each time a change happens. one way to do this is to implement "invalidate_user" or something.
 //maybe we could run it if the getState().user does not match the user object we get back from the payload?
 
-const fetchUser = () => {
-    return async dispatch => {
-        dispatch(requestUser());
-        const response = await fetch('/api/current_user', {credentials: 'include'});
-        const json = await response.json();
-        return dispatch(receiveUser(json));
-    }
+const fetchUser = () => async dispatch => {
+    dispatch(requestUser());
+    const response = await fetch('/api/current_user', {credentials: 'include'});
+    const json = await response.json();
+    return dispatch(receiveUser(json));
 }
 
 const shouldFetchUser = state => {

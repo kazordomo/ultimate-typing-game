@@ -5,25 +5,25 @@ import {
 } from '../actions/leaderboardsActions';
 
 export default (state = { 
-    isFetching: true, //TODO: should set isFetching to true when fetching only.
+    isFetched: false,
     leaderboards: {} 
 }, action) => {
     switch (action.type) {
         case FETCH_LEADERBOARDS_REQUEST:
             return {
                 ...state,
-                isFetching: true
+                isFetched: false
             }
         case FETCH_LEADERBOARDS_SUCCESS:
             return {
                 ...state,
-                isFetching: false,
+                isFetched: true,
                 leaderboards: action.payload
             }
         case FETCH_LEADERBOARDS_ERROR:
             return {
                 ...state,
-                isFetching: false,
+                isFetched: false,
                 error: { status: 400, message: 'Could not load leaderboards' }
             }
         default:

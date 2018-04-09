@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HandleWordList from './HandleWordList';
-import { fetchWordList, updateWordList, deleteWordList } from '../../actions';
+import { selectWordList, updateWordList, deleteWordList } from '../../actions';
 import { withRouter } from 'react-router-dom';
 import styled from 'react-emotion';
 import Loading from '../../styles/Loading';
@@ -21,13 +21,17 @@ const DeleteButton = styled('button')`
     cursor: pointer;
 `;
 
+//TODO: use selectWOrdList and use currentWordList.
+
 class EditWordList extends Component {
 
-    async componentDidMount() {
+    componentDidMount() {
+        //fetchWordListsIfNeeded();
         const { match, fetchWordList } = this.props;
-        await fetchWordList(match.params.id);
+        selectWordList(match.params.id);
     }
 
+    //TODO: ????
     handleSaveList(wordList) {
         const { match, updateWordList } = this.props;
         updateWordList(wordList, match.params.id);
@@ -39,13 +43,10 @@ class EditWordList extends Component {
     }
 
     render() {
-        if(!this.props.wordList) {
-            return <Loading />
-        }
-        const { wordList: { name, words } } = this.props;
+        const { wordLists: { currentWordList: { name, words } } } = this.props;
         return(
             <div>
-                <Title>{this.props.wordList.name}</Title>
+                <Title>{name}</Title>
                 <HandleWordList edit saveList={this.handleSaveList.bind(this)} deleteList={this.handleDeleteList.bind(this)} wordList={{name, words}} />
                 <DeleteButton onClick={this.handleDeleteList.bind(this)}>DELETE LIST</DeleteButton>
             </div>
@@ -53,8 +54,8 @@ class EditWordList extends Component {
     }
 }
 
-function mapStateToProps({ wordList }) {
-    return { wordList };
+function mapStateToProps({ wordLists }) {
+    return { wordLists };
 }
 
-export default connect(mapStateToProps, {fetchWordList, updateWordList, deleteWordList })(withRouter(EditWordList));
+export default connect(mapStateToProps, { selectWordList, updateWordList, deleteWordList })(withRouter(EditWordList));

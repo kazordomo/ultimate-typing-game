@@ -8,7 +8,6 @@ import Title from '../../styles/Title';
 const AddWordList = ({ postWordList, history }) => {
 
     function handleSaveList(wordList) {
-        console.log(history);
         postWordList(wordList, history);
     }
 

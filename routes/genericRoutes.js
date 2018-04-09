@@ -46,7 +46,7 @@ module.exports = app => {
         res.send(newScore);
     });
 
-    app.get('/api/wordList', (req, res) => {
+    app.get('/api/wordLists', (req, res) => {
         res.send(req.user.createdWordLists);
     });
 
@@ -55,7 +55,7 @@ module.exports = app => {
         res.send(wordList);
     });
 
-    app.post('/api/wordList/:id', requireLogin, (req, res) => {
+    app.put('/api/wordList/:id', requireLogin, (req, res) => {
         let wordList = req.user.createdWordLists.find(list => list.id === req.params.id);
         wordList.name = req.body.name;
         wordList.words = req.body.words;
@@ -73,7 +73,7 @@ module.exports = app => {
         let wordLists = req.user.createdWordLists;
         let wordList = wordLists.find(list => list.id === req.params.id);
         wordLists.splice(wordLists.indexOf(wordList), 1);
-        req.user.save(); //async?
+        req.user.save();
         res.send(wordLists);
     });
 }

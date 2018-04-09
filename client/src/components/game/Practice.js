@@ -7,7 +7,7 @@ import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
 import FlexContainer from '../../styles/FlexContainer';
 import GoBack from '../utils/GoBack';
-import { fetchWordLists, fetchActiveWordList } from '../../actions';
+import { fetchWordLists, selectWordList } from '../../actions';
 import { Link } from 'react-router-dom';
 
 
@@ -20,15 +20,15 @@ const CreatedListsContainer = styled('div')`
     padding: 30px;
     background-color: #232C33;
     color: #FFFFFF;
-    // transition: all .3s cubic-bezier(0.600, -0.280, 0.735, 0.045);
+    transition: all .3s cubic-bezier(0.600, -0.280, 0.735, 0.045);
     box-shadow: -8px -1px 14px -2px rgba(0,0,0,0.65);
 `;
 
-// const OpenClose = styled('div')`
-//     position: absolute;
-//     left: -10px;
-//     top: 49%;
-// `;
+const OpenClose = styled('div')`
+    position: absolute;
+    left: -10px;
+    top: 49%;
+`;
 
 const SubTitle = styled('h1')`
     // padding: 25px 0px;
@@ -60,42 +60,54 @@ class Practice extends Component {
 
         this.state = {
             words: [],
-            wordListActive: false
+            wordListActive: true
         }
     }
 
-    componentDidMount() {
-        this.props.fetchWordLists(null);
+    async componentDidMount() {
+        await this.props.fetchWordLists();
     }
 
-    handleChooseWordList(wordListObj) {
-        this.props.fetchActiveWordList(wordListObj);
+    componentWillUnmount() {
+        this.props.selectWordList(null); //reset currentWordList
+    }
+
+    handleChooseWordList(wordList) {
+        this.props.selectWordList(wordList._id);
     }
 
     renderWordLists() {
-        //TODO: wordlist will become an object when entering a list.
-        return this.props.wordLists.map(list => <WordListItem key={list._id} chooseWordList={ () => this.handleChooseWordList(list.words) } wordListObj={list}></WordListItem>);
+        let { wordLists: { items } } = this.props;
+        return (
+            Object.keys(items).map(key => {
+                return <WordListItem 
+                            key={items[key]._id} 
+                            chooseWordList={ () => this.handleChooseWordList(items[key]) } 
+                            wordListObj={items[key]}>
+                        </WordListItem>
+            })
+        );
     }
 
-    // openCloseWordList() {
-    //     this.setState({ wordListActive: !this.state.wordListActive });
-    // }
+    openCloseWordList() {
+        this.setState({ wordListActive: !this.state.wordListActive });
+    }
 
     render() {
-        if(!this.props.wordLists) {
+        if(!this.props.wordLists.isFetched) {
             return <Loading />
         }
-        // let listStyle = { right: '-360px' };
-        // if(this.state.wordListActive) {
-        //     listStyle = { right: '0px' };
-        // }
+        let listStyle = { right: '-360px' };
+        if(this.state.wordListActive) {
+            listStyle = { right: '0px' };
+        }
         return (
             <div>
                 <GoBack goTo='/dashboard' />
                 <Wrapper>
                     <Game practice gameModeTitle='Practice' />
-                    <CreatedListsContainer>
-                        {/* <OpenClose onClick={this.openCloseWordList.bind(this)}>x</OpenClose> */}
+                    <CreatedListsContainer style={listStyle}>
+                        <OpenClose onClick={this.openCloseWordList.bind(this)}>x</OpenClose>
                         <FlexContainer>
                             <SubTitle>Created Lists</SubTitle>
                             <ListWrapper>{this.renderWordLists()}</ListWrapper>
@@ -112,4 +124,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { fetchWordLists, fetchActiveWordList })(Practice);
+export default connect(mapStateToProps, { fetchWordLists, selectWordList })(Practice);

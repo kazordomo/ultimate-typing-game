@@ -23,7 +23,6 @@ class Dashboard extends Component {
 
     async componentDidMount() {
         await this.props.fetchUserScores();
-        console.log(this.props);
     }
 
     render() {

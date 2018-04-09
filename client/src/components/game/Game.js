@@ -8,7 +8,7 @@ import Title from '../../styles/Title';
 import textInputStyle from '../../styles/textInput';
 import styled from 'react-emotion';
 // import wordList from '../../utils/words';
-import {fetchActiveWordList, fetchUserIfNeeded } from '../../actions';
+import { fetchUserIfNeeded } from '../../actions';
 import { updateTime } from '../../player';
 
 const Row = styled('div')`
@@ -57,7 +57,6 @@ class Game extends Component {
     }
 
     async componentDidMount() {
-        await this.props.fetchActiveWordList();
         await this.props.fetchUserIfNeeded();
         if(this.props.multiplayer) {
             countDown = setInterval(() => {
@@ -105,14 +104,13 @@ class Game extends Component {
         }, 1000);
     }
 
-    async resetGame() {
-        await this.props.fetchActiveWordList();
+    resetGame() {
         this.refs.gameTextInput.value = '';
         this.setState(this.initialState);
     }
     
     validateCharacter() {
-        return this.props.activeWordList[0].slice(0, character) === this.refs.gameTextInput.value.slice(0, character);
+        return this.props.currentWordList.words[0].slice(0, character) === this.refs.gameTextInput.value.slice(0, character);
     }
     
     gameTextInputBorder(validate) {
@@ -140,7 +138,7 @@ class Game extends Component {
             character--;
             this.validateCharacter() && this.gameTextInputBorder(true);
         } else if(keyCode === SPACE) {
-            if(this.refs.gameTextInput.value === this.props.activeWordList[0]) {
+            if(this.refs.gameTextInput.value === this.props.currentWordList.words[0]) {
                 this.setState({ correctWords: correctWords + 1 });
             } else {
                 this.setState({ incorrectWords: incorrectWords + 1 });
@@ -148,7 +146,7 @@ class Game extends Component {
             }
             this.refs.gameTextInput.value = '';
             character = 0;
-            this.props.activeWordList.shift();
+            this.props.currentWordList.words.shift();
         } else {
             character++;
         }
@@ -162,7 +160,7 @@ class Game extends Component {
     }
 
     render() {
-        if(!this.props.activeWordList)
+        if(!this.props.currentWordList.words)
             return <Loading />;
 
         if(this.props.multiplayer && this.state.multiPlayerCountDown) {
@@ -174,7 +172,7 @@ class Game extends Component {
                 <Title>{this.props.gameModeTitle}</Title>
                 <Wrapper>
                     <Row>
-                        <ActiveWords words={this.props.activeWordList} />
+                        <ActiveWords words={this.props.currentWordList.words} />
                     </Row>
                     <Row>
                         <input
@@ -197,8 +195,8 @@ class Game extends Component {
     }
 }
 
-function mapStateToProps({ user, activeWordList }) {
-    return { user, activeWordList };
+function mapStateToProps({ user, wordLists: { currentWordList } }) {
+    return { user, currentWordList };
 }
 
-export default connect(mapStateToProps, {fetchActiveWordList, fetchUserIfNeeded })(Game);
+export default connect(mapStateToProps, { fetchUserIfNeeded })(Game);
