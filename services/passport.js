@@ -58,7 +58,7 @@ passport.use('local-signup', new LocalStrategy({
     try {
         const user = await User.findOne({ 'local.username': username });
         if(user) {
-            return done(null, false, { success: false, message: 'User already exists.' });
+            return done(null, false, { success: false, status: 400, message: 'User already exists.' });
         }
         const newUser = new User();
         newUser.local.username = username;
@@ -80,10 +80,10 @@ passport.use('local-login', new LocalStrategy({
     try {
         const user = await User.findOne({ 'local.username': username });
         if(!user) {
-            return done(null, false, { success: false, message: 'User does not exist.' });
+            return done(null, false, { success: false, status: 404, message: 'User does not exist.' });
         }
         if(!user.validPassword(password, user.local.password)) {
-            return done(null, false, { success: false, message: 'Incorrect password' });
+            return done(null, false, { success: false, status: 401, message: 'Incorrect password' });
         }
         return done(null, user);
     } catch(err) {

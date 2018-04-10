@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { fetchLeaderboards } from '../../actions';
+import { fetchTopScores } from '../../actions';
 import styled from 'react-emotion';
 import TopScore from './TopScore';
 import Loading from '../../styles/Loading';
@@ -22,13 +22,12 @@ class Leaderboard extends Component {
     }
 
     async componentDidMount() {
-        await this.props.fetchLeaderboards();
+        await this.props.fetchTopScores();
         console.log(this.props);
     }
 
     renderScores() {
-        const { leaderboards: { leaderboards } } = this.props; //TODO: add leaderboards as items on leaderboard object.
-        console.log(leaderboards);
+        const { topScores: { leaderboards } } = this.props; //TODO: add leaderboards as items on leaderboard object.
         let position = 0;
         return leaderboards[this.state.currentLeaderboard].map(score => { position++; return <TopScore key={score._id} topScore={score} />; });
     }
@@ -38,7 +37,7 @@ class Leaderboard extends Component {
     }
 
     render() {
-        if(!this.props.leaderboards.isFetched) {
+        if(!this.props.topScores.isFetched) {
             return <Loading />
         }
         return (
@@ -58,8 +57,8 @@ class Leaderboard extends Component {
 }
 
 //TODO: might not need the state.
-function mapStateTopProps({ leaderboards }) {
-    return { leaderboards };
+function mapStateTopProps({ topScores }) {
+    return { topScores };
 }
 
-export default connect(mapStateTopProps, { fetchLeaderboards })(Leaderboard);
+export default connect(mapStateTopProps, { fetchTopScores })(Leaderboard);

@@ -51,6 +51,7 @@ class Login extends Component {
     renderAuthType() {
         const {submitAuthForm, authForm, history } = this.props;
         return (
+            //PREVENT DEFAULT
             this.state.showRegister ? 
                 <LocalRegister 
                     handleAuthSubmit={() => submitAuthForm(authForm.values, 'signup', history)}
@@ -64,7 +65,7 @@ class Login extends Component {
     }
 
     renderErrorMsg() {
-        const { error } = this.props;
+        const { error } = this.props.user;
         if(error) {
             return <ErrorMessage>{error.message}</ErrorMessage>;
         }
@@ -86,8 +87,8 @@ class Login extends Component {
     }
 }
 
-function mapStateToProps({ submitAuthForm, form: { authForm }, error }) {
-    return { submitAuthForm, authForm, error };
+function mapStateToProps({ submitAuthForm, form: { authForm }, user }) {
+    return { submitAuthForm, authForm, user };
 }
 
 export default connect(mapStateToProps, actions)(withRouter(Login));

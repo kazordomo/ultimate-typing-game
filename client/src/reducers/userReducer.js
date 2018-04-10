@@ -6,25 +6,28 @@ import {
 
 export default (state = { 
     isFetching: true, 
-    user: {} 
+    user: {}, 
+    error: false
 }, action) => {
     switch (action.type) {
         case FETCH_USER_REQUEST:
             return {
                 ...state,
-                isFetching: true
+                isFetching: true,
+                error: false
             }
         case FETCH_USER_SUCCESS:
             return {
                 ...state,
                 isFetching: false,
-                user: action.payload
+                user: action.payload,
+                error: false
             }
         case FETCH_USER_ERROR:
             return {
                 ...state,
                 isFetching: false,
-                error: { status: 400, message: 'Could not find user' }
+                error: action.payload
             }
         default:
             return state;
