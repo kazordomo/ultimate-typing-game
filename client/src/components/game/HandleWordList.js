@@ -55,15 +55,6 @@ class AddEditWordList extends Component {
         this.refs.nameTextInput.value = this.state.name;
     }
 
-    componentWillUnmount() {
-        //TODO: remake. will kick of the post even if the list gets deleted.
-        if(this.props.edit) {
-            const { name, words } = this.state;
-            this.props.saveList({name, words});
-        }
-
-    }
-
     handleAddListName() {
         this.setState({ name: this.refs.nameTextInput.value });
     }
@@ -80,13 +71,6 @@ class AddEditWordList extends Component {
         this.setState({ words });
     }
 
-    renderCreateList() {
-        if(!this.props.add)
-            return '';
-        const { name, words } = this.state;
-        return <Button onClick={() => this.props.saveList({name, words})}>Create List</Button>
-    }
-
     renderWords() {
         const { words } = this.state;
         let id = 0;
@@ -97,6 +81,7 @@ class AddEditWordList extends Component {
     }
 
     render() {
+        const { words, name } = this.state;
         return(
             <div>
                 <GoBack goTo='/game/practice' />
@@ -111,11 +96,11 @@ class AddEditWordList extends Component {
                         <Button onClick={this.handleAddWord}>Add Word</Button>
                     </Row>
                     <Row>
-                        {this.renderCreateList()}
+                        <Button onClick={() => this.props.saveList({name, words})}>Save List</Button>
                     </Row>
                 </Wrapper>
                 <WordsContainer>
-                    <WordListInfo>Total words: {this.state.words.length}</WordListInfo>
+                    <WordListInfo>Total words: {words.length}</WordListInfo>
                     <WordsInnerContainer>
                         {this.renderWords()}
                     </WordsInnerContainer>

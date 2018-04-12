@@ -7,7 +7,7 @@ import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
 import FlexContainer from '../../styles/FlexContainer';
 import GoBack from '../utils/GoBack';
-import { fetchWordLists, selectWordList } from '../../actions';
+import { fetchWordLists, fetchWordListIfNeeded } from '../../actions';
 import { Link } from 'react-router-dom';
 
 
@@ -25,9 +25,17 @@ const CreatedListsContainer = styled('div')`
 `;
 
 const OpenClose = styled('div')`
+    width: 75px;
     position: absolute;
-    left: -10px;
-    top: 49%;
+    left: -75px;
+    top: 15px;
+    background-color: #FFFFFF;
+    color: #000000;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 20px 0px 0px 20px;
+    cursor: pointer;
+    box-shadow: -4px -1px 14px 1px rgba(0,0,0,0.65)
 `;
 
 const SubTitle = styled('h1')`
@@ -68,12 +76,8 @@ class Practice extends Component {
         await this.props.fetchWordLists();
     }
 
-    componentWillUnmount() {
-        this.props.selectWordList(null); //reset currentWordList
-    }
-
     handleChooseWordList(wordList) {
-        this.props.selectWordList(wordList._id);
+        this.props.fetchWordListIfNeeded(wordList._id);
     }
 
     renderWordLists() {
@@ -107,7 +111,9 @@ class Practice extends Component {
                 <Wrapper>
                     <Game practice gameModeTitle='Practice' />
                     <CreatedListsContainer style={listStyle}>
-                        <OpenClose onClick={this.openCloseWordList.bind(this)}>x</OpenClose>
+                        <OpenClose onClick={this.openCloseWordList.bind(this)}>
+                            {this.state.wordListActive ? 'Close' : 'Open'}
+                        </OpenClose>
                         <FlexContainer>
                             <SubTitle>Created Lists</SubTitle>
                             <ListWrapper>{this.renderWordLists()}</ListWrapper>
@@ -124,4 +130,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { fetchWordLists, selectWordList })(Practice);
+export default connect(mapStateToProps, { fetchWordLists, fetchWordListIfNeeded })(Practice);

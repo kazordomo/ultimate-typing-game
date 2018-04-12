@@ -7,8 +7,7 @@ import Loading from '../../styles/Loading';
 import Title from '../../styles/Title';
 import textInputStyle from '../../styles/textInput';
 import styled from 'react-emotion';
-// import wordList from '../../utils/words';
-import { fetchUserIfNeeded } from '../../actions';
+import { selectWordList } from '../../actions';
 import { updateTime } from '../../player';
 
 const Row = styled('div')`
@@ -35,6 +34,7 @@ const RED = 'red';
 let character = 0;
 let countDown = null;
 let updateScore = null;
+let start = null;
 
 class Game extends Component {
 
@@ -56,8 +56,9 @@ class Game extends Component {
         this.resetGame = this.resetGame.bind(this);
     }
 
-    async componentDidMount() {
-        await this.props.fetchUserIfNeeded();
+    componentDidMount() {
+        if(!this.props.practice)
+            this.props.selectWordList(null); //reset currentWordList
         if(this.props.multiplayer) {
             countDown = setInterval(() => {
                 let { multiPlayerCountDown } = this.state;
@@ -78,6 +79,7 @@ class Game extends Component {
     clearInterval() {
         clearInterval(countDown);
         clearInterval(updateScore);
+        clearInterval(start);
     }
 
     initMultiplayer() {
@@ -92,7 +94,7 @@ class Game extends Component {
     }
 
     timer() {
-        let start = setInterval(() => {
+        start = setInterval(() => {
             const { correctWords, incorrectWords, keystrokes } = this.state;
             if(!this.props.multiplayer)
                 this.setState({ time: this.state.time - 1});
@@ -199,4 +201,4 @@ function mapStateToProps({ user, wordLists: { currentWordList } }) {
     return { user, currentWordList };
 }
 
-export default connect(mapStateToProps, { fetchUserIfNeeded })(Game);
+export default connect(mapStateToProps, { selectWordList })(Game);

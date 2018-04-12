@@ -21,19 +21,18 @@ class Leaderboard extends Component {
         currentLeaderboard: 'topScores'
     }
 
-    async componentDidMount() {
-        await this.props.fetchTopScores();
-        console.log(this.props);
+    componentDidMount() {
+        this.props.fetchTopScores();
     }
 
     renderScores() {
-        const { topScores: { leaderboards } } = this.props; //TODO: add leaderboards as items on leaderboard object.
+        const { topScores: { leaderboards } } = this.props;
         let position = 0;
         return leaderboards[this.state.currentLeaderboard].map(score => { position++; return <TopScore key={score._id} topScore={score} />; });
     }
 
     handleChangeLeaderboard(leaderboard) {
-        console.log(leaderboard);
+        this.setState({ currentLeaderboard: leaderboard });
     }
 
     render() {
@@ -46,8 +45,8 @@ class Leaderboard extends Component {
                 <Title>Leaderboard</Title>
                 <LeaderboardContainer>
                     <div>
-                        <button>TopScores</button>
-                        <button>TopToday</button>
+                        <button onClick={() => this.handleChangeLeaderboard('topScores')}>TopScores</button>
+                        <button onClick={() => this.handleChangeLeaderboard('topScoresToday')}>TopToday</button>
                     </div>
                     {this.renderScores()}
                 </LeaderboardContainer>

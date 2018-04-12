@@ -50,7 +50,8 @@ export default function(state = {
         case FETCH_WORD_LIST_SUCCESS:
             return {
                 ...state, 
-                currentWordList: state.items[action.payload] 
+                isFetched: true,
+                currentWordList: action.payload 
             };
         //because we are fetching lists every time we mount practice-comp this is fine for now.
         case UPDATE_WORD_LIST_SUCCESS:

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HandleWordList from './HandleWordList';
-import { selectWordList, updateWordList, deleteWordList } from '../../actions';
+import { fetchWordListIfNeeded, updateWordList, deleteWordList } from '../../actions';
 import { withRouter } from 'react-router-dom';
 import styled from 'react-emotion';
 import Loading from '../../styles/Loading';
@@ -26,9 +26,8 @@ const DeleteButton = styled('button')`
 class EditWordList extends Component {
 
     componentDidMount() {
-        //fetchWordListsIfNeeded();
-        const { match, fetchWordList } = this.props;
-        selectWordList(match.params.id);
+        const { match, fetchWordListIfNeeded } = this.props;
+        fetchWordListIfNeeded(match.params.id);
     }
 
     //TODO: ????
@@ -43,7 +42,10 @@ class EditWordList extends Component {
     }
 
     render() {
+        if(!this.props.wordLists.isFetched)
+            return <Loading />
         const { wordLists: { currentWordList: { name, words } } } = this.props;
+        console.log(this.props);;
         return(
             <div>
                 <Title>{name}</Title>
@@ -58,4 +60,10 @@ function mapStateToProps({ wordLists }) {
     return { wordLists };
 }
 
-export default connect(mapStateToProps, { selectWordList, updateWordList, deleteWordList })(withRouter(EditWordList));
+export default connect(
+    mapStateToProps, { 
+        fetchWordListIfNeeded, 
+        updateWordList, 
+        deleteWordList,  
+    })
+(withRouter(EditWordList));

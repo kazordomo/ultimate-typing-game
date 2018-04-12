@@ -9,14 +9,6 @@ import styled from 'react-emotion';
 import { submitScore, fetchUserIfNeeded } from '../../actions';
 import { newPlayer, playerIsReady, updateWpm, unsubscribe } from '../../player';
 
-const WaitingOnOpponentDiv = styled('div')`
-    width: 100%;
-    padding: 30px;
-    background-color: #232C33;
-    color: #B5B2C2;
-    text-align: center;
-`;
-
 class Multiplayer extends Component {
 
     constructor(props) {
@@ -79,7 +71,7 @@ class Multiplayer extends Component {
 
     renderGameField() {
         if(!this.state.gameIsReady) {
-            return <WaitingOnOpponentDiv>Waiting on opponent...</WaitingOnOpponentDiv>;
+            return <WaitingOnOpponent />;
         } else {
             return (
                 <div>

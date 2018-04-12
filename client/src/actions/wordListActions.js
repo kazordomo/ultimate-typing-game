@@ -24,16 +24,30 @@ export const fetchWordLists = () => async dispatch => {
     dispatch(receiveWordLists(json));
 }
 
-//TODO: for this is in charge for both default wordList and custom as well as editing. might wanna change that...
 export const selectWordList = id => dispatch => {
     dispatch({ type: SELECT_WORD_LIST, payload: id });
 }
 
-//TODO: use this if we reload page in edit. if no caching.
-export const fetchWordList = id => async dispatch => {
+const fetchWordList = id => async dispatch => {
     const response = await fetch(`/api/wordList/${id}`, { credentials: 'include' });
     const json = await response.json();
     dispatch({ type: FETCH_WORD_LIST_SUCCESS, payload: json });
+}
+
+const shouldFetchWordList = state => {
+    const wordLists = state.wordLists;
+
+    if(wordLists.isFetched)
+        return false;
+    return true;
+}
+
+export const fetchWordListIfNeeded = id => (dispatch, getState) => {
+    if(shouldFetchWordList(getState())) {
+        return dispatch(fetchWordList(id));
+    } else {
+        return dispatch(selectWordList(id));
+    }
 }
 
 export const postWordList = (wordList, history) => async dispatch => {
