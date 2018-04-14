@@ -30,6 +30,7 @@ const CountDown = styled('div')`
 
 const BACKSPACE = 8;
 const SPACE = 32;
+const ENTER = 13;
 const RED = 'red';
 let character = 0;
 let countDown = null;
@@ -46,7 +47,6 @@ class Game extends Component {
             keystrokes: 0,
             correctWords: 0,
             incorrectWords: 0,
-            gameOverMessage: '',
             gameIsReady: true,
             multiPlayerCountDown: 3
         }
@@ -101,7 +101,7 @@ class Game extends Component {
             if(this.state.time === 0) {
                 clearInterval(start);
                 !this.props.practice && this.props.submitScore(correctWords, incorrectWords, keystrokes);
-                this.setState({ gameOverMessage: this.props.gameOverMessage, gameIsReady: false });
+                this.setState({ gameIsReady: false });
             }
         }, 1000);
     }
@@ -128,6 +128,11 @@ class Game extends Component {
     handleOnKeyDown({ keyCode }) {
         const { gameIsReady, keystrokes, correctWords, incorrectWords } = this.state;
         this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
+
+        if(keyCode === ENTER) {
+            clearInterval(start);
+            this.setState(this.initialState);
+        }
 
         //TODO: we need to change how we start the game.
         if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
@@ -162,9 +167,6 @@ class Game extends Component {
     }
 
     render() {
-        if(!this.props.currentWordList.words)
-            return <Loading />;
-
         if(this.props.multiplayer && this.state.multiPlayerCountDown) {
             return <CountDown>{this.state.multiPlayerCountDown}</CountDown>;
         }
@@ -181,15 +183,11 @@ class Game extends Component {
                             type="text" 
                             className={textInputStyle}
                             autoFocus
-                            disabled={!true}
+                            disabled={!time}
                             onKeyDown={this.handleOnKeyDown} 
                             onKeyUp={this.handleOnKeyUp} 
                             ref='gameTextInput' />
-                        {/* <RestartButton onClick={this.resetGame}>Restart</RestartButton> */}
-                        <Counter>{time}</Counter>
-                    </Row>
-                    <Row>
-                        <GameStats stats={this.state} />
+                        { time ? <Counter>{time}</Counter> : <GameStats stats={this.state} /> }
                     </Row>
                 </Wrapper>
             </div>

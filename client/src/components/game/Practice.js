@@ -39,7 +39,6 @@ const OpenClose = styled('div')`
 `;
 
 const SubTitle = styled('h1')`
-    // padding: 25px 0px;
     color: #FFFFFF;
     font-size: 25px;
     text-align: center;
@@ -58,7 +57,9 @@ const linkStyle = css`
 `;
 
 const ListWrapper = styled('div')`
-    min-height: 70%;
+    max-height: 80%;
+    min-height: 80%;
+    overflow: auto;
 `;
 
 class Practice extends Component {

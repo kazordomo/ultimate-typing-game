@@ -46,11 +46,11 @@ module.exports = app => {
         res.send(newScore);
     });
 
-    app.get('/api/wordLists', (req, res) => {
+    app.get('/api/wordLists', requireLogin, (req, res) => {
         res.send(req.user.createdWordLists);
     });
 
-    app.get('/api/wordList/:id', (req, res) => {
+    app.get('/api/wordList/:id', requireLogin, (req, res) => {
         const wordList = req.user.createdWordLists.find(list => list.id === req.params.id);
         res.send(wordList);
     });

@@ -32,8 +32,9 @@ class EditWordList extends Component {
 
     //TODO: ????
     handleSaveList(wordList) {
-        const { match, updateWordList } = this.props;
-        updateWordList(wordList, match.params.id);
+        const { match, updateWordList, history } = this.props;
+        console.log(this.props);
+        updateWordList(wordList, match.params.id, history);
     }
 
     handleDeleteList() {
@@ -45,7 +46,6 @@ class EditWordList extends Component {
         if(!this.props.wordLists.isFetched)
             return <Loading />
         const { wordLists: { currentWordList: { name, words } } } = this.props;
-        console.log(this.props);;
         return(
             <div>
                 <Title>{name}</Title>

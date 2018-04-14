@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { postWordList } from '../../actions';
+import { addWordList } from '../../actions';
 import HandleWordList from './HandleWordList';
 import { withRouter } from 'react-router-dom';
 import Title from '../../styles/Title';
 
-const AddWordList = ({ postWordList, history }) => {
+const AddWordList = ({ addWordList, history }) => {
 
     function handleSaveList(wordList) {
-        postWordList(wordList, history);
+        addWordList(wordList, history);
     }
 
     return(
@@ -19,5 +19,5 @@ const AddWordList = ({ postWordList, history }) => {
     );
 }
 
-export default connect(null, { postWordList })(withRouter(AddWordList));
+export default connect(null, { addWordList })(withRouter(AddWordList));
 

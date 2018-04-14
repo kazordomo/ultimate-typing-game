@@ -50,7 +50,7 @@ export const fetchWordListIfNeeded = id => (dispatch, getState) => {
     }
 }
 
-export const postWordList = (wordList, history) => async dispatch => {
+export const addWordList = (wordList, history) => async dispatch => {
     const response = await fetch('/api/wordList', { 
         credentials: 'include',
         method: 'post', 
@@ -62,7 +62,8 @@ export const postWordList = (wordList, history) => async dispatch => {
     dispatch({ type: POST_WORD_LIST_SUCCESS, payload: json });
 }
 
-export const updateWordList = (wordList, id) => async dispatch => {
+export const updateWordList = (wordList, id, history) => async dispatch => {
+    //TODO: dev - proxy request econnreset
     const response = await fetch(`/api/wordList/${id}`, { 
         credentials: 'include',
         method: 'put', 
@@ -70,6 +71,7 @@ export const updateWordList = (wordList, id) => async dispatch => {
         headers: { 'Content-Type': 'application/json' }
     });
     const json = await response.json();
+    history.push('/game/practice');
     dispatch({ type: UPDATE_WORD_LIST_SUCCESS, payload: json });
 }
 

@@ -1,4 +1,5 @@
 import defaultWordList from '../utils/words';
+import { arrayToObj, shuffleWords } from '../utils';
 import { 
     SELECT_WORD_LIST,
     FETCH_WORD_LISTS_REQUEST,
@@ -10,14 +11,6 @@ import {
     UPDATE_WORD_LIST_SUCCESS
 } from '../actions/wordListActions';
 
-//export from util folder
-function arrayToObj(arr) {
-    return arr.reduce((acc, curr) => {
-        acc[curr._id] = curr;
-        return acc;
-    }, {});
-}
-
 export default function(state = {
     isFetched: false,
     items: {},
@@ -28,7 +21,7 @@ export default function(state = {
             return {
                 ...state,
                 isFetched: true,
-                currentWordList: state.items[action.payload] || defaultWordList
+                currentWordList: state.items[action.payload] || shuffleWords(defaultWordList)
             }
         case FETCH_WORD_LISTS_REQUEST:
             return {

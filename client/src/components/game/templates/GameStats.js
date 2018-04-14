@@ -3,20 +3,23 @@ import styled from 'react-emotion';
 
 const StatRow = styled('div')`
     margin: 15px 0px;
-    padding: 7px;
-    border-radius: 4px;
+    padding: 10px;
+    border-radius: 4px 12px 12px 4px;
     background: rgba(112, 244, 222, 0.2);
+    color: #FFFFFF;
 `;
 
-export default ({ stats: { gameOver, correctWords, incorrectWords, keystrokes } }) => {
-    if(!gameOver) {
-        return null;
-    }
+const Span = styled('span')`
+    color: #FFFFFF;
+`;
+
+export default ({ stats: { correctWords, incorrectWords, keystrokes } }) => {
     return (
         <div>
             <StatRow>Correct Words: {correctWords}</StatRow>
             <StatRow>Incorrect Words: {incorrectWords}</StatRow>
             <StatRow>Total Keystrokes: {keystrokes}</StatRow>
+            <Span>Press ENTER to play again</Span>
         </div>
     );
 }
