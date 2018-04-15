@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { fetchTopScores } from '../../actions';
+import { fetchTopScoresIfNeeded } from '../../actions';
 import styled from 'react-emotion';
 import TopScore from './TopScore';
 import Loading from '../../styles/Loading';
@@ -21,8 +21,9 @@ class Leaderboard extends Component {
         currentLeaderboard: 'topScores'
     }
 
-    componentDidMount() {
-        this.props.fetchTopScores();
+    async componentDidMount() {
+        await this.props.fetchTopScoresIfNeeded();
+        console.log(this.props);
     }
 
     renderScores() {
@@ -60,4 +61,4 @@ function mapStateTopProps({ topScores }) {
     return { topScores };
 }
 
-export default connect(mapStateTopProps, { fetchTopScores })(Leaderboard);
+export default connect(mapStateTopProps, { fetchTopScoresIfNeeded })(Leaderboard);
