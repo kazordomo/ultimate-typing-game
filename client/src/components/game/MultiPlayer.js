@@ -32,6 +32,14 @@ class Multiplayer extends Component {
 
     async componentDidMount() {
         await this.props.fetchUserIfNeeded();
+        this.initPlayer();
+    }
+
+    componentWillUnmount() {
+        unsubscribe();
+    }
+
+    initPlayer() {
         newPlayer(this.props.user, (err, players) => {
             let opponent = this.state.opponent;
             let user = this.state.user;
@@ -42,23 +50,6 @@ class Multiplayer extends Component {
         });
     }
 
-    componentWillUnmount() {
-        unsubscribe();
-    }
-
-    startMultiplayerGame() {
-        let timer = 3;
-        let countDown = setInterval(() => {
-            this.setState({ waitingOnOpponentText: timer })
-            if(timer === 0) {
-                this.setState({ gameIsReady: true }, () => {
-                    return clearInterval(countDown);
-                })
-            }
-            timer--;
-        }, 1000)
-    }
-
     updatePlayersWpm(wpm) {
         let user = this.state.user;
         user.wpm = wpm;
@@ -67,6 +58,18 @@ class Multiplayer extends Component {
             opponent.wpm = data;
             this.setState({ opponent, user });
         })
+    }
+
+    handleSubmitScore(correctWords, incorrectWords, keystrokes) {
+        const { user, opponent } = this.state;
+        let checkWinOrLoss = (user.wpm > opponent.wpm) ? true : false;
+        this.props.submitScore({ 
+            correctWords, 
+            incorrectWords, 
+            keystrokes, 
+            multiplayerGame: true, 
+            multiplayerWin: checkWinOrLoss 
+        });
     }
 
     renderGameField() {
@@ -87,12 +90,6 @@ class Multiplayer extends Component {
 
             );
         }
-    }
-
-    handleSubmitScore(correctWords, incorrectWords, keystrokes) {
-        const { user, opponent } = this.state;
-        let win = (user.wpm > opponent.wpm) ? 1 : 0;
-        this.props.submitScore({ correctWords, incorrectWords, keystrokes, win });
     }
 
     render() {

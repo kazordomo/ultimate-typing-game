@@ -1,5 +1,5 @@
 import styled from 'react-emotion';
 
 export default styled('div')`
-    margin-top: 20px;
+    margin: 10px 0px;
 `;

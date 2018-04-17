@@ -60,15 +60,7 @@ class Game extends Component {
         if(!this.props.practice)
             this.props.selectWordList(null); //reset currentWordList
         if(this.props.multiplayer) {
-            countDown = setInterval(() => {
-                let { multiPlayerCountDown } = this.state;
-                this.setState({multiPlayerCountDown: multiPlayerCountDown - 1});
-                if(multiPlayerCountDown === 0) {
-                    clearInterval(countDown);
-                    this.setState({multiPlayerCountDown: ''});
-                    this.initMultiplayer();
-                }
-            }, 1000);
+            this.multiplayerCountDown();
         }
     }
 
@@ -82,7 +74,7 @@ class Game extends Component {
         clearInterval(start);
     }
 
-    initMultiplayer() {
+    startMultiplayer() {
         updateScore = setInterval(() => {
             this.props.updatePlayersWpm(this.state.correctWords);
         }, 1000);
@@ -91,6 +83,18 @@ class Game extends Component {
             if(this.state.time === 0)
                 clearInterval(updateScore);
         });
+    }
+
+    multiplayerCountDown() {
+        countDown = setInterval(() => {
+            let { multiPlayerCountDown } = this.state;
+            this.setState({multiPlayerCountDown: multiPlayerCountDown - 1});
+            if(multiPlayerCountDown === 0) {
+                clearInterval(countDown);
+                this.setState({multiPlayerCountDown: ''});
+                this.startMultiplayer();
+            }
+        }, 1000);
     }
 
     timer() {

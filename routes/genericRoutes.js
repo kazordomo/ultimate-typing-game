@@ -1,4 +1,3 @@
-//TODO. refactor into gameRoutes, statisticRoutes/leaderboardRoutes, userRoutes...
 const mongoose = require('mongoose');
 const requireLogin = require('../middlewares/requireLogin');
 const Score = mongoose.model('scores');
@@ -6,16 +5,6 @@ const User = mongoose.model('users');
 
 
 module.exports = app => {
-
-    //TODO: api/scores/user, api/scores/all
-    app.get('/api/scores/user', requireLogin, async (req, res) => {
-        await Score.find({ _user: req.user.id }).sort({'correctWords': -1}).limit(5).exec((err, userScores) => {
-            if(err)
-                return err; //TODO: ERROR HANDLING
-            res.send(userScores);
-        });
-        
-    });
 
     app.get('/api/scores', requireLogin, async (req, res) => {
         let start = new Date(); //TODO: UTC, will get 22:00 the day before in swedenland
@@ -31,18 +20,16 @@ module.exports = app => {
     });
 
     app.post('/api/scores', requireLogin, async (req, res) => {
-        const { correctWords, incorrectWords, keystrokes, win } = req.body;
+        const { correctWords, incorrectWords, keystrokes } = req.body;
         const newScore = new Score({
             correctWords,
             incorrectWords,
             keystrokes,
+            multiplayerGame: req.body.multiplayerGame ? true : false,
+            multiplayerWin: req.body.multiplayerWin ? req.body.multiplayerWin : false,
             _user: req.user.id
         });
         await newScore.save();
-        if(win) {
-            req.user.multiplayerWins = req.user.multiplayerWins + 1; 
-            req.user.save();
-        }
         res.send(newScore);
     });
 
@@ -75,5 +62,10 @@ module.exports = app => {
         wordLists.splice(wordLists.indexOf(wordList), 1);
         req.user.save();
         res.send(wordLists);
+    });
+
+    app.get('/api/user/scores', requireLogin, async (req, res) => {
+        const userScores = await Score.find({ '_user': { $in: mongoose.Types.ObjectId(req.user.id) } });
+        res.send(userScores);
     });
 }

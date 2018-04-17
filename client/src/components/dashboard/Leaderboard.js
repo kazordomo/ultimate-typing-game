@@ -21,9 +21,8 @@ class Leaderboard extends Component {
         currentLeaderboard: 'topScores'
     }
 
-    async componentDidMount() {
-        await this.props.fetchTopScoresIfNeeded();
-        console.log(this.props);
+    componentDidMount() {
+        this.props.fetchTopScoresIfNeeded();
     }
 
     renderScores() {

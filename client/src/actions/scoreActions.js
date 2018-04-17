@@ -1,7 +1,6 @@
 export const FETCH_TOP_SCORES_REQUEST = 'FETCH_SCORES_REQUEST';
 export const FETCH_TOP_SCORES_SUCCESS = 'FETCH_SCORES_SUCCESS';
 export const FETCH_TOP_SCORES_ERROR = 'FETCH_SCORES_ERROR';
-export const FETCH_USER_TOP_SCORES_SUCCESS = 'FETCH_USER_TOP_SCORES_SUCCESS';
 export const POST_SCORE_SUCCESS = 'POST_SCORE_SUCCESS';
 export const POST_SCORE_ERROR = 'POST_SCORE_ERROR';
 
@@ -35,12 +34,6 @@ export const fetchTopScoresIfNeeded = () => (dispatch, getState) => {
     if(shouldFetchTopScores(getState())) {
         return dispatch(fetchTopScores());
     }
-}
-
-export const fetchUserScores = () => async dispatch => {
-    const response = await fetch('/api/scores/user', { credentials: 'include' });
-    const json = await response.json();
-    dispatch({ type: FETCH_USER_TOP_SCORES_SUCCESS, payload: json });
 }
 
 export const submitScore = score => async dispatch => {

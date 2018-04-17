@@ -26,8 +26,6 @@ const userSchema = new Schema({
         },
         password: String
     },
-    multiplayerWins: { type: Number, default: 0 },
-    level: { type: Number, default: 0 },
     createdDate: { type: Date, default: Date.now },
     createdWordLists: [WordListSchema]
 });

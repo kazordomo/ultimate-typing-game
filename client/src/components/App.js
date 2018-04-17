@@ -14,6 +14,8 @@ import Game from './game/Game';
 import Leaderboard from './dashboard/Leaderboard';
 import AddWordList from './game/AddWordList';
 import EditWordList from './game/EditWordList';
+import UserStats from './dashboard/UserStats';
+import Settings from './dashboard/Settings';
 
 //RENDERS 100 TIMES?!
 injectGlobal`
@@ -26,7 +28,7 @@ injectGlobal`
 `;
 
 const Container = styled('div')`
-    width: 2000px;
+    width: 800px;
     max-width: 90%;
     margin: 0 auto;
     margin-top: 50px;
@@ -45,6 +47,8 @@ class App extends Component {
                     {/* <Header /> */}
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />
+                    <Route exact path='/stats' component={UserStats} />
+                    <Route exact path='/settings' component={Settings} />
                     <Route exact path='/leaderboard' component={Leaderboard} />
                     <Route exact path='/game' component={Game} />
                     <Route exact path='/game/singleplayer' component={SinglePlayer} />

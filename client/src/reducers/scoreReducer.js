@@ -21,7 +21,8 @@ function sortLeaderboards(leaderboards, payload) {
 
 export default (state = { 
     isFetched: false,
-    leaderboards: {} 
+    leaderboards: {},
+    error: false
 }, action) => {
     switch (action.type) {
         case FETCH_TOP_SCORES_REQUEST:
