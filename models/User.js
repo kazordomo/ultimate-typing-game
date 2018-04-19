@@ -19,11 +19,6 @@ const userSchema = new Schema({
             unique: true,
             trim: true
         },
-        email: {
-            type: String,
-            unique: true,
-            trim: true
-        },
         password: String
     },
     createdDate: { type: Date, default: Date.now },

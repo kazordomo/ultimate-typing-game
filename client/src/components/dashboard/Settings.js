@@ -1,11 +1,25 @@
 import React from 'react';
-import GoBack from '../utils/GoBack';
+import GoBack from '../basic/GoBack';
+import Title from '../../styles/Title';
 
 const Settings = () => {
+
+    function deleteAccount() {
+        fetch('/auth/deleteAccount', {
+            credentials: 'include',
+            method: 'delete',
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+
     return (
         <div>
             <GoBack goTo='/dashboard' />
-            Settings
+            <Title>Settings</Title>
+            <div>Unlink facebook</div>
+            <div>Unlink google</div>
+            <div>Change password</div>
+            <button onClick={() => deleteAccount()}>Delete account</button>
         </div>
     )
 }

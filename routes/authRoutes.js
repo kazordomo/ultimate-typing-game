@@ -1,4 +1,6 @@
+const mongoose = require('mongoose');
 const passport = require('passport');
+const User = mongoose.model('users');
 
 module.exports = app => {
     //start the auth process.
@@ -44,6 +46,17 @@ module.exports = app => {
                 res.send(user); //sending back credentials as well atm
             });
         })(req, res, next);
+    });
+
+    app.delete('/auth/deleteAccount', (req, res) => {
+        User.findByIdAndRemove(req.user.id)
+        .exec()
+        .then(doc => {
+            if(! doc)
+                return res.stateus(404).end();
+            return res.status(204).end();
+        })
+        .catch(err => nex(err));
     });
 
     app.get('/api/current_user', (req, res) => {

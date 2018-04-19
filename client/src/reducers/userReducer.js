@@ -7,6 +7,7 @@ import {
 export default (state = { 
     isFetching: true, 
     user: {}, 
+    isAuthenticated: false,
     error: false
 }, action) => {
     switch (action.type) {
@@ -21,6 +22,7 @@ export default (state = {
                 ...state,
                 isFetching: false,
                 user: action.payload,
+                isAuthenticated: true,
                 error: false
             }
         case FETCH_USER_ERROR:

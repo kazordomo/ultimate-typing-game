@@ -24,7 +24,7 @@ const fetchUser = () => async dispatch => {
 
 const shouldFetchUser = state => {
     const user = state.user.user;
-    // if(!user)
+    
     if(Object.keys(user).length === 0)
         return true;
     if(user.isFetching)

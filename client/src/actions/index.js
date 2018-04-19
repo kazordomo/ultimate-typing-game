@@ -1,5 +1,5 @@
 export * from './userActions';
-export * from './userStatActions';
+export * from './statsActions';
 export * from './scoreActions';
 export * from './wordListActions';
 export * from './formActions';

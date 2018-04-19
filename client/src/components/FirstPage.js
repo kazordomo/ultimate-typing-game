@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from './login/Login';
+import Login from './auth/AuthContainer';
 import styled from 'react-emotion';
 import Wrapper from '../styles/Wrapper';
 

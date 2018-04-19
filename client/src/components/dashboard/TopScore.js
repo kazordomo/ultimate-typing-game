@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'react-emotion';
+import { Link } from 'react-router-dom';
 
 const TopScoreRow = styled('div')`
     margin: 20px 0px;
@@ -14,13 +15,15 @@ const Date = styled('span')`
     float: right;
 `;
 
-const TopScore = ({topScore: { correctWords, scoreDate, _id }}) => {
+const TopScore = ({topScore: { correctWords, scoreDate, username, position, _user }}) => {
     return (
         <TopScoreRow>
-            <span>1</span>
+            <Link to={`/stats/${_user}`}>JA</Link>
+            <span>{position}</span>
+            <TopScoreStatDivider>-</TopScoreStatDivider>
+            <span>{username}</span>
             <TopScoreStatDivider>-</TopScoreStatDivider>
             <span>{correctWords}</span>
-            <TopScoreStatDivider>-</TopScoreStatDivider>
             <Date>{scoreDate}</Date>
         </TopScoreRow>
     );

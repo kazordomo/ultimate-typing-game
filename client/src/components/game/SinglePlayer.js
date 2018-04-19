@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { submitScore } from '../../actions';
 import Game from './Game';
-import GoBack from '../utils/GoBack';
+import GoBack from '../basic/GoBack';
 
 class SinglePlayer extends Component {
 

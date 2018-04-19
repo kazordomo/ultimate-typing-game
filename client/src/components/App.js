@@ -3,6 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import styled, { injectGlobal } from 'react-emotion';
+import PrivateRoute from './PrivateRoute';
 import Background from '../styles/Background';
 import Header from './Header';
 import FirstPage from './FirstPage';
@@ -34,6 +35,8 @@ const Container = styled('div')`
     margin-top: 50px;
 `;
 
+//TODO: FIX THE FRIKKING LOGIN PAGE
+
 class App extends Component {
     componentDidMount() {
         this.props.fetchUserIfNeeded();
@@ -44,10 +47,9 @@ class App extends Component {
             <BrowserRouter>
                 <Container>
                     <Background />
-                    {/* <Header /> */}
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />
-                    <Route exact path='/stats' component={UserStats} />
+                    <Route exact path='/stats/:id' component={UserStats} />
                     <Route exact path='/settings' component={Settings} />
                     <Route exact path='/leaderboard' component={Leaderboard} />
                     <Route exact path='/game' component={Game} />

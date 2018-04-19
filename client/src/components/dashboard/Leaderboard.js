@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import TopScore from './TopScore';
 import Loading from '../../styles/Loading';
 import Title from '../../styles/Title';
-import GoBack from '../utils/GoBack';
+import GoBack from '../basic/GoBack';
 import { Link } from 'react-router-dom';
 
 const LeaderboardContainer = styled('div')`
@@ -27,8 +27,13 @@ class Leaderboard extends Component {
 
     renderScores() {
         const { topScores: { leaderboards } } = this.props;
-        let position = 0;
-        return leaderboards[this.state.currentLeaderboard].map(score => { position++; return <TopScore key={score._id} topScore={score} />; });
+        let position = 1;
+        return leaderboards[this.state.currentLeaderboard].map(score => { 
+            score.position = position++; 
+            return <TopScore 
+                    key={score._id} 
+                    topScore={score} />; 
+        });
     }
 
     handleChangeLeaderboard(leaderboard) {

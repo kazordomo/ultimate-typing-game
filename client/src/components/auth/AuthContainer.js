@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import SocialMediaLogin from './SocialMediaLogin';
-import LocalRegister from './LocalRegister';
-import LocalLogin from './LocalLogin';
+import SocialMedia from './SocialMedia';
+import Register from './Register';
+import Login from './Login';
 import ErrorMessage from '../../styles/ErrorMessage';
 import Row from '../../styles/Row';
 import * as actions from '../../actions';
@@ -53,11 +53,11 @@ class Login extends Component {
         return (
             //PREVENT DEFAULT
             this.state.showRegister ? 
-                <LocalRegister 
+                <Register 
                     handleAuthSubmit={() => submitAuthForm(authForm.values, 'signup', history)}
                     getLogin={() => this.toggleRegisterLogin.bind(this)} 
                     styles={localStyles} /> :
-                <LocalLogin 
+                <Login 
                     handleAuthSubmit={() => submitAuthForm(authForm.values, 'login', history)} 
                     getRegister={() => this.toggleRegisterLogin.bind(this)} 
                     styles={localStyles} />
@@ -81,7 +81,7 @@ class Login extends Component {
             <div>
                 {this.renderErrorMsg()}
                 {this.renderAuthType()}
-                <SocialMediaLogin />
+                <SocialMedia />
             </div>
         );
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ActiveWords from './templates/ActiveWords';
-import GameStats from './templates/GameStats';
+import ActiveWords from './ActiveWords';
+import GameStats from './GameStats';
 import Wrapper from '../../styles/Wrapper';
 import Loading from '../../styles/Loading';
 import Title from '../../styles/Title';

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchUserStatsIfNeeded } from '../../actions';
+import { fetchStatsIfNeeded, fetchUserIfNeeded } from '../../actions';
 import Stat from './Stat';
+import Title from '../../styles/Title';
 import Loading from '../../styles/Loading';
-import GoBack from '../utils/GoBack';
+import GoBack from '../basic/GoBack';
 import styled from 'react-emotion';
 import { LineChart, Line, Tooltip } from 'recharts';
 
@@ -15,7 +16,7 @@ const StatsContainer = styled('div')`
 class UserStats extends Component {
 
     async componentDidMount() {
-        await this.props.fetchUserStatsIfNeeded();
+        await this.props.fetchStatsIfNeeded(this.props.match.params.id);
     }
 
     sortChartData() {
@@ -31,15 +32,17 @@ class UserStats extends Component {
         let { userStats: { stats } } = this.props;
         return (
             <StatsContainer>
+                <Title>Statistics</Title>
                 <GoBack goTo='/dashboard' />
                 <Stat label={'Average WPM'} stat={stats.wpm} />
                 <Stat label={'Total Games'} stat={stats.totalGames} />
-                <Stat label={'Total Correct Words'} stat={stats.totalCorrectWords} />
-                <Stat label={'Total Incorrect Words'} stat={stats.totalIncorrectWords} />
+                <Stat label={'Total Correct Words'} stat={stats.correctWords} />
+                <Stat label={'Total Incorrect Words'} stat={stats.incorrectWords} />
                 <Stat label={'Total Keystrokes'} stat={stats.keystrokes} />
+                <Stat label={'Total Perfect Games'} stat={stats.totalPerfectGames} />
                 <Stat label={'Total Multiplayer Games'} stat={stats.totalMultiplayerGames} />
                 <Stat label={'Total Multiplayer Wins'} stat={stats.totalMultiplayerWins} />
-                <LineChart width={400} height={400} data={this.sortChartData()}>
+                <LineChart width={400} height={200} data={this.sortChartData()}>
                     <Tooltip/>
                     <Line type="monotone" dataKey="wpm" stroke="#8884d8" />
                 </LineChart>
@@ -48,8 +51,8 @@ class UserStats extends Component {
     }
 }
 
-function mapStateToProps({ userStats }) {
-    return { userStats };
+function mapStateToProps({ user, userStats }) {
+    return { user, userStats };
 }
 
-export default connect(mapStateToProps, { fetchUserStatsIfNeeded })(UserStats);
+export default connect(mapStateToProps, { fetchStatsIfNeeded, fetchUserIfNeeded })(UserStats);

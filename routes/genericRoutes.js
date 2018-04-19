@@ -25,8 +25,10 @@ module.exports = app => {
             correctWords,
             incorrectWords,
             keystrokes,
+            perfectGame: incorrectWords ? false : true,
             multiplayerGame: req.body.multiplayerGame ? true : false,
             multiplayerWin: req.body.multiplayerWin ? req.body.multiplayerWin : false,
+            username: req.user.local.username, //TODO: create an user object. get username from facebook/google login aswell.
             _user: req.user.id
         });
         await newScore.save();
@@ -64,8 +66,8 @@ module.exports = app => {
         res.send(wordLists);
     });
 
-    app.get('/api/user/scores', requireLogin, async (req, res) => {
-        const userScores = await Score.find({ '_user': { $in: mongoose.Types.ObjectId(req.user.id) } });
-        res.send(userScores);
+    app.get('/api/user/scores/:id', requireLogin, async (req, res) => {
+        const scores = await Score.find({ '_user': { $in: mongoose.Types.ObjectId(req.params.id) } });
+        res.send(scores);
     });
 }

@@ -4,7 +4,7 @@ import Game from './Game';
 import WaitingOnOpponent from './WaitingOnOpponent';
 import WpmTracker from './WpmTracker';
 import Wrapper from '../../styles/Wrapper';
-import GoBack from '../utils/GoBack';
+import GoBack from '../basic/GoBack';
 import styled from 'react-emotion';
 import { submitScore, fetchUserIfNeeded } from '../../actions';
 import { newPlayer, playerIsReady, updateWpm, unsubscribe } from '../../player';

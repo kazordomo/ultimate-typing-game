@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PlayButtons from './PlayButtons';
 import UserTopScores from './UserTopScores';
 import Loading from '../../styles/Loading';
@@ -47,7 +48,7 @@ const {
     item6
 } = CssGrid;
 
-const Dashboard = () => {
+const Dashboard = ({ user: { user } }) => {
 
     return(
         <div>
@@ -65,7 +66,7 @@ const Dashboard = () => {
                 <GridItem className={item5}>
                     <I className="fas fa-user"></I>
                     <SectionTitle top={'3%'} right={'90%'} left>Stats</SectionTitle>
-                    <Link to='/stats' className={linkStyle}></Link>
+                    <Link to={`/stats/${user._id}`} className={linkStyle}></Link>
                 </GridItem>
                 <GridItem className={item6}>
                     <I className="fas fa-cog"></I>
@@ -77,4 +78,8 @@ const Dashboard = () => {
     );
 }
 
-export default Dashboard;
+function mapStatToProps({ user }) {
+    return { user };
+}
+
+export default connect(mapStatToProps, null)(Dashboard);

@@ -6,7 +6,7 @@ import WordListItem from './WordListItem';
 import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
 import FlexContainer from '../../styles/FlexContainer';
-import GoBack from '../utils/GoBack';
+import GoBack from '../basic/GoBack';
 import { fetchWordLists, fetchWordListIfNeeded } from '../../actions';
 import { Link } from 'react-router-dom';
 
@@ -61,6 +61,12 @@ const ListWrapper = styled('div')`
     min-height: 80%;
     overflow: auto;
 `;
+
+//TODO: the user should be able to upload wordlists, and let other people test them out.
+//the wordlist should therefore be able to have labels on it, as in what language it is written in in.
+
+//WORD-LIST-SCHEMA:
+//name, words, labels, rating, _user, published
 
 class Practice extends Component {
 
