@@ -5,7 +5,6 @@ import * as actions from '../actions';
 import styled, { injectGlobal } from 'react-emotion';
 import PrivateRoute from './PrivateRoute';
 import Background from '../styles/Background';
-import Header from './Header';
 import FirstPage from './FirstPage';
 import Dashboard from './dashboard/Dashboard';
 import SinglePlayer from './game/SinglePlayer';
@@ -15,7 +14,7 @@ import Game from './game/Game';
 import Leaderboard from './dashboard/Leaderboard';
 import AddWordList from './game/AddWordList';
 import EditWordList from './game/EditWordList';
-import UserStats from './dashboard/UserStats';
+import Stats from './dashboard/Stats';
 import Settings from './dashboard/Settings';
 
 //RENDERS 100 TIMES?!
@@ -49,7 +48,7 @@ class App extends Component {
                     <Background />
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />
-                    <Route exact path='/stats/:id' component={UserStats} />
+                    <Route exact path='/stats/:id' component={Stats} />
                     <Route exact path='/settings' component={Settings} />
                     <Route exact path='/leaderboard' component={Leaderboard} />
                     <Route exact path='/game' component={Game} />

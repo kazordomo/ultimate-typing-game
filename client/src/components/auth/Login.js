@@ -3,7 +3,7 @@ import { reduxForm, Field } from 'redux-form';
 import AuthField from './AuthField';
 import Button from '../../styles/Button';
 
-const LocalLogin = ({ handleSubmit, handleAuthSubmit, getRegister, styles }) => {
+const Login = ({ handleSubmit, handleAuthSubmit, getRegister, styles }) => {
     const { I, TextInput, FlexItemLong, FlexItemShort, FlexRow, FlexRowItem, Row } = styles;
     return(
         <form onSubmit={handleSubmit(handleSubmit(handleAuthSubmit))} >
@@ -34,4 +34,4 @@ const LocalLogin = ({ handleSubmit, handleAuthSubmit, getRegister, styles }) => 
 
 export default reduxForm({
     form: 'authForm'
-})(LocalLogin);
+})(Login);

@@ -13,7 +13,7 @@ export function arrayToObj(arr) {
     }, {});
 }
 
-export function calculateUserStats(scores, payload) {
+export function calculateStats(scores, payload) {
     if(payload)
         scores.push(payload);
 

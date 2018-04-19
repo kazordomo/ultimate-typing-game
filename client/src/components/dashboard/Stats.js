@@ -13,23 +13,23 @@ const StatsContainer = styled('div')`
     font-size: 20px;
 `;
 
-class UserStats extends Component {
+class Stats extends Component {
 
     async componentDidMount() {
         await this.props.fetchStatsIfNeeded(this.props.match.params.id);
     }
 
     sortChartData() {
-        return this.props.userStats.scores.map(score => {
+        return this.props.stats.scores.map(score => {
             return { wpm: score.correctWords };
         });
 
     }
 
     render() {
-        if(!this.props.userStats.isFetched)
+        if(!this.props.stats.isFetched)
             return <Loading />
-        let { userStats: { stats } } = this.props;
+        let { stats: { stats } } = this.props;
         return (
             <StatsContainer>
                 <Title>Statistics</Title>
@@ -51,8 +51,8 @@ class UserStats extends Component {
     }
 }
 
-function mapStateToProps({ user, userStats }) {
-    return { user, userStats };
+function mapStateToProps({ user, stats }) {
+    return { user, stats };
 }
 
-export default connect(mapStateToProps, { fetchStatsIfNeeded, fetchUserIfNeeded })(UserStats);
+export default connect(mapStateToProps, { fetchStatsIfNeeded, fetchUserIfNeeded })(Stats);

@@ -20,11 +20,11 @@ const fetchStats = id => async dispatch => {
 
 const shouldfetchStats = state => {
     return true; //TODO: remove.
-    const userStats = state.userStats;
+    const stats = state.stats;
 
-    if(Object.keys(userStats.stats).length === 0)
+    if(Object.keys(stats.stats).length === 0)
         return true;
-    if(userStats.isFetched)
+    if(stats.isFetched)
         return false;
     return false;
 }

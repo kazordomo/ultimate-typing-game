@@ -40,7 +40,7 @@ const localStyles = {
     `
 };
 
-class Login extends Component {
+class AuthContainer extends Component {
 
     constructor() {
         super();
@@ -91,4 +91,4 @@ function mapStateToProps({ submitAuthForm, form: { authForm }, user }) {
     return { submitAuthForm, authForm, user };
 }
 
-export default connect(mapStateToProps, actions)(withRouter(Login));
+export default connect(mapStateToProps, actions)(withRouter(AuthContainer));

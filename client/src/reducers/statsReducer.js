@@ -7,7 +7,7 @@ import {
     POST_SCORE_SUCCESS, 
     POST_SCORE_ERROR 
 } from '../actions/scoreActions';
-import { calculateUserStats } from '../utils';
+import { calculateStats } from '../utils';
 
 export default (state = { 
     isFetched: false,
@@ -26,7 +26,7 @@ export default (state = {
                 ...state,
                 isFetched: true,
                 scores: action.payload,
-                stats: calculateUserStats(action.payload, null)
+                stats: calculateStats(action.payload, null)
             }
         case FETCH_STATS_ERROR:
             return {
@@ -39,7 +39,7 @@ export default (state = {
                 return {
                     ...state,
                     scores: [...state.scores, action.payload],
-                    stats: calculateUserStats(state.scores, action.payload)
+                    stats: calculateStats(state.scores, action.payload)
                 }
             }
             else
