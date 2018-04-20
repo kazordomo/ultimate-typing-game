@@ -12,10 +12,13 @@ const Settings = () => {
         });
     }
 
+    //TODO: the unlinking should be done when deleting account.
+
     return (
         <div>
             <GoBack goTo='/dashboard' />
             <Title>Settings</Title>
+            <a href='/api/logout'>Logout</a>
             <div>Unlink facebook</div>
             <div>Unlink google</div>
             <div>Change password</div>

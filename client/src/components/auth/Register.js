@@ -1,13 +1,14 @@
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
+import validate from './validateForm';
 import AuthField from './AuthField';
 import Button from '../../styles/Button';
-import validate from './validateForm';
+import AuthStyles from '../../styles/AuthStyles';
 
-const LocalRegister = ({ handleSubmit, handleAuthSubmit, getLogin, styles }) => {
-    const { I, TextInput, FlexItemLong, FlexItemShort, FlexRow, FlexRowItem, Row } = styles;
+const LocalRegister = ({ handleSubmit, _onSubmit, getLogin, styles }) => {
+    const { I, TextInput, FlexItemLong, FlexItemShort, FlexRow, FlexRowItem, Row } = AuthStyles;
     return(
-        <form onSubmit={handleSubmit(handleSubmit(handleAuthSubmit))} >
+        <form onSubmit={handleSubmit(_onSubmit)} >
             <TextInput>
                 <FlexItemShort>
                     <I className='fas fa-user'></I>
@@ -16,14 +17,6 @@ const LocalRegister = ({ handleSubmit, handleAuthSubmit, getLogin, styles }) => 
                     <Field component={AuthField} type='text' label='Username' name='username' />
                 </FlexItemLong>
             </TextInput>
-            {/* <TextInput>
-                <FlexItemShort>
-                    <I className='fas fa-user'></I>
-                </FlexItemShort>
-                <FlexItemLong>
-                    <Field component={AuthField} type='email' label='Email' name='email' />
-                </FlexItemLong>
-            </TextInput> */}
             <TextInput>
                 <FlexItemShort>
                     <I className='fas fa-unlock-alt'></I>
@@ -51,6 +44,5 @@ const LocalRegister = ({ handleSubmit, handleAuthSubmit, getLogin, styles }) => 
 }
 
 export default reduxForm({
-    validate,
     form: 'authForm'
 })(LocalRegister);

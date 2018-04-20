@@ -1,5 +1,8 @@
+/*
+    Will keep this around. Unused atm.
+*/
 export default function(values) {
-    //TODO: only show error message when submitted.    
+    console.log(values);
     const errors = {}
     if (!values.username) {
         errors.username = 'Required';
@@ -16,10 +19,9 @@ export default function(values) {
     if (!values.password) {
         errors.password = 'Required';
     }
-    //we will stick to client side validation on this.
     if(!values.retypepassword) {
         errors.retypepassword = 'Required';
-    } else  if(values.retypepassword !== values.password) {
+    } else if(values.retypepassword !== values.password) {
         errors.retypepassword = 'The passwords do not match!';
     }
 

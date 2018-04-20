@@ -1,12 +1,13 @@
 import React from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, Form } from 'redux-form';
 import AuthField from './AuthField';
 import Button from '../../styles/Button';
+import AuthStyles from '../../styles/AuthStyles';
 
-const Login = ({ handleSubmit, handleAuthSubmit, getRegister, styles }) => {
-    const { I, TextInput, FlexItemLong, FlexItemShort, FlexRow, FlexRowItem, Row } = styles;
+const Login = ({ handleSubmit, _onSubmit, getRegister, styles }) => {
+    const { I, TextInput, FlexItemLong, FlexItemShort, FlexRow, FlexRowItem, Row } = AuthStyles;
     return(
-        <form onSubmit={handleSubmit(handleSubmit(handleAuthSubmit))} >
+        <form onSubmit={handleSubmit(_onSubmit)} >
             <TextInput>
                 <FlexItemShort>
                     <I className='fas fa-user'></I>
@@ -26,7 +27,7 @@ const Login = ({ handleSubmit, handleAuthSubmit, getRegister, styles }) => {
             </Row>
             <FlexRow>
                 <FlexRowItem white onClick={getRegister()}>Create Account</FlexRowItem>
-                <FlexRowItem>Forgot Password</FlexRowItem>
+                {/* <FlexRowItem>Forgot Password</FlexRowItem> */}
             </FlexRow>
         </form>
     );

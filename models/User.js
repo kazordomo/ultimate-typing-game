@@ -7,11 +7,13 @@ const WordListSchema = require('./WordList');
 const userSchema = new Schema({
     facebook: {
         id: String,
-        token: String
+        token: String,
+        username: String
     },
     google: {
         id: String,
-        token: String
+        token: String,
+        username: String
     },
     local: {
         username: {

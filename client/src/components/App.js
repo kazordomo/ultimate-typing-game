@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import styled, { injectGlobal } from 'react-emotion';
@@ -10,7 +10,6 @@ import Dashboard from './dashboard/Dashboard';
 import SinglePlayer from './game/SinglePlayer';
 import MultiPlayer from './game/MultiPlayer';
 import Practice from './game/Practice';
-import Game from './game/Game';
 import Leaderboard from './dashboard/Leaderboard';
 import AddWordList from './game/AddWordList';
 import EditWordList from './game/EditWordList';
@@ -34,11 +33,9 @@ const Container = styled('div')`
     margin-top: 50px;
 `;
 
-//TODO: FIX THE FRIKKING LOGIN PAGE
-
 class App extends Component {
-    componentDidMount() {
-        this.props.fetchUserIfNeeded();
+    async componentDidMount() {
+        await this.props.fetchUserIfNeeded();
     }
 
     render() {
@@ -51,7 +48,6 @@ class App extends Component {
                     <Route exact path='/stats/:id' component={Stats} />
                     <Route exact path='/settings' component={Settings} />
                     <Route exact path='/leaderboard' component={Leaderboard} />
-                    <Route exact path='/game' component={Game} />
                     <Route exact path='/game/singleplayer' component={SinglePlayer} />
                     <Route exact path='/game/multiplayer' component={MultiPlayer} />
                     <Route exact path='/game/practice' component={Practice} />
@@ -64,4 +60,8 @@ class App extends Component {
     }
 }
 
-export default connect(null, actions)(App);
+function mapStateToProps({ user }) {
+    return { user }
+}
+
+export default connect(mapStateToProps, actions)(App);

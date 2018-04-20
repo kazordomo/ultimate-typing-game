@@ -5,30 +5,28 @@ import {
 } from '../actions/userActions';
 
 export default (state = { 
-    isFetching: true, 
-    user: {}, 
     isAuthenticated: false,
+    user: {}, 
     error: false
 }, action) => {
     switch (action.type) {
         case FETCH_USER_REQUEST:
             return {
                 ...state,
-                isFetching: true,
-                error: false
+                isAuthenticated: false,
+                error: false,
             }
         case FETCH_USER_SUCCESS:
             return {
                 ...state,
-                isFetching: false,
+                isAuthenticated: Object.keys(action.payload).length ? true : false,
                 user: action.payload,
-                isAuthenticated: true,
                 error: false
             }
         case FETCH_USER_ERROR:
             return {
                 ...state,
-                isFetching: false,
+                isFetched: false,
                 error: action.payload
             }
         default:

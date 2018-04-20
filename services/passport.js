@@ -28,6 +28,7 @@ passport.use(new FacebookStrategy({
     if(user) {
         return done(null, user);
     }
+    // const username = firstName + lastName;    
     const newUser = await new User({ facebook: { id, token } }).save();
     return done(null, newUser);
 }));
@@ -43,6 +44,7 @@ passport.use(new GoogleStrategy({
     if(user) {
         return done(null, user);
     }
+    // const username = firstName + lastName;
     const newUser = await new User({ google: { id, token } }).save();
     return done(null, newUser);
 }));
@@ -59,6 +61,9 @@ passport.use('local-signup', new LocalStrategy({
         const user = await User.findOne({ 'local.username': username });
         if(user) {
             return done(null, false, { success: false, status: 400, message: 'User already exists.' });
+        }
+        if(req.body.password !== req.body.retypepassword) {
+            return done(null, false, { success: false, status: 400, message: 'The passwords do not match.' });
         }
         const newUser = new User();
         newUser.local.username = username;

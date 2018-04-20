@@ -49,7 +49,7 @@ const {
 } = CssGrid;
 
 const Dashboard = ({ user: { user } }) => {
-
+    
     return(
         <div>
             <MainTitle>Ultimate Typing Game</MainTitle>
