@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import SocialMedia from './SocialMedia';
 import Register from './Register';
 import Login from './Login';
 import ErrorMessage from '../../styles/ErrorMessage';
 import Row from '../../styles/Row';
-import { submitAuthForm  } from '../../actions';
+import { submitAuthForm } from '../../actions';
 
 class AuthContainer extends Component {
 
     state = { showRegister: false };
 
-    //TODO: preventDefault. What.
-    handleAuthSubmit(authType) {
-        const {submitAuthForm, authForm, history } = this.props;
-        submitAuthForm(authForm.values, authType, history);
+    handleAuthSubmit(authType, values) {
+        this.props.submitAuthForm(values, authType, this.props.history);
     }
 
     toggleRegisterLogin() {
@@ -31,15 +29,21 @@ class AuthContainer extends Component {
     }
 
     render() {
+
+        //HasTokenRoute in app.js
+        if(this.props.user.isAuthenticated) {
+            return <Redirect to='/dashboard' />
+        }
+
         return(
             <div>
                 { this.renderErrorMsg() }
                 { this.state.showRegister ? 
                 <Register 
-                    _onSubmit={() => this.handleAuthSubmit('signup')}
+                    _onSubmit={this.handleAuthSubmit.bind(this)}
                     getLogin={() => this.toggleRegisterLogin.bind(this)} /> :
                 <Login 
-                    _onSubmit={() => this.handleAuthSubmit('login')} 
+                    _onSubmit={this.handleAuthSubmit.bind(this)} 
                     getRegister={() => this.toggleRegisterLogin.bind(this)} /> }
                 <SocialMedia />
             </div>
@@ -47,8 +51,8 @@ class AuthContainer extends Component {
     }
 }
 
-function mapStateToProps({ form: { authForm }, user }) {
-    return { authForm, user };
+function mapStateToProps({ user }) {
+    return { user };
 }
 
 export default connect(mapStateToProps, { submitAuthForm } )(withRouter(AuthContainer));

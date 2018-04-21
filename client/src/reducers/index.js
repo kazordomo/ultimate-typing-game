@@ -3,12 +3,10 @@ import user from './userReducer';
 import stats from './statsReducer';
 import wordLists from './wordListReducer';
 import topScores from './scoreReducer';
-import { reducer as form } from 'redux-form';
 
 export default combineReducers({
     user,
     stats,
-    form,
     wordLists,
     topScores,
 });

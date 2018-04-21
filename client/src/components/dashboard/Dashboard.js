@@ -48,8 +48,7 @@ const {
     item6
 } = CssGrid;
 
-const Dashboard = ({ user: { user } }) => {
-    
+const Dashboard = ({ user: { data } }) => {
     return(
         <div>
             <MainTitle>Ultimate Typing Game</MainTitle>
@@ -66,7 +65,7 @@ const Dashboard = ({ user: { user } }) => {
                 <GridItem className={item5}>
                     <I className="fas fa-user"></I>
                     <SectionTitle top={'3%'} right={'90%'} left>Stats</SectionTitle>
-                    <Link to={`/stats/${user._id}`} className={linkStyle}></Link>
+                    <Link to={`/stats/${data._id}`} className={linkStyle}></Link>
                 </GridItem>
                 <GridItem className={item6}>
                     <I className="fas fa-cog"></I>

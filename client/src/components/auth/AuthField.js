@@ -15,11 +15,16 @@ const textInputStyle = css`
     box-sizing: border-box;
 `;
 
-export default ({ input, label, type }) => {
+export default ({ name, label, type, onChange, value }) => {
     return (
         <FormGroup>
-            {/* touchOnBlur={false}  */}
-            <input className={textInputStyle} {...input} type={type} placeholder={label} />
+            <input 
+                name={name}
+                className={textInputStyle} 
+                type={type} 
+                placeholder={label} 
+                onChange={onChange} 
+                value={value} />
         </FormGroup>
     );
 }

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const passport = require('passport');
+// const jwt = require('jsonwebtoken');
 const User = mongoose.model('users');
 
 module.exports = app => {

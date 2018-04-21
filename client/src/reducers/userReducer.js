@@ -6,7 +6,7 @@ import {
 
 export default (state = { 
     isAuthenticated: false,
-    user: {}, 
+    data: {}, 
     error: false
 }, action) => {
     switch (action.type) {
@@ -20,7 +20,7 @@ export default (state = {
             return {
                 ...state,
                 isAuthenticated: Object.keys(action.payload).length ? true : false,
-                user: action.payload,
+                data: action.payload,
                 error: false
             }
         case FETCH_USER_ERROR:
