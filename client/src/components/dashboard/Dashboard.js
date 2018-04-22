@@ -65,7 +65,7 @@ const Dashboard = ({ user: { data } }) => {
                 <GridItem className={item5}>
                     <I className="fas fa-user"></I>
                     <SectionTitle top={'3%'} right={'90%'} left>Stats</SectionTitle>
-                    <Link to={`/stats/${data._id}`} className={linkStyle}></Link>
+                    <Link to={`/stats/${data._id}/false`} className={linkStyle}></Link>
                 </GridItem>
                 <GridItem className={item6}>
                     <I className="fas fa-cog"></I>

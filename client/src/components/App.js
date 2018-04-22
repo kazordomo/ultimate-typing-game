@@ -45,7 +45,7 @@ class App extends Component {
                     <Background />
                     <Route exact path='/' component={FirstPage} />
                     <Route path='/dashboard' component={Dashboard} />
-                    <Route exact path='/stats/:id' component={Stats} />
+                    <Route exact path='/stats/:id/:isExternal' component={Stats} />
                     <Route exact path='/settings' component={Settings} />
                     <Route exact path='/leaderboard' component={Leaderboard} />
                     <Route exact path='/game/singleplayer' component={SinglePlayer} />

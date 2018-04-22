@@ -18,7 +18,7 @@ const Date = styled('span')`
 const TopScore = ({topScore: { correctWords, scoreDate, username, position, _user }}) => {
     return (
         <TopScoreRow>
-            <Link to={`/stats/${_user}`}>JA</Link>
+            <Link to={`/stats/${_user}/true`}>JA</Link>
             <span>{position}</span>
             <TopScoreStatDivider>-</TopScoreStatDivider>
             <span>{username}</span>

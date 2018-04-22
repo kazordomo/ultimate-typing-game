@@ -1,9 +1,14 @@
 export const FETCH_STATS_REQUEST = 'FETCH_STATS_REQUEST';
 export const FETCH_STATS_SUCCESS = 'FETCH_STATS_SUCCESS';
 export const FETCH_STATS_ERROR = 'FETCH_STATS_ERROR';
+export const FETCH_EXTERNAL_PLAYER_STATS_REQUEST = 'FETCH_EXTERNAL_PLAYER_STATS_REQUEST';
 
 const requestStats = () => ({
     type: FETCH_STATS_REQUEST
+});
+
+const requestExternalPlayerStats = () => ({
+    type: FETCH_EXTERNAL_PLAYER_STATS_REQUEST
 });
 
 const receiveStats = data => ({
@@ -11,26 +16,27 @@ const receiveStats = data => ({
     payload: data
 });
 
-const fetchStats = id => async dispatch => {
-    dispatch(requestStats());
+
+const fetchStats = (id, isExternal) => async dispatch => {
+    isExternal ? dispatch(requestExternalPlayerStats()) : dispatch(requestStats());
     const response = await fetch(`/api/user/scores/${id}`, { credentials: 'include' });
     const json = await response.json();
     dispatch(receiveStats(json));
 }
 
-const shouldfetchStats = state => {
-    return true; //TODO: remove.
+const shouldfetchStats = (state, isExternal) => {
     const stats = state.stats;
-
-    if(Object.keys(stats.stats).length === 0)
+    if(isExternal)
+        return true;
+    if(stats.isExternalPlayerStats)
         return true;
     if(stats.isFetched)
         return false;
-    return false;
+    return true;
 }
 
-export const fetchStatsIfNeeded = id => (dispatch, getState) => {
-    if(shouldfetchStats(getState())) {
-        return dispatch(fetchStats(id));
+export const fetchStatsIfNeeded = (id, isExternal) => (dispatch, getState) => {
+    if(shouldfetchStats(getState(), isExternal)) {
+        return dispatch(fetchStats(id, isExternal));
     }
 }

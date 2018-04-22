@@ -1,8 +1,8 @@
 import { 
     FETCH_STATS_REQUEST,
     FETCH_STATS_SUCCESS,
-    FETCH_STATS_ERROR
-} from '../actions/statsActions';
+    FETCH_STATS_ERROR,
+    FETCH_EXTERNAL_PLAYER_STATS_REQUEST } from '../actions/statsActions';
 import { 
     POST_SCORE_SUCCESS, 
     POST_SCORE_ERROR 
@@ -12,21 +12,29 @@ import { calculateStats } from '../utils';
 export default (state = { 
     isFetched: false,
     stats: {},
-    scores: [], //needed to calculate the stats
+    scores: [],
+    isExternalPlayerStats: false,
     error: false
 }, action) => {
     switch (action.type) {
         case FETCH_STATS_REQUEST:
             return {
                 ...state,
-                isFetched: false
+                isFetched: false,
+                isExternalPlayerStats: false
+            }
+        case FETCH_EXTERNAL_PLAYER_STATS_REQUEST:
+            return {
+                ...state,
+                isFetched: false,
+                isExternalPlayerStats: true
             }
         case FETCH_STATS_SUCCESS:
             return {
                 ...state,
                 isFetched: true,
                 scores: action.payload,
-                stats: calculateStats(action.payload, null)
+                data: calculateStats(action.payload, null)
             }
         case FETCH_STATS_ERROR:
             return {
@@ -39,7 +47,7 @@ export default (state = {
                 return {
                     ...state,
                     scores: [...state.scores, action.payload],
-                    stats: calculateStats(state.scores, action.payload)
+                    data: calculateStats(state.scores, action.payload)
                 }
             }
             else
