@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const requireLogin = require('../middlewares/requireLogin');
 const Score = mongoose.model('scores');
 const User = mongoose.model('users');
+const WordList = mongoose.model('wordLists');
 
 
 module.exports = app => {
@@ -14,7 +15,7 @@ module.exports = app => {
 
         //TODO: fetch and limit twice, or check all and then seperate the scores? what is best for resources?
         const topScores = await Score.find({}).sort({'correctWords': -1}).limit(50).exec();
-        const topScoresToday = await Score.find({"scoreDate": {"$gte": start, "$lt": end}}).sort({'correctWords': -1}).limit(50).exec();
+        const topScoresToday = await Score.find({'scoreDate': {'$gte': start, '$lt': end}}).sort({'correctWords': -1}).limit(50).exec();
         const leaderboards = { topScores, topScoresToday };
         res.send(leaderboards);
     });
@@ -28,42 +29,55 @@ module.exports = app => {
             perfectGame: incorrectWords ? false : true,
             multiplayerGame: req.body.multiplayerGame ? true : false,
             multiplayerWin: req.body.multiplayerWin ? req.body.multiplayerWin : false,
-            username: req.user.local.username, //TODO: create an user object. get username from facebook/google login aswell.
+            username: req.user.local.username,
             _user: req.user.id
         });
         await newScore.save();
         res.send(newScore);
     });
 
-    app.get('/api/wordLists', requireLogin, (req, res) => {
-        res.send(req.user.createdWordLists);
+    app.get('/api/wordLists/all', requireLogin, async (req, res) => {
+        const wordLists = await WordList.find({'isPublic': true});
+        res.send(wordLists);
     });
 
-    app.get('/api/wordList/:id', requireLogin, (req, res) => {
-        const wordList = req.user.createdWordLists.find(list => list.id === req.params.id);
+    app.get('/api/wordLists', requireLogin, async (req, res) => {
+        const wordList = await WordList.find({ '_user': { $in: mongoose.Types.ObjectId(req.user.id) } });
         res.send(wordList);
     });
 
-    app.put('/api/wordList/:id', requireLogin, (req, res) => {
-        let wordList = req.user.createdWordLists.find(list => list.id === req.params.id);
-        wordList.name = req.body.name;
-        wordList.words = req.body.words;
-        req.user.save();
-    })
-
-    app.post('/api/wordList', requireLogin, (req, res) => {
-        const newWordList = req.body;
-        req.user.createdWordLists.push(newWordList);
-        req.user.save();
-        res.send(req.user.createdWordLists);
+    app.get('/api/wordList/:id', requireLogin, async (req, res) => {
+        let wordList = await WordList.findById(req.params.id);
+        res.send(wordList);
     });
 
-    app.delete('/api/wordList/:id', requireLogin, (req, res) => {
-        let wordLists = req.user.createdWordLists;
-        let wordList = wordLists.find(list => list.id === req.params.id);
-        wordLists.splice(wordLists.indexOf(wordList), 1);
-        req.user.save();
-        res.send(wordLists);
+    app.put('/api/wordList/:id', requireLogin, async (req, res) => {
+        let wordList = await WordList.findById(req.params.id);
+        wordList.name = req.body.name;
+        wordList.words = req.body.words;
+        wordList.isPublic = req.body.isPublic;
+        wordList.save();
+    })
+
+    app.post('/api/wordList', requireLogin, async (req, res) => {
+        const { name, words, isPublic } = req.body;
+        const newWordList = new WordList({
+            name,
+            words,
+            isPublic,
+            _user: req.user.id
+        });
+        await newWordList.save();
+        res.send(newWordList);
+    });
+
+    app.delete('/api/wordList/:id', requireLogin, async (req, res) => {
+        try {
+            await WordList.deleteOne({_id: req.params.id});
+            res.status(200).end();
+        } catch(err) {
+            res.status(400).end();
+        }
     });
 
     app.get('/api/user/scores/:id', requireLogin, async (req, res) => {

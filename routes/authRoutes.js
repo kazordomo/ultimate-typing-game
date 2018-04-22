@@ -54,7 +54,7 @@ module.exports = app => {
         .exec()
         .then(doc => {
             if(! doc)
-                return res.stateus(404).end();
+                return res.status(404).end();
             return res.status(204).end();
         })
         .catch(err => nex(err));

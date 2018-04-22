@@ -51,6 +51,7 @@ export const fetchWordListIfNeeded = id => (dispatch, getState) => {
 }
 
 export const addWordList = (wordList, history) => async dispatch => {
+    console.log(wordList);
     const response = await fetch('/api/wordList', { 
         credentials: 'include',
         method: 'post', 
@@ -76,12 +77,13 @@ export const updateWordList = (wordList, id, history) => async dispatch => {
 }
 
 export const deleteWordList = (id, history) => async dispatch => {
-    const response = await fetch(`/api/wordList/${id}`, {
+    await fetch(`/api/wordList/${id}`, {
         credentials: 'include',
         method: 'delete',
         headers: { 'Content-Type': 'application/json' }
     });
-    const json = await response.json();
     history.push('/game/practice');
-    dispatch({ type: DELETE_WORD_LIST_SUCCESS, payload: json });
+    //TODO: when we delete the wordList, we should set the default list and update
+    //the wordlists.
+    dispatch({ type: DELETE_WORD_LIST_SUCCESS });
 }

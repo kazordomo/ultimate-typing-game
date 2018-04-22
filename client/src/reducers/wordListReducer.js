@@ -51,11 +51,6 @@ export default function(state = {
         case POST_WORD_LIST_SUCCESS:
         case DELETE_WORD_LIST_SUCCESS:
             return state;
-            // return Object.assign({}, state, {
-            //     ...state,
-            //     isFetched: true,
-            //     items: [...state.items, ...action.payload]
-            // });
         default:
             return state;
     }

@@ -44,7 +44,8 @@ class AddEditWordList extends Component {
         super(props);
         this.state = {
             name: props.wordList ? props.wordList.name : '',
-            words: props.wordList ? props.wordList.words : []
+            words: props.wordList ? props.wordList.words : [],
+            isPublic: props.wordList ? props.wordList.isPublic : false
         }
         this.handleAddListName = this.handleAddListName.bind(this);
         this.handleAddWord = this.handleAddWord.bind(this);
@@ -81,7 +82,7 @@ class AddEditWordList extends Component {
     }
 
     render() {
-        const { words, name } = this.state;
+        const { words, name, isPublic } = this.state;
         return(
             <div>
                 <GoBack goTo='/game/practice' />
@@ -96,7 +97,10 @@ class AddEditWordList extends Component {
                         <Button onClick={this.handleAddWord}>Add Word</Button>
                     </Row>
                     <Row>
-                        <Button onClick={() => this.props.saveList({name, words})}>Save List</Button>
+                        <input type='checkbox' ref='isPublic' defaultChecked={isPublic} />
+                    </Row>
+                    <Row>
+                        <Button onClick={() => this.props.saveList({name, words, isPublic: this.refs.isPublic.checked})}>Save List</Button>
                     </Row>
                 </Wrapper>
                 <WordsContainer>
