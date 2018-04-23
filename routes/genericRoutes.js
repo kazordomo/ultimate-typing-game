@@ -41,7 +41,7 @@ module.exports = app => {
         res.send(wordLists);
     });
 
-    app.get('/api/wordLists', requireLogin, async (req, res) => {
+    app.get('/api/wordLists/user', requireLogin, async (req, res) => {
         const wordList = await WordList.find({ '_user': { $in: mongoose.Types.ObjectId(req.user.id) } });
         res.send(wordList);
     });

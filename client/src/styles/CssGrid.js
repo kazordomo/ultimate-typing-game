@@ -4,7 +4,8 @@ export default {
     GridContainer: styled('div')`
         display: grid;
         grid-template-areas: 'c c d d d d d'
-                             'e e e e f f f';
+                             'e e e e f f f'
+                             'g g g g g g g';
         grid-auto-rows: minmax(25vh, auto);
         grid-gap: 5px;
         padding: 5px;
@@ -20,12 +21,12 @@ export default {
         transition: background-color ease-in-out .2s;
     `,
 
-    item3: css`
+    item1: css`
         grid-area: c;
         background-color: rgba(90,125,124, 0.7);
     `,
 
-    item4: css`
+    item2: css`
         grid-area: d;
         background-color: rgba(218,223,247, 0.7);
         &: hover {
@@ -33,7 +34,7 @@ export default {
         }
     `,
 
-    item5: css`
+    item3: css`
         grid-area: e;
         background-color: rgba(35,44,51, 0.7); 
         &: hover {
@@ -41,7 +42,7 @@ export default {
         }
     `,
 
-    item6: css`
+    item4: css`
         grid-area: f;
         background-color: rgba(160,193,209, 0.7);
         &: hover {
@@ -49,10 +50,11 @@ export default {
         }
     `,
 
-    item7: css`
-        display: grid;
-        grid-template-columns: 1fr;
-        // grid-gap: 40px;
-        align-items: center;
+    item5: css`
+        grid-area: g;
+        background-color: rgba(181, 178, 194, 0.7);
+        &: hover {
+            background-color: rgba(181, 178, 194, 1); 
+        }
     `
 }

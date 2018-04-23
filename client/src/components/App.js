@@ -13,6 +13,9 @@ import Practice from './game/Practice';
 import Leaderboard from './dashboard/Leaderboard';
 import AddWordList from './game/AddWordList';
 import EditWordList from './game/EditWordList';
+import WordLists from './dashboard/WordLists';
+import WordListPreview from './dashboard/WordListPreview';
+
 import Stats from './dashboard/Stats';
 import Settings from './dashboard/Settings';
 
@@ -53,6 +56,8 @@ class App extends Component {
                     <Route exact path='/game/practice' component={Practice} />
                     <Route exact path='/game/wordlist/new' component={AddWordList} />
                     <Route exact path='/game/wordlist/edit/:id' component={EditWordList} />
+                    <Route exact path='/wordlists' component={WordLists} />
+                    <Route exact path='/wordlist/preview/:id' component={WordListPreview} />
                     {/* <Route path='/error' component={Error} /> */}
                 </Container>
             </BrowserRouter>

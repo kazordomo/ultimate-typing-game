@@ -6,6 +6,8 @@ import {
     FETCH_WORD_LISTS_SUCCESS,
     FETCH_WORD_LISTS_ERROR,
     FETCH_WORD_LIST_SUCCESS,
+    FETCH_GLOBAL_WORD_LISTS_SUCCESS,
+    FETCH_GLOBAL_WORD_LIST_SUCCESS,
     POST_WORD_LIST_SUCCESS,
     DELETE_WORD_LIST_SUCCESS,
     UPDATE_WORD_LIST_SUCCESS
@@ -13,7 +15,9 @@ import {
 
 export default function(state = {
     isFetched: false,
-    items: {},
+    userWordLists: {},
+    globalWordLists: [],
+    preview: {},
     currentWordList: defaultWordList
 }, action) {
     switch(action.type) {
@@ -21,7 +25,7 @@ export default function(state = {
             return {
                 ...state,
                 isFetched: true,
-                currentWordList: state.items[action.payload] || shuffleWords(defaultWordList)
+                currentWordList: state.userWordLists[action.payload] || shuffleWords(defaultWordList)
             }
         case FETCH_WORD_LISTS_REQUEST:
             return {
@@ -32,7 +36,7 @@ export default function(state = {
             return {
                 ...state,
                 isFetched: true,
-                items: arrayToObj(action.payload)
+                userWordLists: arrayToObj(action.payload)
             }
         case FETCH_WORD_LISTS_ERROR:
             return {
@@ -46,6 +50,19 @@ export default function(state = {
                 isFetched: true,
                 currentWordList: action.payload 
             };
+        case FETCH_GLOBAL_WORD_LISTS_SUCCESS:
+            return {
+                ...state,
+                isFetched: true,
+                globalWordLists: action.payload
+            }
+        case FETCH_GLOBAL_WORD_LIST_SUCCESS:
+        return {
+            ...state,
+            isFetched: true,
+            preview: action.payload
+        }
+            
         //because we are fetching lists every time we mount practice-comp this is fine for now.
         case UPDATE_WORD_LIST_SUCCESS:
         case POST_WORD_LIST_SUCCESS:

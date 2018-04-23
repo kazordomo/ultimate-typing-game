@@ -7,7 +7,7 @@ import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
 import FlexContainer from '../../styles/FlexContainer';
 import GoBack from '../basic/GoBack';
-import { fetchWordLists, fetchWordListIfNeeded } from '../../actions';
+import { fetchUserWordLists, fetchWordListIfNeeded } from '../../actions';
 import { Link } from 'react-router-dom';
 
 
@@ -80,7 +80,7 @@ class Practice extends Component {
     }
 
     async componentDidMount() {
-        await this.props.fetchWordLists();
+        await this.props.fetchUserWordLists();
     }
 
     handleChooseWordList(wordList) {
@@ -88,13 +88,13 @@ class Practice extends Component {
     }
 
     renderWordLists() {
-        let { wordLists: { items } } = this.props;
+        let { wordLists: { userWordLists } } = this.props;
         return (
-            Object.keys(items).map(key => {
+            Object.keys(userWordLists).map(key => {
                 return <WordListItem 
-                            key={items[key]._id} 
-                            chooseWordList={ () => this.handleChooseWordList(items[key]) } 
-                            wordListObj={items[key]}>
+                            key={userWordLists[key]._id} 
+                            chooseWordList={ () => this.handleChooseWordList(userWordLists[key]) } 
+                            wordListObj={userWordLists[key]}>
                         </WordListItem>
             })
         );
@@ -137,4 +137,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { fetchWordLists, fetchWordListIfNeeded })(Practice);
+export default connect(mapStateToProps, { fetchUserWordLists, fetchWordListIfNeeded })(Practice);
