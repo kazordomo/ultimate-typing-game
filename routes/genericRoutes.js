@@ -76,7 +76,7 @@ module.exports = app => {
             await WordList.deleteOne({_id: req.params.id});
             res.status(200).end();
         } catch(err) {
-            res.status(400).end();
+            res.status(400).json(err);
         }
     });
 

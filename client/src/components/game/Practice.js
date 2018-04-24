@@ -7,7 +7,7 @@ import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
 import FlexContainer from '../../styles/FlexContainer';
 import GoBack from '../basic/GoBack';
-import { fetchUserWordLists, fetchWordListIfNeeded } from '../../actions';
+import { fetchUserWordListsIfNeeded, fetchWordListIfNeeded } from '../../actions';
 import { Link } from 'react-router-dom';
 
 
@@ -80,7 +80,7 @@ class Practice extends Component {
     }
 
     async componentDidMount() {
-        await this.props.fetchUserWordLists();
+        await this.props.fetchUserWordListsIfNeeded();
     }
 
     handleChooseWordList(wordList) {
@@ -137,4 +137,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { fetchUserWordLists, fetchWordListIfNeeded })(Practice);
+export default connect(mapStateToProps, { fetchUserWordListsIfNeeded, fetchWordListIfNeeded })(Practice);

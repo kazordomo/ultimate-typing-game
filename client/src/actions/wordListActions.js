@@ -9,6 +9,21 @@ export const POST_WORD_LIST_SUCCESS = 'POST_WORD_LIST_SUCCESS';
 export const UPDATE_WORD_LIST_SUCCESS = 'UPDATE_WORD_LIST_SUCCESS';
 export const DELETE_WORD_LIST_SUCCESS = 'DELETE_WORD_LIST_SUCCESS';
 
+export const fetchGlobalWordLists = () => async dispatch => {
+    dispatch(requestWordLists());
+    const response = await fetch('/api/wordLists/all', { credentials: 'include' });
+    const json = await response.json();
+    dispatch(receiveGlobalWordLists(json));
+}
+
+export const fetchGlobalWordList = id => async dispatch => {
+    dispatch(requestWordLists());
+    const response = await fetch(`/api/wordList/${id}`, { credentials: 'include' });
+    const json = await response.json();
+    dispatch(receiveGlobalWordList(json));
+}
+
+
 const requestWordLists = () => ({
     type: FETCH_WORD_LISTS_REQUEST
 });
@@ -28,36 +43,8 @@ const receiveGlobalWordList = wordList => ({
     payload: wordList
 });
 
-
-export const fetchUserWordLists = () => async dispatch => {
-    dispatch(requestWordLists());
-    const response = await fetch('/api/wordLists/user', { credentials: 'include' });
-    const json = await response.json();
-    dispatch(receiveWordLists(json));
-}
-
-export const fetchGlobalWordLists = () => async dispatch => {
-    dispatch(requestWordLists());
-    const response = await fetch('/api/wordLists/all', { credentials: 'include' });
-    const json = await response.json();
-    dispatch(receiveGlobalWordLists(json));
-}
-
-export const fetchGlobalWordList = id => async dispatch => {
-    dispatch(requestWordLists());
-    const response = await fetch(`/api/wordList/${id}`, { credentials: 'include' });
-    const json = await response.json();
-    dispatch(receiveGlobalWordList(json));
-}
-
 export const selectWordList = id => dispatch => {
     dispatch({ type: SELECT_WORD_LIST, payload: id });
-}
-
-const fetchWordList = id => async dispatch => {
-    const response = await fetch(`/api/wordList/${id}`, { credentials: 'include' });
-    const json = await response.json();
-    dispatch({ type: FETCH_WORD_LIST_SUCCESS, payload: json });
 }
 
 const shouldFetchWordList = state => {
@@ -66,6 +53,25 @@ const shouldFetchWordList = state => {
     if(wordLists.isFetched)
         return false;
     return true;
+}
+
+const fetchUserWordLists = () => async dispatch => {
+    dispatch(requestWordLists());
+    const response = await fetch('/api/wordLists/user', { credentials: 'include' });
+    const json = await response.json();
+    dispatch(receiveWordLists(json));
+}
+
+export const fetchUserWordListsIfNeeded = () => (dispatch, getState) => {
+    if(shouldFetchWordList(getState())) {
+        return dispatch(fetchUserWordLists());
+    }
+}
+
+const fetchWordList = id => async dispatch => {
+    const response = await fetch(`/api/wordList/${id}`, { credentials: 'include' });
+    const json = await response.json();
+    dispatch({ type: FETCH_WORD_LIST_SUCCESS, payload: json });
 }
 
 export const fetchWordListIfNeeded = id => (dispatch, getState) => {
@@ -77,7 +83,6 @@ export const fetchWordListIfNeeded = id => (dispatch, getState) => {
 }
 
 export const addWordList = (wordList, history) => async dispatch => {
-    console.log(wordList);
     const response = await fetch('/api/wordList', { 
         credentials: 'include',
         method: 'post', 
@@ -109,7 +114,6 @@ export const deleteWordList = (id, history) => async dispatch => {
         headers: { 'Content-Type': 'application/json' }
     });
     history.push('/game/practice');
-    //TODO: when we delete the wordList, we should set the default list and update
     //the wordlists.
-    dispatch({ type: DELETE_WORD_LIST_SUCCESS });
+    dispatch({ type: DELETE_WORD_LIST_SUCCESS, payload: id });
 }

@@ -13,6 +13,18 @@ import {
     UPDATE_WORD_LIST_SUCCESS
 } from '../actions/wordListActions';
 
+function addOrUpdateWordList(wordLists, wordList) {
+    const userWordLists = wordLists;
+    userWordLists[wordList._id] = wordList;
+    return userWordLists;
+}
+
+function deleteWordList(wordLists, id) {
+    const userWordLists = wordLists;
+    delete userWordLists[id];
+    return userWordLists;
+}
+
 export default function(state = {
     isFetched: false,
     userWordLists: {},
@@ -57,17 +69,28 @@ export default function(state = {
                 globalWordLists: action.payload
             }
         case FETCH_GLOBAL_WORD_LIST_SUCCESS:
-        return {
+            return {
             ...state,
             isFetched: true,
             preview: action.payload
         }
-            
-        //because we are fetching lists every time we mount practice-comp this is fine for now.
         case UPDATE_WORD_LIST_SUCCESS:
+            return {
+                ...state,
+                userWordLists: addOrUpdateWordList(state.userWordLists, action.payload)
+            }
         case POST_WORD_LIST_SUCCESS:
+            return {
+                //need to add to global wordlists if public.
+                ...state,
+                userWordLists: addOrUpdateWordList(state.userWordLists, action.payload),
+                // globalWordLists: action.payload.isPublic ? addOrUpdateWordList(globalWordLists) : globalWordLists //GLOBALWORDLIST NEEDS TO BE AN OBJECT
+            }
         case DELETE_WORD_LIST_SUCCESS:
-            return state;
+            return {
+                ...state,
+                userWordLists: deleteWordList(state.userWordLists, action.payload)
+            }
         default:
             return state;
     }
