@@ -7,7 +7,7 @@ import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
 import FlexContainer from '../../styles/FlexContainer';
 import GoBack from '../basic/GoBack';
-import { fetchUserWordListsIfNeeded, fetchWordListIfNeeded } from '../../actions';
+import { fetchWordListsIfNeeded, fetchWordListIfNeeded } from '../../actions';
 import { Link } from 'react-router-dom';
 
 
@@ -62,12 +62,6 @@ const ListWrapper = styled('div')`
     overflow: auto;
 `;
 
-//TODO: the user should be able to upload wordlists, and let other people test them out.
-//the wordlist should therefore be able to have labels on it, as in what language it is written in in.
-
-//WORD-LIST-SCHEMA:
-//name, words, labels, rating, _user, published
-
 class Practice extends Component {
 
     constructor(props) {
@@ -80,7 +74,7 @@ class Practice extends Component {
     }
 
     async componentDidMount() {
-        await this.props.fetchUserWordListsIfNeeded();
+        await this.props.fetchWordListsIfNeeded();
     }
 
     handleChooseWordList(wordList) {
@@ -88,13 +82,13 @@ class Practice extends Component {
     }
 
     renderWordLists() {
-        let { wordLists: { userWordLists } } = this.props;
+        let { wordLists: { items } } = this.props;
         return (
-            Object.keys(userWordLists).map(key => {
+            Object.keys(items).map(key => {
                 return <WordListItem 
-                            key={userWordLists[key]._id} 
-                            chooseWordList={ () => this.handleChooseWordList(userWordLists[key]) } 
-                            wordListObj={userWordLists[key]}>
+                            key={items[key]._id} 
+                            chooseWordList={ () => this.handleChooseWordList(items[key]) } 
+                            wordListObj={items[key]}>
                         </WordListItem>
             })
         );
@@ -137,4 +131,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { fetchUserWordListsIfNeeded, fetchWordListIfNeeded })(Practice);
+export default connect(mapStateToProps, { fetchWordListsIfNeeded, fetchWordListIfNeeded })(Practice);

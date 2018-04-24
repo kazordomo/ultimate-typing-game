@@ -1,26 +1,30 @@
-import defaultWordList from '../utils/words';
-import { arrayToObj, shuffleWords } from '../utils';
+import { arrayToObj } from '../utils';
 import { 
-    SELECT_WORD_LIST,
-    FETCH_WORD_LISTS_REQUEST,
-    FETCH_WORD_LISTS_SUCCESS,
-    FETCH_WORD_LISTS_ERROR,
-    FETCH_WORD_LIST_SUCCESS,
-    SELECT_PREVIEW,
+    PREVIEW_WORD_LIST,
+    FETCH_GLOBAL_WORD_LISTS_REQUEST,
     FETCH_GLOBAL_WORD_LISTS_SUCCESS,
-    FETCH_GLOBAL_WORD_LIST_SUCCESS,
+    FETCH_GLOBAL_WORD_LISTS_ERROR,
+    FETCH_GLOBAL_WORD_LIST_SUCCESS
+} from '../actions/globalWordListActions';
+import { 
     POST_WORD_LIST_SUCCESS,
     DELETE_WORD_LIST_SUCCESS,
     UPDATE_WORD_LIST_SUCCESS
 } from '../actions/wordListActions';
 
 function addOrUpdateWordList(items, wordList) {
+    if(!wordList.isPublic)
+        return items
+
     const wordLists = items;
     wordLists[wordList._id] = wordList;
     return wordLists;
 }
 
 function deleteWordList(items, id) {
+    if(!items[id])
+        return items
+
     const wordLists = items;
     delete wordLists[id];
     return wordLists;
@@ -29,37 +33,36 @@ function deleteWordList(items, id) {
 export default function(state = {
     isFetched: false,
     items: {},
-    currentWordList: defaultWordList
+    preview: {}
 }, action) {
     switch(action.type) {
-        case SELECT_WORD_LIST:
+        case PREVIEW_WORD_LIST:
             return {
                 ...state,
-                isFetched: true,
-                currentWordList: state.items[action.payload] || shuffleWords(defaultWordList)
+                preview: state.items[action.payload]
             }
-        case FETCH_WORD_LISTS_REQUEST:
+        case FETCH_GLOBAL_WORD_LISTS_REQUEST:
             return {
                 ...state,
                 isFetched: false
             }
-        case FETCH_WORD_LISTS_SUCCESS:
+        case FETCH_GLOBAL_WORD_LISTS_SUCCESS:
             return {
                 ...state,
                 isFetched: true,
                 items: arrayToObj(action.payload)
             }
-        case FETCH_WORD_LISTS_ERROR:
+        case FETCH_GLOBAL_WORD_LISTS_ERROR:
             return {
                 ...state,
                 isFetched: false,
                 error: { status: 400, message: 'Error retrieving word lists' }
             }
-        case FETCH_WORD_LIST_SUCCESS:
+        case FETCH_GLOBAL_WORD_LIST_SUCCESS:
             return {
                 ...state, 
                 isFetched: true,
-                currentWordList: action.payload 
+                preview: action.payload 
             };
         case UPDATE_WORD_LIST_SUCCESS:
             return {

@@ -3,26 +3,9 @@ export const FETCH_WORD_LISTS_REQUEST = 'FETCH_WORD_LISTS_REQUEST';
 export const FETCH_WORD_LISTS_SUCCESS = 'FETCH_WORD_LISTS_SUCCESS';
 export const FETCH_WORD_LISTS_ERROR = 'FETCH_WORD_LISTS_ERROR';
 export const FETCH_WORD_LIST_SUCCESS = 'FETCH_WORD_LIST_SUCCESS';
-export const FETCH_GLOBAL_WORD_LISTS_SUCCESS = 'FETCH_GLOBAL_WORD_LISTS_SUCCESS';
-export const FETCH_GLOBAL_WORD_LIST_SUCCESS = 'FETCH_GLOBAL_WORD_LIST_SUCCESS';
 export const POST_WORD_LIST_SUCCESS = 'POST_WORD_LIST_SUCCESS';
 export const UPDATE_WORD_LIST_SUCCESS = 'UPDATE_WORD_LIST_SUCCESS';
 export const DELETE_WORD_LIST_SUCCESS = 'DELETE_WORD_LIST_SUCCESS';
-
-export const fetchGlobalWordLists = () => async dispatch => {
-    dispatch(requestWordLists());
-    const response = await fetch('/api/wordLists/all', { credentials: 'include' });
-    const json = await response.json();
-    dispatch(receiveGlobalWordLists(json));
-}
-
-export const fetchGlobalWordList = id => async dispatch => {
-    dispatch(requestWordLists());
-    const response = await fetch(`/api/wordList/${id}`, { credentials: 'include' });
-    const json = await response.json();
-    dispatch(receiveGlobalWordList(json));
-}
-
 
 const requestWordLists = () => ({
     type: FETCH_WORD_LISTS_REQUEST
@@ -31,16 +14,6 @@ const requestWordLists = () => ({
 const receiveWordLists = wordLists => ({
     type: FETCH_WORD_LISTS_SUCCESS,
     payload: wordLists
-});
-
-const receiveGlobalWordLists = wordLists => ({
-    type: FETCH_GLOBAL_WORD_LISTS_SUCCESS,
-    payload: wordLists
-});
-
-const receiveGlobalWordList = wordList => ({
-    type: FETCH_GLOBAL_WORD_LIST_SUCCESS,
-    payload: wordList
 });
 
 export const selectWordList = id => dispatch => {
@@ -55,16 +28,16 @@ const shouldFetchWordList = state => {
     return true;
 }
 
-const fetchUserWordLists = () => async dispatch => {
+const fetchWordLists = () => async dispatch => {
     dispatch(requestWordLists());
     const response = await fetch('/api/wordLists/user', { credentials: 'include' });
     const json = await response.json();
     dispatch(receiveWordLists(json));
 }
 
-export const fetchUserWordListsIfNeeded = () => (dispatch, getState) => {
+export const fetchWordListsIfNeeded = () => (dispatch, getState) => {
     if(shouldFetchWordList(getState())) {
-        return dispatch(fetchUserWordLists());
+        return dispatch(fetchWordLists());
     }
 }
 
@@ -114,6 +87,5 @@ export const deleteWordList = (id, history) => async dispatch => {
         headers: { 'Content-Type': 'application/json' }
     });
     history.push('/game/practice');
-    //the wordlists.
     dispatch({ type: DELETE_WORD_LIST_SUCCESS, payload: id });
 }
