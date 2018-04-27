@@ -6,6 +6,7 @@ export const FETCH_WORD_LIST_SUCCESS = 'FETCH_WORD_LIST_SUCCESS';
 export const POST_WORD_LIST_SUCCESS = 'POST_WORD_LIST_SUCCESS';
 export const UPDATE_WORD_LIST_SUCCESS = 'UPDATE_WORD_LIST_SUCCESS';
 export const DELETE_WORD_LIST_SUCCESS = 'DELETE_WORD_LIST_SUCCESS';
+export const FAVOR_WORD_LIST_SUCCESS = 'FAVOR_WORD_LUST_SUCCESS';
 
 const requestWordLists = () => ({
     type: FETCH_WORD_LISTS_REQUEST
@@ -71,7 +72,7 @@ export const updateWordList = (wordList, id, history) => async dispatch => {
     //TODO: dev - proxy request econnreset
     const response = await fetch(`/api/wordList/${id}`, { 
         credentials: 'include',
-        method: 'put', 
+        method: 'put',
         body: JSON.stringify(wordList),
         headers: { 'Content-Type': 'application/json' }
     });
@@ -88,4 +89,19 @@ export const deleteWordList = (id, history) => async dispatch => {
     });
     history.push('/game/practice');
     dispatch({ type: DELETE_WORD_LIST_SUCCESS, payload: id });
+}
+
+export const favorWordList = wordList => dispatch => {
+    try {
+        fetch('/api/wordList/user/favor', { 
+            credentials: 'include',
+            method: 'post',
+            body: JSON.stringify({ wordListId: wordList._id }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        dispatch({ type: FAVOR_WORD_LIST_SUCCESS, payload: wordList });
+    } catch(err) {
+        //dispatch error
+        console.log(err);
+    }
 }

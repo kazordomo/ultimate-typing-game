@@ -42,8 +42,14 @@ module.exports = app => {
     });
 
     app.get('/api/wordLists/user', requireLogin, async (req, res) => {
-        const wordList = await WordList.find({ '_user': { $in: mongoose.Types.ObjectId(req.user.id) } });
-        res.send(wordList);
+        const favoredIds = req.user.favoredWordLists;
+        const wordLists = await WordList.find({ 
+            $or: [
+                { '_user': { $in: mongoose.Types.ObjectId(req.user.id) } }, 
+                { '_id': { $in: favoredIds }}
+            ] 
+        }); //WOW
+        res.send(wordLists);
     });
 
     app.get('/api/wordList/:id', requireLogin, async (req, res) => {
@@ -55,20 +61,32 @@ module.exports = app => {
         let wordList = await WordList.findById(req.params.id);
         wordList.name = req.body.name;
         wordList.words = req.body.words;
+        wordList.labels = req.body.labels;
         wordList.isPublic = req.body.isPublic;
         wordList.save();
     })
 
     app.post('/api/wordList', requireLogin, async (req, res) => {
-        const { name, words, isPublic } = req.body;
+        const { name, words, isPublic, labels } = req.body;
         const newWordList = new WordList({
             name,
             words,
+            labels,
             isPublic,
             _user: req.user.id
         });
         await newWordList.save();
         res.send(newWordList);
+    });
+
+    app.post('/api/wordList/user/favor', requireLogin, (req, res) => {
+        //TODO: we need to check if the user is the creator of the wordlist.
+        const checkForDup = req.user.favoredWordLists.find(wl => wl === req.body.wordListId);
+        if(checkForDup)
+            return res.status(400).json( {message: 'List already favorised.'} );
+        req.user.favoredWordLists.push(req.body.wordListId);
+        req.user.save();
+        res.status(200).end();
     });
 
     app.delete('/api/wordList/:id', requireLogin, async (req, res) => {

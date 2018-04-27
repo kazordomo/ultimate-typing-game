@@ -6,6 +6,7 @@ const wordListSchema = new Schema({
     words: Array,
     isPublic: { type: Boolean, default: false },
     rating: { type: Number, default: 0 },
+    labels: Array, //Max length of array.
     _user: { type: Schema.Types.ObjectId, ref: 'User' },
     createdDate: { type: Date, default: Date.now }
 });

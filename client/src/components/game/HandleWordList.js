@@ -38,6 +38,14 @@ const WordListInfo = styled('div')`
     font-size: 15px;
 `;
 
+const Label = styled('span')`
+    margin-right: 5px;
+    padding: 2px 15px;
+    background-color: rgba(202, 205, 209, 0.8);
+    font-size: 15px;
+    cursor: pointer;
+`;
+
 class AddEditWordList extends Component {
 
     constructor(props) {
@@ -45,10 +53,12 @@ class AddEditWordList extends Component {
         this.state = {
             name: props.wordList ? props.wordList.name : '',
             words: props.wordList ? props.wordList.words : [],
+            labels: props.wordList ? props.wordList.labels : [],
             isPublic: props.wordList ? props.wordList.isPublic : false
         }
         this.handleAddListName = this.handleAddListName.bind(this);
         this.handleAddWord = this.handleAddWord.bind(this);
+        this.handleAddLabel = this.handleAddLabel.bind(this);
         this.handleDeleteWord = this.handleDeleteWord.bind(this);
     }
 
@@ -66,10 +76,22 @@ class AddEditWordList extends Component {
         this.setState({ words }, () => { this.refs.wordTextInput.value = '';});
     }
 
+    handleAddLabel() {
+        let labels = this.state.labels;
+        labels.push(this.refs.labelTextInput.value);
+        this.setState({ labels }, () => { this.refs.labelTextInput.value = '' ;});
+    }
+
     handleDeleteWord(index) {
         const words = this.state.words;
         words.splice(index, 1);
         this.setState({ words });
+    }
+
+    handleDeleteLabel(index) {
+        const labels = this.state.labels;
+        labels.splice(index, 1);
+        this.setState({ labels });
     }
 
     renderWords() {
@@ -77,21 +99,53 @@ class AddEditWordList extends Component {
         let id = 0;
         return words.map(word => {
             id++;
-            return <WordInList onClick={() => this.handleDeleteWord(words.indexOf(word))} key={id}>{word}</WordInList>;
+            return (
+                <WordInList 
+                    onClick={() => this.handleDeleteWord(words.indexOf(word))} 
+                    key={id}>
+                    {word}
+                </WordInList>
+            );
+        });
+    }
+
+    renderLabels() {
+        const { labels } = this.state;
+        let id = 0;
+        return labels.map(label => {
+            id++;
+            return (
+                <Label 
+                    onClick={() => this.handleDeleteLabel(labels.indexOf(label))} 
+                    key={id}>
+                    {label}
+                </Label>
+            );
         });
     }
 
     render() {
-        const { words, name, isPublic } = this.state;
+        const { words, name, labels, isPublic } = this.state;
         return(
             <div>
                 <GoBack goTo='/game/practice' />
                 <Wrapper>
                     <Row>
-                        <input type='text' ref='nameTextInput' onChange={this.handleAddListName} placeholder='List Name' className={textInputStyle} />
+                        <input 
+                            type='text' 
+                            ref='nameTextInput' 
+                            onChange={this.handleAddListName} 
+                            placeholder='List Name' 
+                            className={textInputStyle} />
                     </Row>
                     <Row>
-                        <input type='text' ref='wordTextInput' onKeyPress={event => (event.key === 'Enter') && this.handleAddWord()}  placeholder='Word To Add' className={textInputStyle} />
+                        <input 
+                            type='text' 
+                            ref='wordTextInput' 
+                            onKeyPress={event => (event.key === 'Enter') && this.handleAddWord()}  
+                            placeholder='Word To Add' 
+                            className={textInputStyle} 
+                        />
                     </Row>
                     <Row>
                         <Button onClick={this.handleAddWord}>Add Word</Button>
@@ -100,10 +154,20 @@ class AddEditWordList extends Component {
                         <input type='checkbox' ref='isPublic' defaultChecked={isPublic} />
                     </Row>
                     <Row>
-                        <Button onClick={() => this.props.saveList({name, words, isPublic: this.refs.isPublic.checked})}>Save List</Button>
+                        <input 
+                            type='text' 
+                            ref='labelTextInput'
+                            onKeyPress={event => (event.key === 'Enter') && this.handleAddLabel()}
+                            placeholder='Label To Add' 
+                            className={textInputStyle} 
+                        />
+                    </Row>
+                    <Row>
+                        <Button onClick={() => this.props.saveList({name, words, labels, isPublic: this.refs.isPublic.checked})}>Save List</Button>
                     </Row>
                 </Wrapper>
                 <WordsContainer>
+                    {this.renderLabels()}
                     <WordListInfo>Total words: {words.length}</WordListInfo>
                     <WordsInnerContainer>
                         {this.renderWords()}

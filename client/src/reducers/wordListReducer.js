@@ -11,7 +11,8 @@ import {
     FETCH_GLOBAL_WORD_LIST_SUCCESS,
     POST_WORD_LIST_SUCCESS,
     DELETE_WORD_LIST_SUCCESS,
-    UPDATE_WORD_LIST_SUCCESS
+    UPDATE_WORD_LIST_SUCCESS,
+    FAVOR_WORD_LIST_SUCCESS
 } from '../actions/wordListActions';
 
 function addOrUpdateWordList(items, wordList) {
@@ -35,7 +36,6 @@ export default function(state = {
         case SELECT_WORD_LIST:
             return {
                 ...state,
-                isFetched: true,
                 currentWordList: state.items[action.payload] || shuffleWords(defaultWordList)
             }
         case FETCH_WORD_LISTS_REQUEST:
@@ -75,6 +75,11 @@ export default function(state = {
             return {
                 ...state,
                 items: deleteWordList(state.items, action.payload)
+            }
+        case FAVOR_WORD_LIST_SUCCESS:
+            return {
+                ...state,
+                items: addOrUpdateWordList(state.items, action.payload)
             }
         default:
             return state;

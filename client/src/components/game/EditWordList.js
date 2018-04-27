@@ -32,7 +32,6 @@ class EditWordList extends Component {
 
     //TODO: ????
     handleSaveList(wordList) {
-        console.log(wordList);
         const { match, updateWordList, history } = this.props;
         updateWordList(wordList, match.params.id, history);
     }
@@ -45,11 +44,11 @@ class EditWordList extends Component {
     render() {
         if(!this.props.wordLists.isFetched)
             return <Loading />
-        const { wordLists: { currentWordList: { name, words, isPublic } } } = this.props;
+        const { wordLists: { currentWordList } } = this.props;
         return(
             <div>
-                <Title>{name}</Title>
-                <HandleWordList edit saveList={this.handleSaveList.bind(this)} deleteList={this.handleDeleteList.bind(this)} wordList={{name, words, isPublic}} />
+                <Title>{currentWordList.name}</Title>
+                <HandleWordList edit saveList={this.handleSaveList.bind(this)} deleteList={this.handleDeleteList.bind(this)} wordList={currentWordList} />
                 <DeleteButton onClick={this.handleDeleteList.bind(this)}>DELETE LIST</DeleteButton>
             </div>
         );

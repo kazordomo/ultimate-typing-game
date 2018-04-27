@@ -12,8 +12,10 @@ class GlobalWordListPreview extends Component {
     }
 
     renderWords(words) {
+        let id = 0;
         return words.map(word => {
-            return <div key={word}>{word}</div>;
+            id++;
+            return <div key={id}>{word}</div>;
         })
     }
 

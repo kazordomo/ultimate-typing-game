@@ -4,8 +4,8 @@ export default {
     GridContainer: styled('div')`
         display: grid;
         grid-template-areas: 'c c d d d d d'
-                             'e e e e f f f'
-                             'g g g g g g g';
+                             'g g g g g g g'
+                             'e e e e f f f';
         grid-auto-rows: minmax(25vh, auto);
         grid-gap: 5px;
         padding: 5px;

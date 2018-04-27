@@ -22,6 +22,7 @@ const userSchema = new Schema({
         },
         password: String
     },
+    favoredWordLists: Array,
     createdDate: { type: Date, default: Date.now }
 });
 

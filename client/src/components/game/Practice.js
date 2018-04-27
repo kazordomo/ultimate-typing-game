@@ -85,11 +85,13 @@ class Practice extends Component {
         let { wordLists: { items } } = this.props;
         return (
             Object.keys(items).map(key => {
-                return <WordListItem 
-                            key={items[key]._id} 
-                            chooseWordList={ () => this.handleChooseWordList(items[key]) } 
-                            wordListObj={items[key]}>
-                        </WordListItem>
+                return (
+                    <WordListItem 
+                        key={items[key]._id} 
+                        chooseWordList={ () => this.handleChooseWordList(items[key]) } 
+                        wordListObj={items[key]}>
+                    </WordListItem>
+                );
             })
         );
     }
