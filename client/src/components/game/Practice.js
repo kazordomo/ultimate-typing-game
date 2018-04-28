@@ -85,11 +85,15 @@ class Practice extends Component {
         let { wordLists: { items } } = this.props;
         return (
             Object.keys(items).map(key => {
+                let isGlobal = false;
+                if(items[key]._user !== this.props.user.data._id)
+                    isGlobal = true;
                 return (
                     <WordListItem 
                         key={items[key]._id} 
                         chooseWordList={ () => this.handleChooseWordList(items[key]) } 
-                        wordListObj={items[key]}>
+                        wordListObj={items[key]}
+                        isGlobalBoolean={isGlobal}>
                     </WordListItem>
                 );
             })

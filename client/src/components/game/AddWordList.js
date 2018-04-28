@@ -4,6 +4,7 @@ import { addWordList } from '../../actions';
 import HandleWordList from './HandleWordList';
 import { withRouter } from 'react-router-dom';
 import Title from '../../styles/Title';
+import GoBack from '../basic/GoBack';
 
 const AddWordList = ({ addWordList, history }) => {
 
@@ -13,6 +14,7 @@ const AddWordList = ({ addWordList, history }) => {
 
     return(
         <div>
+            <GoBack goBackOne goBackFunc={() => history.goBack()} />
             <Title>Create List</Title>
             <HandleWordList add saveList={handleSaveList}/>
         </div>

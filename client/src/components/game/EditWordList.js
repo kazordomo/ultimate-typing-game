@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import styled from 'react-emotion';
 import Loading from '../../styles/Loading';
 import Title from '../../styles/Title';
+import GoBack from '../basic/GoBack';
 
 const DeleteButton = styled('button')`
     position: absolute;
@@ -47,8 +48,14 @@ class EditWordList extends Component {
         const { wordLists: { currentWordList } } = this.props;
         return(
             <div>
+                <GoBack goTo='/game/practice' />
                 <Title>{currentWordList.name}</Title>
-                <HandleWordList edit saveList={this.handleSaveList.bind(this)} deleteList={this.handleDeleteList.bind(this)} wordList={currentWordList} />
+                <HandleWordList 
+                    edit 
+                    saveList={this.handleSaveList.bind(this)} 
+                    deleteList={this.handleDeleteList.bind(this)} 
+                    wordList={currentWordList} 
+                />
                 <DeleteButton onClick={this.handleDeleteList.bind(this)}>DELETE LIST</DeleteButton>
             </div>
         );

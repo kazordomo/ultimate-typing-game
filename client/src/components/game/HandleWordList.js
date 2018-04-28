@@ -128,7 +128,6 @@ class AddEditWordList extends Component {
         const { words, name, labels, isPublic } = this.state;
         return(
             <div>
-                <GoBack goTo='/game/practice' />
                 <Wrapper>
                     <Row>
                         <input 

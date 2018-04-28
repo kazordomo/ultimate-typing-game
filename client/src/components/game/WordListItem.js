@@ -17,18 +17,21 @@ const linkStyle = css`
     color: #FFFFFF;
     text-decoration: none;
     text-align: center;
-    i {
-        // font-size: 15px;
-    }
 `;
 
-export default ({ wordListObj: { name, _id }, chooseWordList }) => {
+const I = styled('i')`
+    float: right;
+    color: yellow;
+`;
+
+export default ({ wordListObj: { name, _id }, chooseWordList, isGlobalBoolean }) => {
     const href = `/game/wordList/edit/${_id}`;
     return(
         <div>
             <List onClick={ () => chooseWordList() }>
                 {name}
-                <Link className={linkStyle} to={href} ><i className="fas fa-edit"></i></Link>
+                {isGlobalBoolean ? <I className="fas fa-star"></I> : 
+                    <Link className={linkStyle} to={href} ><i className="fas fa-edit"></i></Link>}
             </List>
         </div>
     );
