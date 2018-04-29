@@ -15,6 +15,42 @@ const LeaderboardContainer = styled('div')`
     color: #FFFFFF;
 `;
 
+const Table = styled('table')`
+    width: 100%;
+    tr:nth-child(odd) {
+        background-color: rgba(90,125,124, 0.1);        
+    }
+    td {
+        padding: 5px;
+    }
+    th {
+        padding: 5px;
+    }
+`;
+
+const Tr = styled('tr')`
+    text-align: left;
+`;
+
+//TODO: use the base styled Button with outline and border set to none.
+const TopAllButton = styled('button')`
+    cursor: pointer;
+    color: #FFFFFF;
+    border: none;
+    outline: none;
+    width: 50%;
+    background-color: ${props => (props.active === 'topScores') ? 'rgba(91, 155, 102, 1)' : 'rgba(91, 155, 102, 0.1)'};
+`;
+
+const TopTodayButton = styled('button')`
+    cursor: pointer;
+    color: #FFFFFF;
+    border: none;
+    outline: none;
+    width: 50%;
+    background-color: ${props => (props.active !== 'topScores') ? 'rgba(91, 155, 102, 1)' : 'rgba(91, 155, 102, 0.1)'};
+`;
+
 class Leaderboard extends Component {
 
     state = {
@@ -50,10 +86,20 @@ class Leaderboard extends Component {
                 <Title>Leaderboard</Title>
                 <LeaderboardContainer>
                     <div>
-                        <button onClick={() => this.handleChangeLeaderboard('topScores')}>TopScores</button>
-                        <button onClick={() => this.handleChangeLeaderboard('topScoresToday')}>TopToday</button>
+                        <TopAllButton active={this.state.currentLeaderboard} onClick={() => this.handleChangeLeaderboard('topScores')}>Top All</TopAllButton>
+                        <TopTodayButton active={this.state.currentLeaderboard} onClick={() => this.handleChangeLeaderboard('topScoresToday')}>Top Today</TopTodayButton>
                     </div>
-                    {this.renderScores()}
+                    <Table>
+                        <tbody>
+                            <Tr>
+                                <th>Pos.</th>
+                                <th>Player</th>
+                                <th>WPM</th>
+                                <th>Date.</th>
+                            </Tr>
+                            {this.renderScores()}
+                        </tbody>
+                    </Table>
                 </LeaderboardContainer>
             </div>
         );

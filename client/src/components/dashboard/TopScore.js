@@ -1,31 +1,25 @@
 import React from 'react';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import { Link } from 'react-router-dom';
+import { formatDate } from '../../utils';
 
-const TopScoreRow = styled('div')`
-    margin: 20px 0px;
-    border-bottom: 1px solid #FFFFFF;
+const Tr = styled('tr')`
+    text-align: left;
 `;
 
-const TopScoreStatDivider = styled('span')`
-    margin: 0px 50px;
-`;
-
-const Date = styled('span')`
-    float: right;
+const linkStyle = css`
+    text-decoration: none;
+    color: #ffffff;
 `;
 
 const TopScore = ({topScore: { correctWords, scoreDate, username, position, _user }}) => {
     return (
-        <TopScoreRow>
-            <Link to={`/stats/${_user}/true`}>JA</Link>
-            <span>{position}</span>
-            <TopScoreStatDivider>-</TopScoreStatDivider>
-            <span>{username}</span>
-            <TopScoreStatDivider>-</TopScoreStatDivider>
-            <span>{correctWords}</span>
-            <Date>{scoreDate}</Date>
-        </TopScoreRow>
+        <Tr>
+            <td>{position}</td>
+            <td><Link className={linkStyle} to={`/stats/${_user}/true`}>{username}</Link></td>
+            <td>{correctWords}</td>
+            <td>{formatDate(scoreDate)}</td>
+        </Tr>
     );
 };
 

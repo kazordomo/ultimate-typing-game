@@ -3,6 +3,23 @@ import {
     FETCH_USER_SUCCESS,
     FETCH_USER_ERROR
 } from '../actions/userActions';
+import {
+    FAVOR_WORD_LIST_SUCCESS,
+    DELETE_FAVOR_WORD_LIST_SUCCESS
+} from '../actions/wordListActions';
+
+function addFavoredWordList(userData, wordList) {
+    const data = userData;
+    data.favoredWordLists.push(wordList._id);
+    return data;
+}
+
+function deleteFavoredWordList(userData, wordList) {
+    const data = userData;
+    let selectedList = data.favoredWordLists.find(list => list.id === wordList._id);
+    data.favoredWordLists.splice(data.favoredWordLists.indexOf(selectedList), 1);
+    return data;
+}
 
 export default (state = { 
     isAuthenticated: false,
@@ -28,6 +45,16 @@ export default (state = {
                 ...state,
                 isFetched: false,
                 error: action.payload
+            }
+        case FAVOR_WORD_LIST_SUCCESS:
+            return {
+                ...state,
+                data: addFavoredWordList(state.data, action.payload)
+            }
+        case DELETE_FAVOR_WORD_LIST_SUCCESS:
+            return {
+                ...state,
+                data: deleteFavoredWordList(state.data, action.payload)
             }
         default:
             return state;

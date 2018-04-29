@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export function shuffleWords(arr) {
     const words = arr.words
         .map(a => [Math.random(), a])
@@ -34,3 +36,7 @@ export function calculateStats(scores, payload) {
         totalMultiplayerWins: multiplayerWins.length
     }
 }
+
+export function formatDate(date) {
+    return moment(date).format('MMM Do YY');
+} 

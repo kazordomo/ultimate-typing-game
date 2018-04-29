@@ -12,7 +12,8 @@ import {
     POST_WORD_LIST_SUCCESS,
     DELETE_WORD_LIST_SUCCESS,
     UPDATE_WORD_LIST_SUCCESS,
-    FAVOR_WORD_LIST_SUCCESS
+    FAVOR_WORD_LIST_SUCCESS,
+    DELETE_FAVOR_WORD_LIST_SUCCESS
 } from '../actions/wordListActions';
 
 function addOrUpdateWordList(items, wordList) {
@@ -80,6 +81,11 @@ export default function(state = {
             return {
                 ...state,
                 items: addOrUpdateWordList(state.items, action.payload)
+            }
+        case DELETE_FAVOR_WORD_LIST_SUCCESS:
+            return {
+                ...state,
+                items: deleteWordList(state.items, action.payload)
             }
         default:
             return state;

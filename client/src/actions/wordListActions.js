@@ -7,6 +7,7 @@ export const POST_WORD_LIST_SUCCESS = 'POST_WORD_LIST_SUCCESS';
 export const UPDATE_WORD_LIST_SUCCESS = 'UPDATE_WORD_LIST_SUCCESS';
 export const DELETE_WORD_LIST_SUCCESS = 'DELETE_WORD_LIST_SUCCESS';
 export const FAVOR_WORD_LIST_SUCCESS = 'FAVOR_WORD_LUST_SUCCESS';
+export const DELETE_FAVOR_WORD_LIST_SUCCESS = 'DELETE_FAVOR_WORD_LIST_SUCCESS';
 
 const requestWordLists = () => ({
     type: FETCH_WORD_LISTS_REQUEST
@@ -100,6 +101,21 @@ export const favorWordList = wordList => dispatch => {
             headers: { 'Content-Type': 'application/json' }
         });
         dispatch({ type: FAVOR_WORD_LIST_SUCCESS, payload: wordList });
+    } catch(err) {
+        //dispatch error
+        console.log(err);
+    }
+}
+
+export const deleteFavoredWordList = wordList => dispatch => {
+    try {
+        fetch('/api/wordList/user/favor', { 
+            credentials: 'include',
+            method: 'delete',
+            body: JSON.stringify({ wordListId: wordList._id }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        dispatch({ type: DELETE_FAVOR_WORD_LIST_SUCCESS, payload: wordList._id });
     } catch(err) {
         //dispatch error
         console.log(err);

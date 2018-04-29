@@ -34,7 +34,7 @@ class Stats extends Component {
         return (
             <StatsContainer>
                 <Title>Statistics</Title>
-                <GoBack goTo='/dashboard' />
+                <GoBack goBackOne goBackFunc={() => this.props.history.goBack()} />                
                 <Stat label={'Average WPM'} stat={data.wpm} />
                 <Stat label={'Total Games'} stat={data.totalGames} />
                 <Stat label={'Total Correct Words'} stat={data.correctWords} />

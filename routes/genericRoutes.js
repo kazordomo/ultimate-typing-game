@@ -81,10 +81,18 @@ module.exports = app => {
 
     app.post('/api/wordList/user/favor', requireLogin, (req, res) => {
         //TODO: we need to check if the user is the creator of the wordlist.
-        const checkForDup = req.user.favoredWordLists.find(wl => wl === req.body.wordListId);
-        if(checkForDup)
-            return res.status(400).json( {message: 'List already favorised.'} );
+        // const checkForDup = req.user.favoredWordLists.find(wl => wl === req.body.wordListId);
+        // if(checkForDup)
+        //     return res.status(400).json( {message: 'List already favorised.'} );
         req.user.favoredWordLists.push(req.body.wordListId);
+        req.user.save();
+        res.status(200).end();
+    });
+
+    app.delete('/api/wordList/user/favor', requireLogin, (req, res) => {
+        let wordLists = req.user.favoredWordLists;
+        let wordList = wordLists.find(list => list.id === req.body.wordListId);
+        wordLists.splice(wordLists.indexOf(wordList), 1);
         req.user.save();
         res.status(200).end();
     });

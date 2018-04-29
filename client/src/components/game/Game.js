@@ -43,7 +43,7 @@ class Game extends Component {
         super(props);
         
         this.initialState = {
-            time: 10,
+            time: 60,
             keystrokes: 0,
             correctWords: 0,
             incorrectWords: 0,
