@@ -19,6 +19,14 @@ class GlobalWordListPreview extends Component {
         })
     }
 
+    renderLabels(labels) {
+        let id = 0;
+        return labels.map(label => {
+            id++;
+            return <div key={id}>{label}</div>;
+        });
+    }
+
     render() {
         if(Object.keys(this.props.globalWordLists.preview).length === 0)
             return <Loading />;
@@ -27,6 +35,9 @@ class GlobalWordListPreview extends Component {
                 <GoBack goTo='/wordLists' />                
                 <div>{this.props.globalWordLists.preview.name}</div>
                 { this.renderWords(this.props.globalWordLists.preview.words) }
+                <div>
+                    { this.renderLabels(this.props.globalWordLists.preview.labels) }
+                </div>
             </div>
         )
     }

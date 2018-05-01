@@ -4,7 +4,9 @@ import {
     FETCH_GLOBAL_WORD_LISTS_REQUEST,
     FETCH_GLOBAL_WORD_LISTS_SUCCESS,
     FETCH_GLOBAL_WORD_LISTS_ERROR,
-    FETCH_GLOBAL_WORD_LIST_SUCCESS
+    FETCH_GLOBAL_WORD_LIST_SUCCESS,
+    SORT_GLOBAL_WORD_LISTS,
+    FILTER_GLOBAL_WORD_LISTS
 } from '../actions/globalWordListActions';
 import { 
     POST_WORD_LIST_SUCCESS,
@@ -30,16 +32,49 @@ function deleteWordList(items, id) {
     return wordLists;
 }
 
+function sortWordLists(items, field) {
+    //if object - convert to array to make the sort
+    const array = (typeof items === 'object') ? Object.keys(items).map(i => items[i]) : items;
+
+    if(field === 'createdDate') {
+        return arrayToObj(array.sort((a, b) => new Date(b['createdDate']) - new Date(a['createdDate'])));
+    } else {
+        return arrayToObj(array.sort((a, b) => b[field] - a[field]));
+    }
+}
+
+function filterWordLists(items, filter) {
+    const array = (typeof items === 'object') ? Object.keys(items).map(i => items[i]) : items;
+
+    return arrayToObj(array.filter(wordList => {
+        return wordList.name === filter;
+    }));
+}
+
 export default function(state = {
     isFetched: false,
     items: {},
-    preview: {}
+    preview: {},
+    sort: 'createdDate',
+    filter: ''
 }, action) {
     switch(action.type) {
         case PREVIEW_WORD_LIST:
             return {
                 ...state,
                 preview: state.items[action.payload]
+            }
+        case SORT_GLOBAL_WORD_LISTS:
+            return {
+                ...state,
+                sort: action.payload,
+                items: sortWordLists(state.items, action.payload)
+            }
+        case FILTER_GLOBAL_WORD_LISTS:
+            //we will not use items: filterFunc here, becuase the items will never reset.
+            return {
+                ...state,
+                filter: action.payload
             }
         case FETCH_GLOBAL_WORD_LISTS_REQUEST:
             return {
@@ -50,7 +85,7 @@ export default function(state = {
             return {
                 ...state,
                 isFetched: true,
-                items: arrayToObj(action.payload)
+                items: sortWordLists(action.payload, 'createdDate')
             }
         case FETCH_GLOBAL_WORD_LISTS_ERROR:
             return {
@@ -61,7 +96,6 @@ export default function(state = {
         case FETCH_GLOBAL_WORD_LIST_SUCCESS:
             return {
                 ...state, 
-                isFetched: true,
                 preview: action.payload 
             };
         case UPDATE_WORD_LIST_SUCCESS:

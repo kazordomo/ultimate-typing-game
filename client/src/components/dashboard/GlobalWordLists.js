@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchGlobalWordListsIfNeeded }  from '../../actions/globalWordListActions';
+import { 
+    fetchGlobalWordListsIfNeeded, 
+    sortGlobalWordLists, 
+    filterGlobalWordLists 
+}  from '../../actions/globalWordListActions';
 import { favorWordList, deleteFavoredWordList } from '../../actions/wordListActions';
 import { fetchUserIfNeeded } from '../../actions/userActions';
 import GoBack from '../basic/GoBack';
@@ -31,27 +35,40 @@ class WordLists extends Component {
         await this.props.fetchUserIfNeeded();
     }
 
-    toggleWordListFavored(favoredBoolean, func) {
-        favoredBoolean = !favoredBoolean;
-        func()
+    handleChange(event) {
+        this.props.filterGlobalWordLists(event.target.value.toLowerCase());
     }
 
+    //REFACTOR
     renderWordLists() {
-        //TODO: because we are using actions from wordList, the favorite star will not be updated.
         const { globalWordLists: { items }, user } = this.props;
-        return Object.keys(items).map(key => {
+
+        const filteredItems = Object.keys(items)
+            .filter(key => {
+                return items[key].name
+                    .toLowerCase()
+                    .includes(this.props.globalWordLists.filter);
+            })
+            .reduce((obj, key) => {
+                obj[key] = items[key];
+                return obj;
+            }, {});
+        
+        return Object.keys(filteredItems).map(key => {
             let isUserFavored = user.data.favoredWordLists.find(id => id === items[key]._id) || false;
+            let isUserList = items[key]._user === user.data._id;
             return (
                 <div 
                     key={items[key]._id} >
                     <Link to={`/wordList/preview/${items[key]._id}`}>{items[key].name}</Link>
-                    { isUserFavored ? 
-                        <span onClick={() => this.props.deleteFavoredWordList(items[key])}>
-                            <I className="fas fa-star"></I>
-                        </span> :
-                        <span onClick={() => this.props.favorWordList(items[key])}>
-                            <I className="far fa-star"></I>
-                        </span>
+                    { isUserList ? '' :
+                        isUserFavored ? 
+                            <span onClick={() => this.props.deleteFavoredWordList(items[key])}>
+                                <I className="fas fa-star"></I>
+                            </span> :
+                            <span onClick={() => this.props.favorWordList(items[key])}>
+                                <I className="far fa-star"></I>
+                            </span>
                     }
                 </div>
             );
@@ -66,6 +83,11 @@ class WordLists extends Component {
             <div>
                 <GoBack goTo='/dashboard' />
                 <Link className={linkStyle} to='/game/wordlist/new'>Add new list</Link>                
+                <input type='text' onChange={this.handleChange.bind(this)} />
+                <div>
+                    <button onClick={() => this.props.sortGlobalWordLists('createdDate')}>Sort by date</button>
+                    <button onClick={() => this.props.sortGlobalWordLists('rating')}>Sort by rating</button>
+                </div>
                 <div>{ this.renderWordLists() }</div>
             </div>
         )
@@ -80,5 +102,7 @@ export default connect(mapStateToProps, {
     fetchGlobalWordListsIfNeeded, 
     fetchUserIfNeeded, 
     favorWordList,
-    deleteFavoredWordList
+    deleteFavoredWordList,
+    sortGlobalWordLists,
+    filterGlobalWordLists
 })(WordLists);
