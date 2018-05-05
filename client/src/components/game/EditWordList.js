@@ -71,5 +71,4 @@ export default connect(
         fetchWordListIfNeeded, 
         updateWordList, 
         deleteWordList,  
-    })
-(withRouter(EditWordList));
+    })(withRouter(EditWordList));

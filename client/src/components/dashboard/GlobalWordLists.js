@@ -7,6 +7,7 @@ import {
 }  from '../../actions/globalWordListActions';
 import { favorWordList, deleteFavoredWordList } from '../../actions/wordListActions';
 import { fetchUserIfNeeded } from '../../actions/userActions';
+import GlobalWordListItem from './GlobalWordListItem';
 import GoBack from '../basic/GoBack';
 import Loading from '../../styles/Loading';
 import { Link } from 'react-router-dom';
@@ -24,8 +25,41 @@ const linkStyle = css`
     border-radius: 2px;
 `;
 
+const textInputStyle = css`
+    border: none;
+    outline: none;
+    background-color: transparent; 
+    padding: 0px 10px;
+    color: #FFFFFF;
+`;
+
+const SortFilter = styled('div')`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 20px 0px;
+    border-bottom: 1px solid #5A7D7C;
+`;
+
+const SortButton = styled('button')`
+    width: 150px;
+    margin: 2px 1px;
+    outline: none;
+    border: none;
+    background-color: rgba(90,125,124, 0.7);
+    color: #FFFFFF;
+    cursor: pointer;
+`;
+
 const I = styled('i')`
-    color: yellow;
+    color: #5A7D7C;
+`;
+
+const ListInnerContainer = styled('div')`
+    display: grid;
+    grid-gap: 10px;
+    grid-template: repeat(8, 1fr) / repeat(3, 1fr);
+    grid-auto-flow: row;
 `;
 
 class WordLists extends Component {
@@ -53,25 +87,19 @@ class WordLists extends Component {
                 obj[key] = items[key];
                 return obj;
             }, {});
-        
+
         return Object.keys(filteredItems).map(key => {
-            let isUserFavored = user.data.favoredWordLists.find(id => id === items[key]._id) || false;
+            let isUserFavored = user.data.favoredWordLists.indexOf(key) > -1;
             let isUserList = items[key]._user === user.data._id;
-            return (
-                <div 
-                    key={items[key]._id} >
-                    <Link to={`/wordList/preview/${items[key]._id}`}>{items[key].name}</Link>
-                    { isUserList ? '' :
-                        isUserFavored ? 
-                            <span onClick={() => this.props.deleteFavoredWordList(items[key])}>
-                                <I className="fas fa-star"></I>
-                            </span> :
-                            <span onClick={() => this.props.favorWordList(items[key])}>
-                                <I className="far fa-star"></I>
-                            </span>
-                    }
-                </div>
-            );
+
+            return <GlobalWordListItem 
+               item={items[key]} 
+               user={user}
+               deleteList={this.props.deleteFavoredWordList}
+               favorList={this.props.favorWordList}
+               bools={{isUserFavored, isUserList}}
+               key={key}
+            />
         })
     }
 
@@ -82,13 +110,20 @@ class WordLists extends Component {
         return (
             <div>
                 <GoBack goTo='/dashboard' />
+                <SortFilter>
+                    <div>
+                        <I className="fas fa-search"></I>
+                        <input className={textInputStyle} type='text' onChange={this.handleChange.bind(this)} />
+                    </div>
+                    <div>
+                        <SortButton onClick={() => this.props.sortGlobalWordLists('createdDate')}>Sort by date</SortButton>
+                        <SortButton onClick={() => this.props.sortGlobalWordLists('rating')}>Sort by rating</SortButton>
+                    </div>
+                </SortFilter>
+                <ListInnerContainer>
+                    { this.renderWordLists() }
+                </ListInnerContainer>
                 <Link className={linkStyle} to='/game/wordlist/new'>Add new list</Link>                
-                <input type='text' onChange={this.handleChange.bind(this)} />
-                <div>
-                    <button onClick={() => this.props.sortGlobalWordLists('createdDate')}>Sort by date</button>
-                    <button onClick={() => this.props.sortGlobalWordLists('rating')}>Sort by rating</button>
-                </div>
-                <div>{ this.renderWordLists() }</div>
             </div>
         )
     }

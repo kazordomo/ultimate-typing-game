@@ -12,13 +12,19 @@ const linkStyle = css`
     color: #ffffff;
 `;
 
-const TopScore = ({topScore: { correctWords, scoreDate, username, position, _user }}) => {
+const TopScore = ({topScore, isUserTopScores}) => {
     return (
         <Tr>
-            <td>{position}</td>
-            <td><Link className={linkStyle} to={`/stats/${_user}/true`}>{username}</Link></td>
-            <td>{correctWords}</td>
-            <td>{formatDate(scoreDate)}</td>
+            <td>{topScore.position}</td>
+            {   
+                isUserTopScores ? null :
+                <td>
+                    <Link className={linkStyle} to={`/stats/${topScore._user}/true`}>
+                    {topScore.username}</Link>
+                </td>
+            }
+            <td>{topScore.correctWords}</td>
+            <td>{formatDate(topScore.scoreDate)}</td>
         </Tr>
     );
 };

@@ -63,6 +63,7 @@ module.exports = app => {
         wordList.words = req.body.words;
         wordList.labels = req.body.labels;
         wordList.isPublic = req.body.isPublic;
+        wordList.rating = req.body.rating;
         wordList.save();
     })
 

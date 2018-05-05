@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import ActiveWords from './ActiveWords';
 import GameStats from './GameStats';
 import Wrapper from '../../styles/Wrapper';
-import Loading from '../../styles/Loading';
 import Title from '../../styles/Title';
 import textInputStyle from '../../styles/textInput';
 import styled from 'react-emotion';

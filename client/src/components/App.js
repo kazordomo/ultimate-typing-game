@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import styled, { injectGlobal } from 'react-emotion';
-import PrivateRoute from './PrivateRoute';
+// import PrivateRoute from './PrivateRoute';
 import Background from '../styles/Background';
 import FirstPage from './FirstPage';
 import Dashboard from './dashboard/Dashboard';

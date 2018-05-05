@@ -1,0 +1,24 @@
+/* copy/pasted from the react-rater module to use as the new default */
+.rater {
+    display: inline-block;
+    line-height: normal; }
+    .rater > * {
+      display: inline-block; }
+  
+  .rater-star {
+    cursor: pointer;
+    color: #666;
+    position: relative; }
+    .rater-star.will-be-active {
+      color: #ccc; }
+    .rater-star.is-active {
+      color: #ccc; }
+    .rater-star.is-active-half:before {
+      color: #ccc;
+      content: '\2605';
+      position: absolute;
+      left: 0;
+      width: 50%;
+      overflow: hidden; }
+    .rater-star.is-disabled {
+      cursor: default; }

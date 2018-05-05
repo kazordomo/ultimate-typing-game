@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
-import GoBack from '../basic/GoBack';
 import Wrapper from '../../styles/Wrapper';
 import Button from '../../styles/Button';
 import Row from '../../styles/Row';

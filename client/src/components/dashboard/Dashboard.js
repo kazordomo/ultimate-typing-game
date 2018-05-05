@@ -1,10 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PlayButtons from './PlayButtons';
-import UserTopScores from './UserTopScores';
-import Loading from '../../styles/Loading';
 import CssGrid from '../../styles/CssGrid';
-import Title from '../../styles/Title';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'react-emotion';
 
@@ -46,7 +43,6 @@ const {
     item3, 
     item4, 
     item5, 
-    item6
 } = CssGrid;
 
 const Dashboard = ({ user: { data } }) => {

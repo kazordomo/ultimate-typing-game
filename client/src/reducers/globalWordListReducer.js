@@ -43,14 +43,6 @@ function sortWordLists(items, field) {
     }
 }
 
-function filterWordLists(items, filter) {
-    const array = (typeof items === 'object') ? Object.keys(items).map(i => items[i]) : items;
-
-    return arrayToObj(array.filter(wordList => {
-        return wordList.name === filter;
-    }));
-}
-
 export default function(state = {
     isFetched: false,
     items: {},

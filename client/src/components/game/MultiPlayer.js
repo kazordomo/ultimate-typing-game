@@ -5,9 +5,8 @@ import WaitingOnOpponent from './WaitingOnOpponent';
 import WpmTracker from './WpmTracker';
 import Wrapper from '../../styles/Wrapper';
 import GoBack from '../basic/GoBack';
-import styled from 'react-emotion';
 import { submitScore, fetchUserIfNeeded } from '../../actions';
-import { newPlayer, playerIsReady, updateWpm, unsubscribe } from '../../player';
+import { newPlayer, updateWpm, unsubscribe } from '../../player';
 
 class Multiplayer extends Component {
 

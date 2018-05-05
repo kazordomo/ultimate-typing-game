@@ -5,7 +5,6 @@ import SocialMedia from './SocialMedia';
 import Register from './Register';
 import Login from './Login';
 import ErrorMessage from '../../styles/ErrorMessage';
-import Row from '../../styles/Row';
 import { submitAuthForm } from '../../actions';
 
 class AuthContainer extends Component {
