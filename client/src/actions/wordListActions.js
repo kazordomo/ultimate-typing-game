@@ -57,7 +57,7 @@ export const fetchWordListIfNeeded = id => (dispatch, getState) => {
     }
 }
 
-export const addWordList = (wordList, history) => async dispatch => {
+export const addWordList = (wordList) => async dispatch => {
     const response = await fetch('/api/wordList', { 
         credentials: 'include',
         method: 'post', 
@@ -65,7 +65,6 @@ export const addWordList = (wordList, history) => async dispatch => {
         headers: { 'Content-Type': 'application/json' }
     });
     const json = await response.json();
-    history.push('/game/practice');
     dispatch({ type: POST_WORD_LIST_SUCCESS, payload: json });
 }
 
@@ -78,7 +77,7 @@ export const updateWordList = (wordList, id, history) => async dispatch => {
         headers: { 'Content-Type': 'application/json' }
     });
     const json = await response.json();
-    history.push('/game/practice');
+    history && history.push('/game/practice');
     dispatch({ type: UPDATE_WORD_LIST_SUCCESS, payload: json });
 }
 

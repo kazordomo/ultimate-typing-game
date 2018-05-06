@@ -31,7 +31,7 @@ export default (props) => {
                     {props.item.name}
                 </Link>
             </span>
-            <Rater total={5} rating={props.item.rating} interactive={false} onRate={() => console.log("HEJ")}>
+            <Rater total={5} rating={props.item.rating} interactive={false}>
                 <Star />
             </Rater>
             {/* <span>{props.item.labels.map(label => label)}</span> */}

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'react-emotion';
 import { fetchGlobalWordListIfNeeded } from '../../actions/globalWordListActions';
 import Loading from '../../styles/Loading';
 import GoBack from '../basic/GoBack';
+import Title from '../../styles/Title';
 import { 
     favorWordList, 
     updateWordList, 
@@ -11,6 +13,28 @@ import {
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import Star from './Star';
+import Button from '../../styles/Button';
+
+const Word = styled('span')`
+    margin-right 20px;
+    line-height: 2;
+`;
+
+const WordsContainer = styled('div')`
+    display: flex;
+    flex-wrap: wrap;
+    color: #FFFFFF;
+`;
+
+const RatingContainer = styled('div')`
+    text-align: center;
+    color: #FFFFFF;
+`;
+
+const Span = styled('span')`
+    margin-left: 10px;
+    font-size: 16px;
+`;
 
 class GlobalWordListPreview extends Component {
 
@@ -22,7 +46,7 @@ class GlobalWordListPreview extends Component {
         let id = 0;
         return words.map(word => {
             id++;
-            return <div key={id}>{word}</div>;
+            return <Word key={id}>{word}</Word>;
         })
     }
 
@@ -43,20 +67,33 @@ class GlobalWordListPreview extends Component {
     }
 
     render() {
-        if(Object.keys(this.props.globalWordLists.preview).length === 0)
+        const { globalWordLists: { preview } } = this.props;
+
+        if(Object.keys(preview).length === 0)
             return <Loading />;
+        const calculatedRating = 
+            preview.ratings.reduce((a, b) => a + b.value / preview.ratings.length, 0);
         return (
             <div>
                 <GoBack goTo='/wordLists' />                
-                <button onClick={() => this.props.favorWordList(this.props.globalWordLists.preview)}>Save List</button>
-                <button onClick={() => this.props.deleteFavoredWordList(this.props.globalWordLists.preview)}>Should be same button but delete...</button>
-                <Rater total={5} rating={this.props.globalWordLists.preview.rating} onRate={this.handleRating.bind(this)}>
-                    <Star active />
-                </Rater>
-                <div>{this.props.globalWordLists.preview.name}</div>
-                { this.renderWords(this.props.globalWordLists.preview.words) }
+                <Title>{preview.name}</Title>
+                <div style={{width: '250px', margin: '0 auto'}}>
+                    <Button onClick={() => this.props.favorWordList(preview)}>Save List</Button>
+                </div>
+                {/* <button onClick={() => this.props.deleteFavoredWordList(preview)}>Should be same button but delete...</button> */}
+                <RatingContainer>
+                    <Rater total={5} rating={calculatedRating} onRate={this.handleRating.bind(this)}>
+                        <Star active />
+                    </Rater>
+                    { preview.ratings.length ?
+                        <Span>( { preview.ratings.length } )</Span> :
+                        '' }
+                </RatingContainer>
+                <WordsContainer>
+                    { this.renderWords(preview.words) }
+                </WordsContainer>
                 <div>
-                    { this.renderLabels(this.props.globalWordLists.preview.labels) }
+                    { this.renderLabels(preview.labels) }
                 </div>
             </div>
         )

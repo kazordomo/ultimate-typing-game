@@ -132,11 +132,6 @@ class Game extends Component {
         const { gameIsReady, keystrokes, correctWords, incorrectWords } = this.state;
         this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
 
-        if(keyCode === ENTER) {
-            clearInterval(start);
-            this.setState(this.initialState);
-        }
-
         //TODO: we need to change how we start the game.
         if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
             this.setState({ gameIsReady: false }, () => {
@@ -166,7 +161,7 @@ class Game extends Component {
         if(this.refs.gameTextInput.value === '')
             character = 0;
         if(keyCode > 65 && keyCode < 90)
-            this.gameTextInputBorder(this.validateCharacter());
+            this.gameTextInputBorder(this.validateCharacter());        
     }
 
     render() {
@@ -174,6 +169,12 @@ class Game extends Component {
             return <CountDown>{this.state.multiPlayerCountDown}</CountDown>;
         }
         let { time } = this.state;
+        document.onkeydown = ({ keyCode }) => {
+            if(keyCode === ENTER) {
+                clearInterval(start);
+                this.setState(this.initialState);
+            }
+        };
         return(
             <div>
                 <Title>{this.props.gameModeTitle}</Title>

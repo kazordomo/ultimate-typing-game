@@ -91,9 +91,13 @@ class WordLists extends Component {
         return Object.keys(filteredItems).map(key => {
             let isUserFavored = user.data.favoredWordLists.indexOf(key) > -1;
             let isUserList = items[key]._user === user.data._id;
+            const listObj = items[key];
+            const calculatedRating = 
+                listObj.ratings.reduce((a, b) => a + b.value / listObj.ratings.length, 0);
+            listObj.rating = calculatedRating;
 
             return <GlobalWordListItem 
-               item={items[key]} 
+               item={listObj} 
                user={user}
                deleteList={this.props.deleteFavoredWordList}
                favorList={this.props.favorWordList}

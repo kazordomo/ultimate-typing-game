@@ -4,7 +4,6 @@ const Score = mongoose.model('scores');
 const User = mongoose.model('users');
 const WordList = mongoose.model('wordLists');
 
-
 module.exports = app => {
 
     app.get('/api/scores', requireLogin, async (req, res) => {
@@ -48,7 +47,7 @@ module.exports = app => {
                 { '_user': { $in: mongoose.Types.ObjectId(req.user.id) } }, 
                 { '_id': { $in: favoredIds }}
             ] 
-        }); //WOW
+        });
         res.send(wordLists);
     });
 
@@ -59,12 +58,30 @@ module.exports = app => {
 
     app.put('/api/wordList/:id', requireLogin, async (req, res) => {
         let wordList = await WordList.findById(req.params.id);
+        const userAlreadyRated = wordList.ratings.find(rating => rating._user.toString() === req.user.id );
+        if(req.body.rating && wordList._user.toString() === req.user.id) {
+            return res.status(400).json({ 
+                success: false,
+                status: 400, 
+                message: 'You can not rate your own list.' 
+            });
+        }else if(userAlreadyRated) {
+            return res.status(400).json({ 
+                success: false,
+                status: 400, 
+                message: 'You have already rated this list.' 
+            });
+        }
+
+        const rating = req.body.rating ? 
+                { _user: req.user.id, value: req.body.rating } : null;
         wordList.name = req.body.name;
         wordList.words = req.body.words;
         wordList.labels = req.body.labels;
         wordList.isPublic = req.body.isPublic;
-        wordList.rating = req.body.rating;
+        rating && wordList.ratings.push(rating);
         wordList.save();
+        res.send(wordList);
     })
 
     app.post('/api/wordList', requireLogin, async (req, res) => {
@@ -81,10 +98,6 @@ module.exports = app => {
     });
 
     app.post('/api/wordList/user/favor', requireLogin, (req, res) => {
-        //TODO: we need to check if the user is the creator of the wordlist.
-        // const checkForDup = req.user.favoredWordLists.find(wl => wl === req.body.wordListId);
-        // if(checkForDup)
-        //     return res.status(400).json( {message: 'List already favorised.'} );
         req.user.favoredWordLists.push(req.body.wordListId);
         req.user.save();
         res.status(200).end();

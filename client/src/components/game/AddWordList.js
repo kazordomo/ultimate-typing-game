@@ -9,7 +9,8 @@ import GoBack from '../basic/GoBack';
 const AddWordList = ({ addWordList, history }) => {
 
     function handleSaveList(wordList) {
-        addWordList(wordList, history);
+        addWordList(wordList);
+        history.goBack();
     }
 
     return(

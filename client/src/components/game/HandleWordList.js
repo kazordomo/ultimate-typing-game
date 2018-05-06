@@ -45,7 +45,7 @@ const Label = styled('span')`
     cursor: pointer;
 `;
 
-class AddEditWordList extends Component {
+class HandleWordList extends Component {
 
     constructor(props) {
         super(props);
@@ -176,4 +176,4 @@ class AddEditWordList extends Component {
     }
 }
 
-export default AddEditWordList;
+export default HandleWordList;
