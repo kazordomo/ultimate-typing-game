@@ -4,6 +4,7 @@ import Wrapper from '../../styles/Wrapper';
 import Button from '../../styles/Button';
 import Row from '../../styles/Row';
 import textInputStyle from '../../styles/textInput';
+import checkboxStyle from '../../styles/checkboxStyle';
 
 const WordsContainer = styled('div')`
     width: 500px;
@@ -137,6 +138,9 @@ class HandleWordList extends Component {
                             className={textInputStyle} />
                     </Row>
                     <Row>
+                        <input type='checkbox' ref='isPublic' className={checkboxStyle} defaultChecked={isPublic} />
+                    </Row>
+                    <Row>
                         <input 
                             type='text' 
                             ref='wordTextInput' 
@@ -147,9 +151,6 @@ class HandleWordList extends Component {
                     </Row>
                     <Row>
                         <Button onClick={this.handleAddWord}>Add Word</Button>
-                    </Row>
-                    <Row>
-                        <input type='checkbox' ref='isPublic' defaultChecked={isPublic} />
                     </Row>
                     <Row>
                         <input 

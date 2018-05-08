@@ -20,14 +20,13 @@ const Wrapper = styled('div')`
 `;
 
 const GeneralStats = styled('div')`
-    width: 30%;
+    width: 300px;
     float: left;
 `;
 
 const ChartWrapper = styled('div')`
-    width: 70%;
+    width: 500px;
     float: right;
-    // background: rgba(0, 0, 0, 0.1);
 `;
 
 class Stats extends Component {
@@ -36,12 +35,13 @@ class Stats extends Component {
         const { match, fetchStatsIfNeeded } = this.props;
         const isExternalBool = (match.params.isExternal === 'true') ? true : false;
         await fetchStatsIfNeeded(match.params.id, isExternalBool);
+        console.log(this.props);
     }
 
     sortChartData() {
-        return this.props.stats.scores.map(score => {
-            return { wpm: score.correctWords };
-        });
+        return this.props.stats.scores
+            .sort((a, b) => new Date(a['scoreDate']) - new Date(b['scoreDate']))
+            .slice(1).slice(-20).map(score => { return { wpm: score.correctWords } });
     }
 
     renderScores() {
@@ -76,7 +76,7 @@ class Stats extends Component {
                         <Stat label={'Multiplayer Wins'} stat={data.totalMultiplayerWins} />
                     </GeneralStats>   
                     <ChartWrapper>
-                        <LineChart width={400} height={300} data={this.sortChartData()}>
+                        <LineChart width={500} height={300} data={this.sortChartData()}>
                             <Tooltip/>
                             <Line type="monotone" dataKey="wpm" stroke="#8884d8" />
                         </LineChart>

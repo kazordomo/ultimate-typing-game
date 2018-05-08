@@ -40,7 +40,7 @@ class Game extends Component {
 
     constructor(props) {
         super(props);
-        
+
         this.initialState = {
             time: 60,
             keystrokes: 0,
@@ -54,6 +54,12 @@ class Game extends Component {
         this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
         this.resetGame = this.resetGame.bind(this);
     }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.time) {
+            this.setState({ time: nextProps.time });
+        }
+      }
 
     componentDidMount() {
         if(!this.props.practice)
@@ -111,6 +117,8 @@ class Game extends Component {
 
     resetGame() {
         this.refs.gameTextInput.value = '';
+        this.refs.gameTextInput.style.color = '#5A7D7C';
+        this.refs.gameTextInput.style.borderBottom = '1px solid #5A7D7C';
         this.setState(this.initialState);
     }
     
@@ -169,12 +177,13 @@ class Game extends Component {
             return <CountDown>{this.state.multiPlayerCountDown}</CountDown>;
         }
         let { time } = this.state;
-        document.onkeydown = ({ keyCode }) => {
-            if(keyCode === ENTER) {
-                clearInterval(start);
-                this.setState(this.initialState);
-            }
-        };
+        //TODO: This will be global. not goodie.
+        // document.onkeydown = ({ keyCode }) => {
+        //     if(keyCode === ENTER) {
+        //         clearInterval(start);
+        //         this.resetGame();
+        //     }
+        // };
         return(
             <div>
                 <Title>{this.props.gameModeTitle}</Title>

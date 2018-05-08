@@ -35,6 +35,11 @@ module.exports = app => {
         res.send(newScore);
     });
 
+    app.get('/api/user/scores/:id', requireLogin, async (req, res) => {
+        const scores = await Score.find({ '_user': { $in: mongoose.Types.ObjectId(req.params.id) } });
+        res.send(scores);
+    });
+
     app.get('/api/wordLists/all', requireLogin, async (req, res) => {
         const wordLists = await WordList.find({'isPublic': true});
         res.send(wordLists);
@@ -118,10 +123,5 @@ module.exports = app => {
         } catch(err) {
             res.status(400).json(err);
         }
-    });
-
-    app.get('/api/user/scores/:id', requireLogin, async (req, res) => {
-        const scores = await Score.find({ '_user': { $in: mongoose.Types.ObjectId(req.params.id) } });
-        res.send(scores);
     });
 }

@@ -22,7 +22,6 @@ const Word = styled('span')`
 
 const WordsContainer = styled('div')`
     display: flex;
-    flex-wrap: wrap;
     color: #FFFFFF;
 `;
 
@@ -34,6 +33,13 @@ const RatingContainer = styled('div')`
 const Span = styled('span')`
     margin-left: 10px;
     font-size: 16px;
+`;
+
+const Words = styled('div')`
+    display: flex;
+    flex-wrap: wrap;
+    width: auto;
+    margin: 0 auto;
 `;
 
 class GlobalWordListPreview extends Component {
@@ -58,6 +64,9 @@ class GlobalWordListPreview extends Component {
         });
     }
 
+    //TODO: this will make the component rerender and use calculatedRating as rating again.
+    //avoiding componentWillUnmount, but perhaps we should update the wordlist first then, so that
+    //the users rating will remain until the compoent is unmounted.
     handleRating(event) {
         if(event.type === 'click') {
             const wordList = this.props.globalWordLists.preview;
@@ -73,6 +82,7 @@ class GlobalWordListPreview extends Component {
             return <Loading />;
         const calculatedRating = 
             preview.ratings.reduce((a, b) => a + b.value / preview.ratings.length, 0);
+
         return (
             <div>
                 <GoBack goTo='/wordLists' />                
@@ -90,7 +100,9 @@ class GlobalWordListPreview extends Component {
                         '' }
                 </RatingContainer>
                 <WordsContainer>
+                    <Words>
                     { this.renderWords(preview.words) }
+                    </Words>
                 </WordsContainer>
                 <div>
                     { this.renderLabels(preview.labels) }
