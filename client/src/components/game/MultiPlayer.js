@@ -10,6 +10,10 @@ import { newPlayer, updateWpm, unsubscribe } from '../../player';
 
 class Multiplayer extends Component {
 
+    //TODO: Warning: Can only update a mounted or mounting component. 
+    // This usually means you called setState, replaceState, or forceUpdate on an unmounted component. 
+    // This is a no-op.
+
     constructor(props) {
         super(props);
 
@@ -50,6 +54,7 @@ class Multiplayer extends Component {
     }
 
     updatePlayersWpm(wpm) {
+        console.log(wpm);
         let user = this.state.user;
         user.wpm = wpm;
         updateWpm(wpm, (err, data) => {
@@ -90,6 +95,10 @@ class Multiplayer extends Component {
             );
         }
     }
+
+    // handleGiveUp() {
+
+    // }
 
     render() {
         return(

@@ -22,7 +22,7 @@ module.exports = (server) => {
         });
 
         socket.on('new player', user => {
-            players[socket.id] = { user: user.user.local.username, isReady: false };
+            players[socket.id] = { user: user.data.local.username, isReady: false };
             io.sockets.in(`room-${roomno}`).emit('new player', players);
         });
 

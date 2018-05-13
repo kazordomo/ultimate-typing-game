@@ -56,7 +56,7 @@ class Game extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.time) {
+        if(nextProps.practice && nextProps.time) {
             this.setState({ time: nextProps.time });
         }
       }

@@ -8,14 +8,18 @@ const PlayButtonsWrapper = styled('div')`
 
 const linkStyle = css`
     display: block;
-    margin: 50px 0px;
+    width: 80%;
+    margin: 40px auto;
+    padding: 5px;
+    background-color: #5B9B66;
     color: #FFFFFF;
-    border: none;
-    border-radius: 2px;
-    text-decoration: none;
     text-align: center;
-    &:hover {
-        color: #5B9B66;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all .1s ease-in-out;
+    box-shadow: 2px 4px 13px 0px rgba(0,0,0,0.75);
+    :hover {
+        box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.75);
     }
 `;
 
