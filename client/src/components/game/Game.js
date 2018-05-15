@@ -36,6 +36,11 @@ let countDown = null;
 let updateScore = null;
 let start = null;
 
+//TODO:
+//this comp should better be divided by the three different game modes.
+//pain in tha azz to find your way in the code with all the if states according too
+//the different modes.
+
 class Game extends Component {
 
     constructor(props) {
@@ -59,7 +64,7 @@ class Game extends Component {
         if(nextProps.practice && nextProps.time) {
             this.setState({ time: nextProps.time });
         }
-      }
+    }
 
     componentDidMount() {
         if(!this.props.practice)
@@ -70,10 +75,10 @@ class Game extends Component {
     }
 
     componentWillUnmount() {
-        this.clearInterval();
+        this.clearIntervals();
     }
 
-    clearInterval() {
+    clearIntervals() {
         clearInterval(countDown);
         clearInterval(updateScore);
         clearInterval(start);
@@ -84,9 +89,14 @@ class Game extends Component {
             this.props.updatePlayersWpm(this.state.correctWords);
         }, 1000);
         updateTime(true, (err, time) => {
-            this.setState({ time });
-            if(this.state.time === 0)
-                clearInterval(updateScore);
+            //TOOD:
+            //should find a better way to solve this. socket.removeListener or similar,
+            //to always use this.setState on the right mounted component.
+            if(this.refs._isMounted) {
+                this.setState({ time });
+                if(this.state.time === 0)
+                    clearInterval(updateScore);
+            }
         });
     }
 
@@ -185,7 +195,7 @@ class Game extends Component {
         //     }
         // };
         return(
-            <div>
+            <div ref='_isMounted'>
                 <Title>{this.props.gameModeTitle}</Title>
                 <Wrapper>
                     <Row>

@@ -24,7 +24,6 @@ function playerIsReady(cb) {
 
 function updateWpm(wpm, cb) {
     socket.on('get wpm', data => cb(null, data));
-    // socket.emit('update wpm', wpm);    
     socket.emit('update wpm', wpm);
 }
 
@@ -37,5 +36,8 @@ function unsubscribe() {
     socket.emit('unsubscribe');
 }
 
+// function disconnect() {
+//     socket.on('disconnect', () => )
+// }
 
 export { newPlayer, playerIsReady, updateTime, updateWpm, unsubscribe };

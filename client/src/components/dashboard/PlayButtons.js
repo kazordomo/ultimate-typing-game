@@ -33,7 +33,7 @@ const PlayButtons = () => {
     return (
         <PlayButtonsWrapper>
             <PlayButton goTo='singleplayer' mode='Singleplayer' />
-            <PlayButton goTo='multiplayer' mode='Multiplayer' />
+            <PlayButton goTo='multiplayer' mode='Multiplayer (beta)' />
             <PlayButton goTo='practice' mode='Practice' />
         </PlayButtonsWrapper>
     );

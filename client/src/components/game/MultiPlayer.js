@@ -7,17 +7,19 @@ import Wrapper from '../../styles/Wrapper';
 import GoBack from '../basic/GoBack';
 import { submitScore, fetchUserIfNeeded } from '../../actions';
 import { newPlayer, updateWpm, unsubscribe } from '../../player';
+import { disconnect } from 'cluster';
 
 class Multiplayer extends Component {
 
-    //TODO: Warning: Can only update a mounted or mounting component. 
-    // This usually means you called setState, replaceState, or forceUpdate on an unmounted component. 
-    // This is a no-op.
+    //TODO: when a player unsubscribes before the game is done,
+    //we need to get a ping telling us that.
+    //if the player unmounts before the timer is done, the player will "disconnect".
+    //otherwise it will be a simple unsubscribed.
 
     constructor(props) {
         super(props);
 
-        this.state = { 
+        this.state = {
             user: {
                 name: '',
                 wpm: 0
@@ -26,8 +28,7 @@ class Multiplayer extends Component {
                 name: '',
                 wpm: 0
             },
-            gameIsReady: false,
-
+            gameIsReady: false
         };
         this.handleSubmitScore = this.handleSubmitScore.bind(this);
         this.updatePlayersWpm = this.updatePlayersWpm.bind(this);
@@ -49,30 +50,33 @@ class Multiplayer extends Component {
             opponent.name = players['opponent'];
             user.name = players['user'];
             let gameIsReady = (players['user'] && players['opponent']) ? true : false;
-            this.setState({ opponent, user, gameIsReady });
+            //hax. chech if the comp is mounted before setting the state
+            if(this.refs._isMounted)
+                this.setState({ opponent, user, gameIsReady });
         });
     }
 
     updatePlayersWpm(wpm) {
-        console.log(wpm);
         let user = this.state.user;
         user.wpm = wpm;
         updateWpm(wpm, (err, data) => {
             let opponent = this.state.opponent;
             opponent.wpm = data;
-            this.setState({ opponent, user });
+            if(this.refs._isMounted)
+                this.setState({ opponent, user });
         })
     }
 
     handleSubmitScore(correctWords, incorrectWords, keystrokes) {
         const { user, opponent } = this.state;
         let checkWinOrLoss = (user.wpm > opponent.wpm) ? true : false;
+        this.setState({ gameIsReady: false });
         this.props.submitScore({ 
             correctWords, 
             incorrectWords, 
             keystrokes, 
             multiplayerGame: true, 
-            multiplayerWin: checkWinOrLoss 
+            multiplayerWin: checkWinOrLoss
         });
     }
 
@@ -83,11 +87,12 @@ class Multiplayer extends Component {
             return (
                 <div>
                     <Game 
-                            multiplayer
-                            gameModeTitle={'Multiplayer'}
-                            submitScore={this.handleSubmitScore}
-                            updatePlayersWpm={this.updatePlayersWpm}
-                            gameIsReady={this.state.gameIsReady}/>
+                        multiplayer
+                        gameModeTitle={'Multiplayer'}
+                        submitScore={this.handleSubmitScore}
+                        updatePlayersWpm={this.updatePlayersWpm}
+                        gameIsReady={this.state.gameIsReady}
+                    />
                     <WpmTracker player={this.state.user} />
                     <WpmTracker player={this.state.opponent} />
                 </div>
@@ -102,11 +107,13 @@ class Multiplayer extends Component {
 
     render() {
         return(
-            <div>
+            <div ref='_isMounted'>
                 <GoBack goTo='/dashboard' />
-                <Wrapper>
-                    {this.renderGameField()}
-                </Wrapper>
+                <div>
+                    <Wrapper>
+                        {this.renderGameField()}
+                    </Wrapper>
+                </div>
             </div>
         );
     }

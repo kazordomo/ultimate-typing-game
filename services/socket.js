@@ -3,7 +3,6 @@ const socketIO = require('socket.io');
 module.exports = (server) => {
 
     const io = socketIO(server);
-
     const players = {};
     let roomno = 1;
 
@@ -17,8 +16,9 @@ module.exports = (server) => {
         });
 
         socket.on('unsubscribe', () => {
-            socket.leave(`room-${roomno}`);
+            interval && clearInterval(interval);
             delete players[socket.id];
+            socket.leave(`room-${roomno}`);
         });
 
         socket.on('new player', user => {
@@ -33,7 +33,7 @@ module.exports = (server) => {
             }
             player.isReady = !player.isReady; 
             io.sockets.in(`room-${roomno}`).emit('player is ready', players);
-        })
+        });
 
         socket.on('timer', start => {
             let counter = 10;
@@ -51,15 +51,13 @@ module.exports = (server) => {
         });
 
         socket.on('update wpm', wpm => {
-            socket.broadcast.emit('get wpm', wpm);            
+            socket.broadcast.emit('get wpm', wpm);  
         });
 
-        socket.on('disconnect', () => { 
-            clearInterval(interval);
-            socket.leave(`room-${roomno}`);
-            delete players[socket.id]; 
-            // io.emit('update players');
-        });
-
+        // socket.on('disconnect', () => { 
+        //     clearInterval(interval);
+        //     socket.leave(`room-${roomno}`);
+        //     delete players[socket.id]; 
+        // });
     });
 }
