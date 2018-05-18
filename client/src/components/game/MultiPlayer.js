@@ -1,38 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'react-emotion';
 import Game from './Game';
 import WaitingOnOpponent from './WaitingOnOpponent';
 import WpmTracker from './WpmTracker';
 import Wrapper from '../../styles/Wrapper';
 import GoBack from '../basic/GoBack';
-import { submitScore, fetchUserIfNeeded } from '../../actions';
-import { newPlayer, updateWpm, unsubscribe } from '../../player';
-import { disconnect } from 'cluster';
+import { 
+    submitScore, 
+    fetchUserIfNeeded,
+    multiplayerCountDown,
+    multiplayerStart,
+    initMultiplayerGamePlayers,
+    updateStat,
+    gameTimer
+} from '../../actions';
+import { 
+    newPlayer, 
+    updateWpm, 
+    updateTime, 
+    unsubscribe 
+} from '../../player';
+
+const CountDown = styled('div')`
+    font-size: 64px;
+    color: red;
+    text-align: center;
+`;
 
 class Multiplayer extends Component {
-
-    //TODO: when a player unsubscribes before the game is done,
-    //we need to get a ping telling us that.
-    //if the player unmounts before the timer is done, the player will "disconnect".
-    //otherwise it will be a simple unsubscribed.
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            user: {
-                name: '',
-                wpm: 0
-            },
-            opponent: {
-                name: '',
-                wpm: 0
-            },
-            gameIsReady: false
-        };
-        this.handleSubmitScore = this.handleSubmitScore.bind(this);
-        this.updatePlayersWpm = this.updatePlayersWpm.bind(this);
-    }
 
     async componentDidMount() {
         await this.props.fetchUserIfNeeded();
@@ -45,26 +41,62 @@ class Multiplayer extends Component {
 
     initPlayer() {
         newPlayer(this.props.user, (err, players) => {
-            let opponent = this.state.opponent;
-            let user = this.state.user;
-            opponent.name = players['opponent'];
-            user.name = players['user'];
+            const user = {
+                name: players['user'],
+                wpm: 0
+            };
+            const opponent = {
+                name: players['opponent'],
+                wpm: 0
+            };
+            console.log(players);
             let gameIsReady = (players['user'] && players['opponent']) ? true : false;
             //hax. chech if the comp is mounted before setting the state
-            if(this.refs._isMounted)
-                this.setState({ opponent, user, gameIsReady });
+            if(this.refs._isMounted) {
+                if(gameIsReady)
+                    this.multiplayerCountDown();
+                this.props.initMultiplayerGamePlayers({ user, opponent, gameIsReady });
+            }
         });
     }
 
     updatePlayersWpm(wpm) {
-        let user = this.state.user;
+        let user = this.props.currentGame.user;
         user.wpm = wpm;
         updateWpm(wpm, (err, data) => {
-            let opponent = this.state.opponent;
+            let opponent = this.props.currentGame.opponent;
             opponent.wpm = data;
-            if(this.refs._isMounted)
-                this.setState({ opponent, user });
+            if(this.refs._isMounted) {
+                this.props.updateStat({ user });                
+                this.props.updateStat({ opponent });
+            }
         })
+    }
+
+    multiplayerCountDown() {
+        let countDown = setInterval(() => {
+            let { multiPlayerCountDown } = this.props;
+            this.props.multiplayerCountDown(this.props.currentGame.multiPlayerCountDown - 1);
+            if(this.props.currentGame.multiPlayerCountDown === 0) {
+                clearInterval(countDown);
+            }
+        }, 1000);
+    }
+
+    timer() {
+        let start = setInterval(() => {
+            const { currentGame, gameTimer } = this.props;
+            //TODO: nahhh
+            this.updatePlayersWpm(currentGame.correctWords);
+            gameTimer(currentGame.time - 1);
+            //TODO: updateTime will keep going. we need to kill (removeAllListeers) from the socket.
+            updateTime(true, (err, time) => {
+                if(this.refs._isMounted) {
+                    if(currentGame.time === 1)
+                        clearInterval(start);
+                }
+            });
+        }, 1000);
     }
 
     handleSubmitScore(correctWords, incorrectWords, keystrokes) {
@@ -81,26 +113,27 @@ class Multiplayer extends Component {
     }
 
     renderGameField() {
-        if(!this.state.gameIsReady) {
+        if(!this.props.currentGame.gameIsReady) {
             return <WaitingOnOpponent />;
-        } else {
-            return (
-                <div>
-                    <Game 
-                        multiplayer
-                        gameModeTitle={'Multiplayer'}
-                        submitScore={this.handleSubmitScore}
-                        updatePlayersWpm={this.updatePlayersWpm}
-                        gameIsReady={this.state.gameIsReady}
-                    />
-                    <WpmTracker player={this.state.user} />
-                    <WpmTracker player={this.state.opponent} />
-                </div>
-
-            );
         }
-    }
+        if(this.props.currentGame.multiPlayerCountDown) {
+            return <CountDown>{this.props.currentGame.multiPlayerCountDown}</CountDown>;
+        }
+        return (
+            <div>
+                <Game 
+                    multiplayer
+                    gameModeTitle={'Multiplayer'}
+                    submitScore={this.handleSubmitScore.bind(this)}
+                    gameIsReady={this.props.currentGame.gameIsReady}
+                    timer={this.timer.bind(this)}
+                />
+                <WpmTracker player={this.props.currentGame.user} />
+                <WpmTracker player={this.props.currentGame.opponent} />
+            </div>
 
+        );
+    }
     // handleGiveUp() {
 
     // }
@@ -119,8 +152,18 @@ class Multiplayer extends Component {
     }
 }
 
-function mapStateToProps({ user }) {
-    return { user };
+function mapStateToProps({ user, currentGame }) {
+    return { user, currentGame };
 }
 
-export default connect(mapStateToProps, { fetchUserIfNeeded, submitScore })(Multiplayer);
+export default connect(mapStateToProps, 
+    { 
+        fetchUserIfNeeded, 
+        submitScore,
+        multiplayerCountDown,
+        multiplayerStart,
+        initMultiplayerGamePlayers,
+        updateStat,
+        gameTimer
+    }
+)(Multiplayer);

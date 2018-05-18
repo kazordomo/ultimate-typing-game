@@ -5,7 +5,13 @@ import PracticeSideBar from './PracticeSideBar';
 import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
 import GoBack from '../basic/GoBack';
-import { fetchWordListsIfNeeded, fetchWordListIfNeeded } from '../../actions';
+import { 
+    fetchWordListsIfNeeded, 
+    fetchWordListIfNeeded, 
+    gameTimer,
+    updateStat,
+    resetGame
+} from '../../actions';
 
 class Practice extends Component {
 
@@ -23,6 +29,21 @@ class Practice extends Component {
         await this.props.fetchWordListsIfNeeded();
     }
 
+    componentWillUnmount() {
+        this.props.resetGame();
+    }
+
+    //DRY
+    timer() {
+        let start = setInterval(() => {
+            const { currentGame, gameTimer } = this.props;
+            gameTimer(currentGame.time - 1);
+            if(currentGame.time === 1) {
+                clearInterval(start);
+            }
+        }, 1000);
+    }
+
     handleChooseWordList(wordList) {
         this.props.fetchWordListIfNeeded(wordList._id);
     }
@@ -38,12 +59,12 @@ class Practice extends Component {
             <div>
                 <GoBack goTo='/dashboard' />
                 <Wrapper>
-                    <Game practice time={this.state.time} gameModeTitle='Practice' />
+                    <Game practice timer={this.timer.bind(this)} gameModeTitle='Practice' />
                     <PracticeSideBar 
                         wordLists={this.props.wordLists.items}
                         user={this.props.user}
-                        time={this.state.time}
-                        changeTime={this.handleSetTime.bind(this)}
+                        time={this.props.currentGame.time}
+                        changeTime={this.props.updateStat.bind(this)}
                         chooseWordList={this.handleChooseWordList.bind(this)}
                     />
                 </Wrapper>
@@ -56,4 +77,10 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { fetchWordListsIfNeeded, fetchWordListIfNeeded })(Practice);
+export default connect(mapStateToProps, { 
+    fetchWordListsIfNeeded, 
+    fetchWordListIfNeeded, 
+    gameTimer,
+    updateStat,
+    resetGame
+})(Practice);

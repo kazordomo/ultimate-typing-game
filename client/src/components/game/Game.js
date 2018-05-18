@@ -6,7 +6,11 @@ import Wrapper from '../../styles/Wrapper';
 import Title from '../../styles/Title';
 import textInputStyle from '../../styles/textInput';
 import styled from 'react-emotion';
-import { selectWordList } from '../../actions';
+import { 
+    selectWordList, 
+    resetGame,
+    updateStat
+} from '../../actions';
 import { updateTime } from '../../player';
 
 const Row = styled('div')`
@@ -43,93 +47,27 @@ let start = null;
 
 class Game extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.initialState = {
-            time: 60,
-            keystrokes: 0,
-            correctWords: 0,
-            incorrectWords: 0,
-            gameIsReady: true,
-            multiPlayerCountDown: 3
-        }
-        this.state = this.initialState;
-        this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
-        this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
-        this.resetGame = this.resetGame.bind(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.practice && nextProps.time) {
-            this.setState({ time: nextProps.time });
-        }
-    }
-
     componentDidMount() {
+        //TODO: minimize the use of needing to check the different game modes.
+        //should be more dynamic.
         if(!this.props.practice)
             this.props.selectWordList(null); //reset currentWordList
         if(this.props.multiplayer) {
-            this.multiplayerCountDown();
+            this.props.timer();
+            this.props.updateStat({target: 'gameIsRunning', value: true});
         }
     }
 
     componentWillUnmount() {
-        this.clearIntervals();
-    }
-
-    clearIntervals() {
-        clearInterval(countDown);
-        clearInterval(updateScore);
         clearInterval(start);
-    }
-
-    startMultiplayer() {
-        updateScore = setInterval(() => {
-            this.props.updatePlayersWpm(this.state.correctWords);
-        }, 1000);
-        updateTime(true, (err, time) => {
-            //TOOD:
-            //should find a better way to solve this. socket.removeListener or similar,
-            //to always use this.setState on the right mounted component.
-            if(this.refs._isMounted) {
-                this.setState({ time });
-                if(this.state.time === 0)
-                    clearInterval(updateScore);
-            }
-        });
-    }
-
-    multiplayerCountDown() {
-        countDown = setInterval(() => {
-            let { multiPlayerCountDown } = this.state;
-            this.setState({multiPlayerCountDown: multiPlayerCountDown - 1});
-            if(multiPlayerCountDown === 0) {
-                clearInterval(countDown);
-                this.setState({multiPlayerCountDown: ''});
-                this.startMultiplayer();
-            }
-        }, 1000);
-    }
-
-    timer() {
-        start = setInterval(() => {
-            const { correctWords, incorrectWords, keystrokes } = this.state;
-            if(!this.props.multiplayer)
-                this.setState({ time: this.state.time - 1});
-            if(this.state.time === 0) {
-                clearInterval(start);
-                !this.props.practice && this.props.submitScore(correctWords, incorrectWords, keystrokes);
-                this.setState({ gameIsReady: false });
-            }
-        }, 1000);
+        this.props.resetGame();
     }
 
     resetGame() {
         this.refs.gameTextInput.value = '';
         this.refs.gameTextInput.style.color = '#5A7D7C';
         this.refs.gameTextInput.style.borderBottom = '1px solid #5A7D7C';
-        this.setState(this.initialState);
+        this.props.resetGame();
     }
     
     validateCharacter() {
@@ -140,31 +78,28 @@ class Game extends Component {
         if(validate) {
             this.refs.gameTextInput.style.borderBottom = '1px solid #5A7D7C';
             this.refs.gameTextInput.style.color = '#5A7D7C';
-        }  else {
+        } else {
             this.refs.gameTextInput.style.borderBottom = `1px solid ${RED}`;
             this.refs.gameTextInput.style.color = `${RED}`;
         }
     }
 
     handleOnKeyDown({ keyCode }) {
-        const { gameIsReady, keystrokes, correctWords, incorrectWords } = this.state;
         this.refs.gameTextInput.value = this.refs.gameTextInput.value.replace(/\s+/g,'');
 
-        //TODO: we need to change how we start the game.
-        if(gameIsReady && (keyCode > 65 && keyCode < 90)) {
-            this.setState({ gameIsReady: false }, () => {
-                this.timer();
-            });
+        if(!this.props.multiplayer && !this.props.currentGame.gameIsRunning && (keyCode > 65 && keyCode < 90)) {
+            this.props.updateStat({target: 'gameIsRunning', value: true});
+            this.props.timer();
         }
-        this.setState({ keystrokes: keystrokes + 1 });
+        this.props.updateStat({target: 'keystrokes', value: 1});
         if(keyCode === BACKSPACE) {
             character--;
             this.validateCharacter() && this.gameTextInputBorder(true);
         } else if(keyCode === SPACE) {
             if(this.refs.gameTextInput.value === this.props.currentWordList.words[0]) {
-                this.setState({ correctWords: correctWords + 1 });
+                this.props.updateStat({target: 'correctWords', value: 1});
             } else {
-                this.setState({ incorrectWords: incorrectWords + 1 });
+                this.props.updateStat({target: 'incorrectWords', value: 1});
                 this.gameTextInputBorder(false);
             }
             this.refs.gameTextInput.value = '';
@@ -183,17 +118,13 @@ class Game extends Component {
     }
 
     render() {
-        if(this.props.multiplayer && this.state.multiPlayerCountDown) {
-            return <CountDown>{this.state.multiPlayerCountDown}</CountDown>;
-        }
-        let { time } = this.state;
         //TODO: This will be global. not goodie.
-        // document.onkeydown = ({ keyCode }) => {
-        //     if(keyCode === ENTER) {
-        //         clearInterval(start);
-        //         this.resetGame();
-        //     }
-        // };
+        document.onkeydown = ({ keyCode }) => {
+            if(keyCode === ENTER) {
+                clearInterval(start);
+                this.resetGame();
+            }
+        };
         return(
             <div ref='_isMounted'>
                 <Title>{this.props.gameModeTitle}</Title>
@@ -206,11 +137,15 @@ class Game extends Component {
                             type="text" 
                             className={textInputStyle}
                             autoFocus
-                            disabled={!time}
-                            onKeyDown={this.handleOnKeyDown} 
-                            onKeyUp={this.handleOnKeyUp} 
+                            disabled={!this.props.currentGame.time}
+                            onKeyDown={this.handleOnKeyDown.bind(this)}
+                            onKeyUp={this.handleOnKeyUp.bind(this)} 
                             ref='gameTextInput' />
-                        { time ? <Counter>{time}</Counter> : <GameStats stats={this.state} /> }
+                        { 
+                            this.props.currentGame.time 
+                                ? <Counter>{this.props.currentGame.time}</Counter> 
+                                : <GameStats stats={this.props.currentGame} />
+                        }
                     </Row>
                 </Wrapper>
             </div>
@@ -218,8 +153,12 @@ class Game extends Component {
     }
 }
 
-function mapStateToProps({ user, wordLists: { currentWordList } }) {
-    return { user, currentWordList };
+function mapStateToProps({ user, wordLists: { currentWordList }, currentGame }) {
+    return { user, currentWordList, currentGame };
 }
 
-export default connect(mapStateToProps, { selectWordList })(Game);
+export default connect(mapStateToProps, { 
+    selectWordList, 
+    resetGame, 
+    updateStat 
+})(Game);

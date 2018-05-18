@@ -20,7 +20,6 @@ const PlayerName = styled('div')`
 export default ({ player: { name, wpm } }) => {
     return (
         <TrackerWrapper>
-            {/* <div>{name}</div> */}
             <Row>
                 <PlayerName>{name}</PlayerName>
                 <Percent width={wpm} />

@@ -35,7 +35,6 @@ class Stats extends Component {
         const { match, fetchStatsIfNeeded } = this.props;
         const isExternalBool = (match.params.isExternal === 'true') ? true : false;
         await fetchStatsIfNeeded(match.params.id, isExternalBool);
-        console.log(this.props);
     }
 
     sortChartData() {

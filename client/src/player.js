@@ -17,11 +17,6 @@ function newPlayer(player, cb) {
     socket.emit('new player', player);
 }
 
-function playerIsReady(cb) {
-    socket.on('player is ready', player => cb(null, player));
-    socket.emit('player is ready');
-}
-
 function updateWpm(wpm, cb) {
     socket.on('get wpm', data => cb(null, data));
     socket.emit('update wpm', wpm);
@@ -36,8 +31,4 @@ function unsubscribe() {
     socket.emit('unsubscribe');
 }
 
-// function disconnect() {
-//     socket.on('disconnect', () => )
-// }
-
-export { newPlayer, playerIsReady, updateTime, updateWpm, unsubscribe };
+export { newPlayer, updateTime, updateWpm, unsubscribe };

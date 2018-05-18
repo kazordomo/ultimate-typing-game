@@ -9,30 +9,30 @@ module.exports = (server) => {
     io.on('connection', socket => {
         let interval = null;
 
+        // socket.rooms = []; // keep track of rooms so the user will not reenter the same room?
+
         socket.on('subscribe to room', room => {
-            if(io.nsps['/'].adapter.rooms[`room-${roomno}`] && io.nsps['/'].adapter.rooms[`room-${roomno}`].length > 1) 
+            if(io.nsps['/'].adapter.rooms[`room-${roomno}`] && io.nsps['/'].adapter.rooms[`room-${roomno}`].length > 1) {
                 roomno++;
+            }
             socket.join(`room-${roomno}`);
         });
 
+        //TODO: when a player leaves durring a game, the opponent should not notice
+        //and finish the game as usual. the room should stay the same so that no other joins the
+        //room. the player leaving should have a loss.
         socket.on('unsubscribe', () => {
             interval && clearInterval(interval);
             delete players[socket.id];
             socket.leave(`room-${roomno}`);
         });
 
+        //TODO: problem seems to lie here. we start the game according to the callback inside
+        //the new player emit function.
         socket.on('new player', user => {
-            players[socket.id] = { user: user.data.local.username, isReady: false };
+            players[socket.id] = { user: user.data.local.username };
+            console.log(players);
             io.sockets.in(`room-${roomno}`).emit('new player', players);
-        });
-
-        socket.on('player is ready', () => {
-            let player = players[socket.id];
-            if(!player) {
-                return;
-            }
-            player.isReady = !player.isReady; 
-            io.sockets.in(`room-${roomno}`).emit('player is ready', players);
         });
 
         socket.on('timer', start => {
@@ -53,11 +53,5 @@ module.exports = (server) => {
         socket.on('update wpm', wpm => {
             socket.broadcast.emit('get wpm', wpm);  
         });
-
-        // socket.on('disconnect', () => { 
-        //     clearInterval(interval);
-        //     socket.leave(`room-${roomno}`);
-        //     delete players[socket.id]; 
-        // });
     });
 }

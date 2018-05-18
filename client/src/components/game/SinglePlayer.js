@@ -1,13 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { submitScore } from '../../actions';
+import { submitScore, gameTimer } from '../../actions';
 import Game from './Game';
 import GoBack from '../basic/GoBack';
 
 class SinglePlayer extends Component {
 
-    handleSubmitScore(correctWords, incorrectWords, keystrokes) {
+    handleSubmitScore() {
+        const { currentGame: { 
+            correctWords, 
+            incorrectWords, 
+            keystrokes } 
+        } = this.props;
         this.props.submitScore({ correctWords, incorrectWords, keystrokes });
+    }
+
+    timer() {
+        let start = setInterval(() => {
+            const { currentGame, gameTimer } = this.props;
+            gameTimer(currentGame.time - 1);
+            if(currentGame.time === 1) {
+                this.handleSubmitScore();
+                clearInterval(start);
+            }
+        }, 1000);
     }
 
     render() {
@@ -16,14 +32,15 @@ class SinglePlayer extends Component {
                 <GoBack goTo='/dashboard' />
                 <Game 
                     gameModeTitle={'Singleplayer'}
-                    submitScore={this.handleSubmitScore.bind(this)}/>
+                    timer={this.timer.bind(this)}
+                />
             </div>
         );
     }
 }
 
-function mapStateToProps({ submitScore }) {
-    return { submitScore };
+function mapStateToProps({ submitScore, currentGame }) {
+    return { submitScore, currentGame };
 }
 
-export default connect(mapStateToProps, { submitScore })(SinglePlayer);
+export default connect(mapStateToProps, { submitScore, gameTimer })(SinglePlayer);

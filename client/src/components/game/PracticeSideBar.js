@@ -126,7 +126,7 @@ class PracticeSideBar extends Component {
                                 type='number'
                                 defaultValue={this.props.time}
                                 ref='timeInput'
-                                onChange={() => this.props.changeTime(this.refs.timeInput.value)}
+                                onChange={() => this.props.changeTime({target: 'time', value: this.refs.timeInput.value})}
                             />
                         </div>
                     </GameSettingsWrapper>
