@@ -6,16 +6,19 @@ module.exports = (server) => {
     const players = {};
     let roomno = 1;
 
+    //TODO: a new player/socket is added on page reload, even if same player as before.
+    //the roomno does not increase in this case.
+
     io.on('connection', socket => {
         let interval = null;
 
-        // socket.rooms = []; // keep track of rooms so the user will not reenter the same room?
-
         socket.on('subscribe to room', room => {
-            if(io.nsps['/'].adapter.rooms[`room-${roomno}`] && io.nsps['/'].adapter.rooms[`room-${roomno}`].length > 1) {
+            let playersInRoom = io.nsps['/'].adapter.rooms[`room-${roomno}`];
+            if(playersInRoom && playersInRoom.length > 1) {
                 roomno++;
             }
             socket.join(`room-${roomno}`);
+            console.log(roomno);
         });
 
         //TODO: when a player leaves durring a game, the opponent should not notice
@@ -52,6 +55,11 @@ module.exports = (server) => {
 
         socket.on('update wpm', wpm => {
             socket.broadcast.emit('get wpm', wpm);  
+        });
+
+        //disconnect is build in within socket object.
+        socket.on('disconnet', () => {
+            socket.emit('player disconnet', players[socket.id]);
         });
     });
 }

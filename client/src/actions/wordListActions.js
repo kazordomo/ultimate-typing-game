@@ -87,7 +87,7 @@ export const deleteWordList = (id, history) => async dispatch => {
         method: 'delete',
         headers: { 'Content-Type': 'application/json' }
     });
-    history.push('/game/practice');
+    history && history.push('/game/practice');
     dispatch({ type: DELETE_WORD_LIST_SUCCESS, payload: id });
 }
 

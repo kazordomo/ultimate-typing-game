@@ -5,9 +5,11 @@ import PracticeSideBar from './PracticeSideBar';
 import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
 import GoBack from '../basic/GoBack';
+import DeletePopup from '../basic/DeletePopup';
 import { 
     fetchWordListsIfNeeded, 
     fetchWordListIfNeeded, 
+    deleteWordList,
     gameTimer,
     updateStat,
     resetGame
@@ -58,6 +60,7 @@ class Practice extends Component {
         return (
             <div>
                 <GoBack goTo='/dashboard' />
+                <DeletePopup />
                 <Wrapper>
                     <Game practice timer={this.timer.bind(this)} gameModeTitle='Practice' />
                     <PracticeSideBar 
@@ -66,6 +69,7 @@ class Practice extends Component {
                         time={this.props.currentGame.time}
                         changeTime={this.props.updateStat.bind(this)}
                         chooseWordList={this.handleChooseWordList.bind(this)}
+                        deleteWordList={this.props.deleteWordList.bind(this)}
                     />
                 </Wrapper>
             </div>
@@ -80,6 +84,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, { 
     fetchWordListsIfNeeded, 
     fetchWordListIfNeeded, 
+    deleteWordList,
     gameTimer,
     updateStat,
     resetGame

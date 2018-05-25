@@ -5,6 +5,7 @@ import wordLists from './wordListReducer';
 import globalWordLists from './globalWordListReducer';
 import topScores from './scoreReducer';
 import currentGame from './currentGameReducer';
+import popup from './popupReducer';
 
 export default combineReducers({
     user,
@@ -12,5 +13,6 @@ export default combineReducers({
     wordLists,
     globalWordLists,
     topScores,
-    currentGame
+    currentGame,
+    popup
 });

@@ -10,19 +10,18 @@ import { fetchUserIfNeeded } from '../../actions/userActions';
 import GlobalWordListItem from './GlobalWordListItem';
 import GoBack from '../basic/GoBack';
 import Loading from '../../styles/Loading';
+import Row from '../../styles/Row';
 import { Link } from 'react-router-dom';
 
 //TODO: create and import linkStyle
 import styled, { css } from 'react-emotion';
 const linkStyle = css`
-    display: block;
-    width: 250px;
-    margin: 0 auto;
-    background-color: #5B9B66;
+    float: right;
     color: #FFFFFF;
-    text-align: center;
     text-decoration: none;
-    border-radius: 2px;
+    i {
+        margin-left: 10px;
+    }
 `;
 
 const textInputStyle = css`
@@ -33,11 +32,19 @@ const textInputStyle = css`
     color: #FFFFFF;
 `;
 
+const ClearFix = styled('div')`
+    ::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+`;
+
 const SortFilter = styled('div')`
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin: 20px 0px;
+    margin: 30px 0px;
     border-bottom: 1px solid #5A7D7C;
 `;
 
@@ -67,6 +74,7 @@ class WordLists extends Component {
     async componentDidMount() {
         await this.props.fetchGlobalWordListsIfNeeded();
         await this.props.fetchUserIfNeeded();
+        console.log(this.props);
     }
 
     handleChange(event) {
@@ -108,11 +116,16 @@ class WordLists extends Component {
     }
 
     render() {
-
+        
         if(!this.props.globalWordLists.isFetched || !this.props.user.isAuthenticated)
-            return <Loading />
+        return <Loading />
         return (
             <div>
+                <Link className={linkStyle} to='/game/wordlist/new'>
+                    Add new list
+                    <i className="fas fa-plus"></i>
+                </Link>
+                <ClearFix />
                 <GoBack goTo='/dashboard' />
                 <SortFilter>
                     <div>
@@ -127,7 +140,6 @@ class WordLists extends Component {
                 <ListInnerContainer>
                     { this.renderWordLists() }
                 </ListInnerContainer>
-                <Link className={linkStyle} to='/game/wordlist/new'>Add new list</Link>                
             </div>
         )
     }

@@ -1,6 +1,19 @@
 import React from 'react';
 import GoBack from '../basic/GoBack';
 import Title from '../../styles/Title';
+import styled from 'react-emotion';
+
+const Ahref = styled('a')`
+    display: block;
+    width: 250px;
+    margin: 20px auto;
+    padding: 5px 10px;
+    background-color: ${props => props.backgroundColor };
+    text-decoration: none;
+    border-radius: 2px;
+    color: ${props => props.color };
+    text-align: center;
+`;
 
 const Settings = () => {
 
@@ -15,14 +28,21 @@ const Settings = () => {
     //TODO: the unlinking should be done when deleting account.
 
     return (
-        <div>
+        <div>   
             <GoBack goTo='/dashboard' />
             <Title>Settings</Title>
-            <a href='/api/logout'>Logout</a>
-            <div>Unlink facebook</div>
-            <div>Unlink google</div>
-            <div>Change password</div>
-            <button onClick={() => deleteAccount()}>Delete account</button>
+            <Ahref 
+                backgroundColor='#B5B2C2' 
+                color='#000000' 
+                href='/api/logout'>
+                Logout
+            </Ahref>
+            <Ahref 
+                backgroundColor='#FA2A38' 
+                color='#FFFFFF' 
+                onClick={() => deleteAccount()}>
+                Delete account
+            </Ahref>
         </div>
     )
 }

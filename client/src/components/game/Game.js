@@ -11,7 +11,6 @@ import {
     resetGame,
     updateStat
 } from '../../actions';
-import { updateTime } from '../../player';
 
 const Row = styled('div')`
     width: 100%;
@@ -20,14 +19,8 @@ const Row = styled('div')`
 
 const Counter = styled('div')`
     margin-top 10px;
-    color: #5A7D7C;
+    color: #EDF257;
     font-size: 40px;
-    text-align: center;
-`;
-
-const CountDown = styled('div')`
-    font-size: 64px;
-    color: red;
     text-align: center;
 `;
 
@@ -36,8 +29,6 @@ const SPACE = 32;
 const ENTER = 13;
 const RED = 'red';
 let character = 0;
-let countDown = null;
-let updateScore = null;
 let start = null;
 
 //TODO:

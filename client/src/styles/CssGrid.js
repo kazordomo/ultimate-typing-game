@@ -16,6 +16,7 @@ export default {
         align-items: center;
         justify-content: center;
         position: relative;
+        min-height: 300px;
         background-color: rgba(26, 27, 28, 0.6);
         border-radius: 4px;
         transition: background-color ease-in-out .2s;

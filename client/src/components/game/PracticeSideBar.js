@@ -17,7 +17,7 @@ const SideBarContainer = styled('div')`
 `;
 
 const SubTitle = styled('h1')`
-    color: #FFFFFF;
+    color: #5A7D7C;
     font-size: 25px;
     text-align: center;
     letter-spacing: 1.2px;
@@ -40,18 +40,44 @@ const ListWrapper = styled('div')`
     overflow: auto;
 `;
 
-const OpenClose = styled('div')`
-    width: auto;
-    position: absolute;
-    left: -75px;
-    top: 15px;
-    background-color: #FFFFFF;
-    color: #000000;
-    text-align: center;
+const Close = styled('div')`
+    color: #FFFFFF;
     font-size: 16px;
-    border-radius: 20px 0px 0px 20px;
     cursor: pointer;
-    box-shadow: -4px -1px 14px 1px rgba(0,0,0,0.65)
+`;
+
+const Open = styled('div')`
+    position: absolute;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: all .3s cubic-bezier(0.600, -0.280, 0.735, 0.045);
+    i {
+        font-size: 20px;
+        margin-right: 8px;
+    }
+`;
+
+const SetClock = styled('div')`
+    position: relative;
+    i {
+        top: 25px;
+        position: absolute;
+    }
+    input[type="number"] {
+        width: 75px;
+        padding: 10px 20px;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: #EDF257;
+        font-size: 30px;
+        text-align: center;
+        ::-webkit-inner-spin-button, 
+        ::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+    }
 `;
 
 const inputNumberStyle = css`
@@ -95,7 +121,8 @@ class PracticeSideBar extends Component {
                         key={wordLists[key]._id} 
                         chooseWordList={ () => chooseWordList(wordLists[key]) }
                         wordListObj={wordLists[key]}
-                        isGlobalBoolean={isGlobal}>
+                        isGlobalBoolean={isGlobal}
+                        handleDeleteWordList={this.props.deleteWordList}>
                     </WordListItem>
                 );
             })
@@ -107,28 +134,33 @@ class PracticeSideBar extends Component {
     }
 
     render() {
-        let listStyle = { right: '-360px' };
+        let listStyle = { right: '-350px' };
+        let openIcon = { marginLeft: '-95px' };
         if(this.state.wordListActive) {
             listStyle = { right: '0px' };
+            openIcon = { marginLeft: '360px' };
         }
         return (
             <div>
                 <SideBarContainer style={listStyle}>
-                    <OpenClose onClick={this.openCloseWordList.bind(this)}>
-                        {this.state.wordListActive ? 'Close' : 'Open'}
-                    </OpenClose>
+                    <Open onClick={this.openCloseWordList.bind(this)} style={openIcon}>
+                        <i className="fas fa-caret-left"></i>
+                        Open
+                    </Open>
+                    <Close onClick={this.openCloseWordList.bind(this)}>
+                        <i className="fas fa-times"></i>
+                    </Close>
                     <SubTitle>Game Settings</SubTitle>
                     <GameSettingsWrapper>
-                        <div>
+                        <SetClock>
                             <i className="fas fa-clock"></i>
                             <input 
-                                className={inputNumberStyle}
                                 type='number'
                                 defaultValue={this.props.time}
                                 ref='timeInput'
                                 onChange={() => this.props.changeTime({target: 'time', value: this.refs.timeInput.value})}
                             />
-                        </div>
+                        </SetClock>
                     </GameSettingsWrapper>
                     <SubTitle>Lists</SubTitle>
                     <ListWrapper>{this.renderWordLists()}</ListWrapper>
