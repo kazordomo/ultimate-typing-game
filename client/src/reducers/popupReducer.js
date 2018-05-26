@@ -1,16 +1,18 @@
 import { SHOW_POPUP_MODAL, HIDE_POPUP_MODAL } from '../actions/popupActions';
 
 export default function(state = {
-    show: false
+    modals: [],
 }, action) {
     switch(action.type) {
         case SHOW_POPUP_MODAL:
             return {
-                show: true,
+                ...state,
+                modals: state.modals.concat(action.payload),
             }
         case HIDE_POPUP_MODAL:
             return {
-                show: false,
+                ...state,
+                modals: state.modals.filter(item => item.id !== action.payload.id),
             }
         default:
             return state;

@@ -5,7 +5,7 @@ import PracticeSideBar from './PracticeSideBar';
 import Loading from '../../styles/Loading';
 import Wrapper from '../../styles/Wrapper';
 import GoBack from '../basic/GoBack';
-import DeletePopup from '../basic/DeletePopup';
+import ModalContainer from '../basic/modal/ModalContainer';
 import { 
     fetchWordListsIfNeeded, 
     fetchWordListIfNeeded, 
@@ -60,7 +60,6 @@ class Practice extends Component {
         return (
             <div>
                 <GoBack goTo='/dashboard' />
-                <DeletePopup />
                 <Wrapper>
                     <Game practice timer={this.timer.bind(this)} gameModeTitle='Practice' />
                     <PracticeSideBar 
@@ -72,6 +71,7 @@ class Practice extends Component {
                         deleteWordList={this.props.deleteWordList.bind(this)}
                     />
                 </Wrapper>
+                <ModalContainer />
             </div>
         );
     }

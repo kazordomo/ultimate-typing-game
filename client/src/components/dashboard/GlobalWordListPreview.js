@@ -13,7 +13,7 @@ import {
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import Star from './Star';
-import Button from '../../styles/Button';
+import { Button } from '../../styles/Button';
 
 const Word = styled('span')`
     margin-right 20px;

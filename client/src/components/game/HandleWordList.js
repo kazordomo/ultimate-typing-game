@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
 import Wrapper from '../../styles/Wrapper';
-import Button from '../../styles/Button';
+import { Button } from '../../styles/Button';
 import Row from '../../styles/Row';
 import textInputStyle from '../../styles/textInput';
 import checkboxStyle from '../../styles/checkboxStyle';
@@ -162,7 +162,9 @@ class HandleWordList extends Component {
                         />
                     </Row>
                     <Row>
-                        <Button onClick={() => this.props.saveList({name, words, labels, isPublic: this.refs.isPublic.checked})}>Save List</Button>
+                        <Button onClick={() => this.props.saveList({name, words, labels, isPublic: this.refs.isPublic.checked})}>
+                            Save List
+                        </Button>
                     </Row>
                 </Wrapper>
                 <WordsContainer>

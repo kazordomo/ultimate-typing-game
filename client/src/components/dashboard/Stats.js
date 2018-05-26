@@ -11,6 +11,8 @@ import TopScore from './TopScore';
 import { LineChart, Line, Tooltip } from 'recharts';
 
 const StatsContainer = styled('div')`
+    width: 600px;
+    margin: 0 auto;
     color: #FFFFFF;
     font-size: 20px;
 `;
@@ -20,13 +22,14 @@ const Wrapper = styled('div')`
 `;
 
 const GeneralStats = styled('div')`
-    width: 300px;
-    float: left;
+    display: grid;
+    grid-gap: 10px;
+    grid-template: repeat(4, 1fr) / repeat(2, 1fr);
+    grid-auto-flow: row;
 `;
 
 const ChartWrapper = styled('div')`
-    width: 500px;
-    float: right;
+    width: 600px;
 `;
 
 class Stats extends Component {
@@ -75,7 +78,7 @@ class Stats extends Component {
                         <Stat label={'Multiplayer Wins'} stat={data.totalMultiplayerWins} />
                     </GeneralStats>   
                     <ChartWrapper>
-                        <LineChart width={500} height={300} data={this.sortChartData()}>
+                        <LineChart width={600} height={200} data={this.sortChartData()}>
                             <Tooltip/>
                             <Line type="monotone" dataKey="wpm" stroke="#8884d8" />
                         </LineChart>

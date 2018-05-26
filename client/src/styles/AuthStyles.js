@@ -29,5 +29,5 @@ export default {
         color: ${props => props.white ? '#FFFFFF' : '#5A7D7C'};
         border-bottom: ${props => props.white ? '2px solid #FFFFFF' : 'none'};
         cursor: pointer;
-    `
+    `,
 };

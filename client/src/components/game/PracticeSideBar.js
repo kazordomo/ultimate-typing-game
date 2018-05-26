@@ -35,8 +35,8 @@ const linkStyle = css`
 `;
 
 const ListWrapper = styled('div')`
-    max-height: 80%;
-    min-height: 80%;
+    // max-height: 70%;
+    // min-height: 70%;
     overflow: auto;
 `;
 
@@ -65,7 +65,7 @@ const SetClock = styled('div')`
     }
     input[type="number"] {
         width: 75px;
-        padding: 10px 20px;
+        padding: 10px 10px;
         background: transparent;
         border: none;
         outline: none;
