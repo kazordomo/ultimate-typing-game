@@ -14,7 +14,7 @@ const Ahref = styled('a')`
     background-color: ${props => props.backgroundColor };
     text-decoration: none;
     border-radius: 2px;
-    color: ${props => props.color };
+    color: #FFFFFF;
     text-align: center;
     cursor: pointer;
 `;
@@ -39,17 +39,15 @@ const Settings = props => {
             <GoBack goTo='/dashboard' />
             <Title>Settings</Title>
             <Ahref 
-                backgroundColor='#B5B2C2' 
-                color='#000000' 
+                backgroundColor='#5B9B66' 
                 href='/api/logout'>
                 Logout
             </Ahref>
             <Ahref 
                 backgroundColor='#FA2A38' 
-                color='#FFFFFF' 
                 onClick={() => props.dispatch(showPopupModal({
                     id: 1,
-                    text: 'Are you sure?',
+                    text: 'Delete account?',
                     onClose: () => console.log('closing'),
                     onConfirm: () => deleteAccount(),
                 }))}>

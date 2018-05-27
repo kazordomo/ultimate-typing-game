@@ -16,6 +16,7 @@ class SinglePlayer extends Component {
     }
 
     timer() {
+        console.log(this.props.currentGame, this.props.gameTimer);
         let start = setInterval(() => {
             const { currentGame, gameTimer } = this.props;
             gameTimer(currentGame.time - 1);

@@ -12,76 +12,25 @@ import GoBack from '../basic/GoBack';
 import Loading from '../../styles/Loading';
 import Row from '../../styles/Row';
 import { Link } from 'react-router-dom';
-
-//TODO: create and import linkStyle
-import styled, { css } from 'react-emotion';
-const linkStyle = css`
-    float: right;
-    color: #FFFFFF;
-    text-decoration: none;
-    i {
-        margin-left: 10px;
-    }
-`;
-
-const textInputStyle = css`
-    border: none;
-    outline: none;
-    background-color: transparent; 
-    padding: 0px 10px;
-    color: #FFFFFF;
-`;
-
-const ClearFix = styled('div')`
-    ::after {
-        content: "";
-        clear: both;
-        display: table;
-    }
-`;
-
-const SortFilter = styled('div')`
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin: 30px 0px;
-    border-bottom: 1px solid #5A7D7C;
-`;
-
-const SortButton = styled('button')`
-    width: 150px;
-    margin: 2px 1px;
-    outline: none;
-    border: none;
-    background-color: rgba(90,125,124, 0.7);
-    color: #FFFFFF;
-    cursor: pointer;
-`;
-
-const I = styled('i')`
-    color: #5A7D7C;
-`;
-
-const ListInnerContainer = styled('div')`
-    display: grid;
-    grid-gap: 10px;
-    grid-template: repeat(8, 1fr) / repeat(3, 1fr);
-    grid-auto-flow: row;
-`;
+import Style from '../../styles/GlobalWordListsStyle';
 
 class WordLists extends Component {
 
+    state = {
+        currentSorting: 'createdDate'
+    }
+
     async componentDidMount() {
-        await this.props.fetchGlobalWordListsIfNeeded();
-        await this.props.fetchUserIfNeeded();
-        console.log(this.props);
+        await Promise.all([
+            this.props.fetchGlobalWordListsIfNeeded(), 
+            this.props.fetchUserIfNeeded(),
+        ]);
     }
 
     handleChange(event) {
         this.props.filterGlobalWordLists(event.target.value.toLowerCase());
     }
 
-    //REFACTOR
     renderWordLists() {
         const { globalWordLists: { items }, user } = this.props;
 
@@ -115,8 +64,23 @@ class WordLists extends Component {
         })
     }
 
+    handleSort(sortValue) {
+        this.setState({ currentSorting: sortValue }, () => {
+            this.props.sortGlobalWordLists(sortValue);
+        });
+    }
+
     render() {
-        
+        const { 
+            linkStyle,
+            textInputStyle,
+            ClearFix,
+            SortFilter,
+            SortButton,
+            I,
+            ListInnerContainer,
+        } = Style;
+
         if(!this.props.globalWordLists.isFetched || !this.props.user.isAuthenticated)
         return <Loading />
         return (
@@ -133,8 +97,16 @@ class WordLists extends Component {
                         <input className={textInputStyle} type='text' onChange={this.handleChange.bind(this)} />
                     </div>
                     <div>
-                        <SortButton onClick={() => this.props.sortGlobalWordLists('createdDate')}>Sort by date</SortButton>
-                        <SortButton onClick={() => this.props.sortGlobalWordLists('rating')}>Sort by rating</SortButton>
+                        <SortButton 
+                            active={this.state.currentSorting === 'createdDate'} 
+                            onClick={() => this.handleSort('createdDate')}>
+                            Sort by date
+                        </SortButton>
+                        <SortButton 
+                            active={this.state.currentSorting === 'rating'} 
+                            onClick={() => this.handleSort('rating')}>
+                            Sort by rating
+                        </SortButton>
                     </div>
                 </SortFilter>
                 <ListInnerContainer>

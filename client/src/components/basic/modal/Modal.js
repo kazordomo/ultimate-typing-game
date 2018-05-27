@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
 import Row from '../../../styles/Row';
-import { CustomButton } from '../../../styles/Button';
+import Button from '../../../styles/Button';
 
 const Container = styled('div')`
     position: relative;
@@ -14,7 +14,7 @@ const Container = styled('div')`
     height: 160px;
     padding: 25px 0px;
     position: absolute;
-    background-color: #DADFF7;
+    background-color: #516363;
     color: #FFFFFF;
     text-align: center;
     border-radius: 2px;
@@ -59,20 +59,17 @@ class Modal extends Component {
                 <Br />
                 <div>{ text }</div>
                 <Row>
-                    <CustomButton 
+                    <Button 
                         {...buttonStyle}
-                        color='#000000'
-                        backgroundColor='#EDF257'
                         onClick={() => this.onClose()}>
                         Close
-                    </CustomButton>
-                    <CustomButton 
+                    </Button>
+                    <Button 
                         {...buttonStyle}
-                        color='#FFFFFF'
                         backgroundColor='#FA2A38'
                         onClick={() => this.onConfirm()}>
                         Confirm
-                    </CustomButton>
+                    </Button>
                 </Row>
             </Container>
         );

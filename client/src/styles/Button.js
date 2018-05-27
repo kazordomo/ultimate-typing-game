@@ -1,21 +1,15 @@
 import styled from 'react-emotion';
 
-export const CustomButton = styled('button')({
+export default styled('button')({
     border: 'none',
     outline: 'none',
     borderRadius: '2px',
     cursor: 'pointer',
     }, (props) => ({
-        ...props
+        width: props.width ? props.width : '100%',
+        padding: props.padding ? props.padding : '10px',
+        backgroundColor: props.backgroundColor ? props.backgroundColor : '#5B9B66',
+        color: props.color ? props.color : '#FFFFFF',
+        ...props,
     })
 );
-
-export const Button = styled('button')`
-    width: 100%;
-    padding: 10px;
-    background-color: #5B9B66;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 2px;
-    outline: none;
-`;

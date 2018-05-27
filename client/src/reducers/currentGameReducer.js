@@ -37,7 +37,6 @@ export default function(state = initialState, action) {
                 gameIsReady: true
             }
         case INIT_MULTIPLAYER_GAME_PLAYERS:
-            console.log(action.payload);
             return {
                 ...state,
                 user: action.payload.user,
@@ -45,6 +44,7 @@ export default function(state = initialState, action) {
                 gameIsReady: action.payload.gameIsReady
             }
         case RESET_GAME:
+            console.log(initialState);
             return initialState;
         case UPDATE_GAME_STAT:
             //TODO: known issue. "time" from practice-side-bar will come as a string.

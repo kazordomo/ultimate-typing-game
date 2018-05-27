@@ -15,7 +15,6 @@ const ListItem = styled('div')`
 `;
 
 const linkStyle = css`
-    float: right;
     color: #FFFFFF;
     text-decoration: none;
     text-align: center;
@@ -27,15 +26,12 @@ const IconWrapper = styled('span')`
 `;
 
 const I = styled('i')`
-    margin-left: 10px;
+    margin: 0px 5px;
     font-size: 18px;
     color: ${props => props.color ? props.color : '#FFFFFF' };
 `;
 
 class WordListItem extends Component {
-
-    // this.props.handleDeleteWordList(this.props.wordListObj._id)
-
     render() {
         const href = `/game/wordList/edit/${this.props.wordListObj._id}`;
         return(
@@ -43,20 +39,19 @@ class WordListItem extends Component {
                 <ListItem onClick={ () => this.props.chooseWordList() }>
                     {this.props.wordListObj.name}
                     <IconWrapper>
+                        { this.props.isGlobalBoolean ? 
+                            <I className='fas fa-star' color='#EDF257'></I> : 
+                            <Link className={linkStyle} to={href} ><I className='fas fa-edit'></I></Link> }
                         { this.props.isGlobalBoolean ? '' : 
                             <I 
                                 className='fas fa-trash-alt' 
-                                color='#FFFFFF'
                                 onClick={() => this.props.dispatch(showPopupModal({
-                                    id: 2,
-                                    text: 'Are you sure?',
+                                    id: this.props.wordListObj._id,
+                                    text: `Delete ${this.props.wordListObj.name}?`,
                                     onClose: () => console.log('closing'),
                                     onConfirm: () => this.props.handleDeleteWordList(this.props.wordListObj._id),
                                 }))}>
                             </I> }
-                        { this.props.isGlobalBoolean ? 
-                            <I className='fas fa-star' color='#EDF257'></I> : 
-                            <Link className={linkStyle} to={href} ><I className='fas fa-edit'></I></Link> }
                     </IconWrapper>
                 </ListItem>
             </div>

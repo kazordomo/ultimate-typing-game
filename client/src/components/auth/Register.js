@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AuthField from './AuthField';
-import { Button } from '../../styles/Button';
+import Button from '../../styles/Button';
 import AuthStyles from '../../styles/AuthStyles';
 
 class Register extends Component {
