@@ -39,8 +39,6 @@ let start = null;
 class Game extends Component {
 
     componentDidMount() {
-        //TODO: minimize the use of needing to check the different game modes.
-        //should be more dynamic.
         if(!this.props.practice)
             this.props.selectWordList(null); //reset currentWordList
         if(this.props.multiplayer) {
@@ -54,11 +52,18 @@ class Game extends Component {
         this.props.resetGame();
     }
 
+    componentWillReceiveProps(props) {
+        if(props.currentGame.time === 0)
+            clearInterval(start);
+    }
+
     resetGame() {
         this.refs.gameTextInput.value = '';
         this.refs.gameTextInput.style.color = '#5A7D7C';
         this.refs.gameTextInput.style.borderBottom = '1px solid #5A7D7C';
+        clearInterval(start);
         this.props.resetGame();
+        this.refs.gameTextInput.focus();
     }
     
     validateCharacter() {
@@ -80,7 +85,7 @@ class Game extends Component {
 
         if(!this.props.multiplayer && !this.props.currentGame.gameIsRunning && (keyCode > 65 && keyCode < 90)) {
             this.props.updateStat({target: 'gameIsRunning', value: true});
-            this.props.timer();
+            start = setInterval(() => this.props.timer(), 1000);
         }
         this.props.updateStat({target: 'keystrokes', value: 1});
         if(keyCode === BACKSPACE) {
@@ -109,15 +114,12 @@ class Game extends Component {
     }
 
     render() {
-        //TODO: This will be global. not goodie.
-        document.onkeydown = ({ keyCode }) => {
-            if(keyCode === ENTER) {
-                clearInterval(start);
-                this.resetGame();
-            }
-        };
         return(
-            <div ref='_isMounted'>
+            <div 
+                ref='_isMounted' 
+                tabIndex='0' 
+                onKeyDown={e => { if(e.keyCode === ENTER) this.resetGame.bind(this)}}
+            >
                 <Title>{this.props.gameModeTitle}</Title>
                 <Wrapper>
                     <Row>

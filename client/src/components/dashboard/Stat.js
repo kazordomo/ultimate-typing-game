@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'react-emotion';
-import Row from '../../styles/Row';
 
 const StatTitle = styled('span')`
     color: #FFFFFF;

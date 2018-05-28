@@ -16,15 +16,10 @@ class SinglePlayer extends Component {
     }
 
     timer() {
-        console.log(this.props.currentGame, this.props.gameTimer);
-        let start = setInterval(() => {
-            const { currentGame, gameTimer } = this.props;
-            gameTimer(currentGame.time - 1);
-            if(currentGame.time === 1) {
-                this.handleSubmitScore();
-                clearInterval(start);
-            }
-        }, 1000);
+        const { currentGame, gameTimer } = this.props;
+        gameTimer(currentGame.time - 1);
+        if(currentGame.time === 1)
+            this.handleSubmitScore();
     }
 
     render() {

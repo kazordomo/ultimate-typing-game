@@ -10,7 +10,6 @@ import { fetchUserIfNeeded } from '../../actions/userActions';
 import GlobalWordListItem from './GlobalWordListItem';
 import GoBack from '../basic/GoBack';
 import Loading from '../../styles/Loading';
-import Row from '../../styles/Row';
 import { Link } from 'react-router-dom';
 import Style from '../../styles/GlobalWordListsStyle';
 

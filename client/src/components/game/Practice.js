@@ -37,13 +37,8 @@ class Practice extends Component {
 
     //DRY
     timer() {
-        let start = setInterval(() => {
-            const { currentGame, gameTimer } = this.props;
-            gameTimer(currentGame.time - 1);
-            if(currentGame.time === 1) {
-                clearInterval(start);
-            }
-        }, 1000);
+        const { currentGame, gameTimer } = this.props;
+        gameTimer(currentGame.time - 1);
     }
 
     handleChooseWordList(wordList) {

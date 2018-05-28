@@ -15,6 +15,7 @@ const initialState = {
     gameIsReady: false,
     gameIsRunning: false,
     multiPlayerCountDown: 3,
+    gameReset: false,
     opponent: {},
     user: {}
 }
@@ -44,7 +45,6 @@ export default function(state = initialState, action) {
                 gameIsReady: action.payload.gameIsReady
             }
         case RESET_GAME:
-            console.log(initialState);
             return initialState;
         case UPDATE_GAME_STAT:
             //TODO: known issue. "time" from practice-side-bar will come as a string.
