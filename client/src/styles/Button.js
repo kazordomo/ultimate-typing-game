@@ -8,8 +8,8 @@ export default styled('button')({
     }, (props) => ({
         width: props.width ? props.width : '100%',
         padding: props.padding ? props.padding : '10px',
-        backgroundColor: props.backgroundColor ? props.backgroundColor : '#5B9B66',
-        color: props.color ? props.color : '#FFFFFF',
+        backgroundColor: props.disabled ? '#849687' : (props.backgroundColor ? props.backgroundColor : '#5B9B66'),
+        color: props.disabled ? '#D7DBDA' : (props.color ? props.color : '#FFFFFF'),
         ...props,
     })
 );

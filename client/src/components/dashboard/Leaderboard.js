@@ -50,8 +50,18 @@ class Leaderboard extends Component {
                 <Title>Leaderboard</Title>
                 <LeaderboardContainer>
                     <div>
-                        <TopAllButton active={this.state.currentLeaderboard} onClick={() => this.handleChangeLeaderboard('topScores')}>Top All</TopAllButton>
-                        <TopTodayButton active={this.state.currentLeaderboard} onClick={() => this.handleChangeLeaderboard('topScoresToday')}>Top Today</TopTodayButton>
+                        <TopAllButton 
+                            active={this.state.currentLeaderboard} 
+                            onClick={() => this.handleChangeLeaderboard('topScores')}
+                        >
+                            Top All
+                        </TopAllButton>
+                        <TopTodayButton 
+                            active={this.state.currentLeaderboard} 
+                            onClick={() => this.handleChangeLeaderboard('topScoresToday')}
+                        >
+                            Top Today
+                        </TopTodayButton>
                     </div>
                     <Table>
                         <tbody>

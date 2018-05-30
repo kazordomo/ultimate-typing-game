@@ -43,7 +43,7 @@ class Stats extends Component {
     sortChartData() {
         return this.props.stats.scores
             .sort((a, b) => new Date(a['scoreDate']) - new Date(b['scoreDate']))
-            .slice(1).slice(-20).map(score => { return { wpm: score.correctWords } });
+            .slice(-20).map(score => { return { wpm: score.correctWords } });
     }
 
     renderScores() {

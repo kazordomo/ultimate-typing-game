@@ -8,8 +8,8 @@ import Title from '../../styles/Title';
 import { 
     favorWordList, 
     updateWordList, 
-    deleteFavoredWordList 
-} from '../../actions/wordListActions';
+    deleteFavoredWordList,
+} from '../../actions';
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import Star from './Star';
@@ -76,23 +76,35 @@ class GlobalWordListPreview extends Component {
     }
 
     render() {
-        const { globalWordLists: { preview } } = this.props;
-
+        const { globalWordLists: { preview }, user } = this.props;
         if(Object.keys(preview).length === 0)
             return <Loading />;
         const calculatedRating = 
             preview.ratings.reduce((a, b) => a + b.value / preview.ratings.length, 0);
+        const isCreatedByCurrentUser = (user.data._id === preview._user);
+        const wordListRatings = preview.ratings.reduce((acc, curr) => {
+            acc[curr._user] = curr;
+            return acc;
+        }, {});
 
         return (
             <div>
                 <GoBack goTo='/wordLists' />                
                 <Title>{preview.name}</Title>
                 <div style={{width: '250px', margin: '0 auto'}}>
-                    <Button onClick={() => this.props.favorWordList(preview)}>Save List</Button>
+                    { 
+                        isCreatedByCurrentUser ? 
+                            <Button disabled onClick={() => this.props.favorWordList(preview)}>Save List</Button> :
+                            <Button onClick={() => this.props.favorWordList(preview)}>Save List</Button>
+                    }
                 </div>
-                {/* <button onClick={() => this.props.deleteFavoredWordList(preview)}>Should be same button but delete...</button> */}
                 <RatingContainer>
-                    <Rater total={5} rating={calculatedRating} onRate={this.handleRating.bind(this)}>
+                    <Rater 
+                        total={5} 
+                        rating={calculatedRating} 
+                        interactive={!isCreatedByCurrentUser && !wordListRatings[user.data._id]} 
+                        onRate={this.handleRating.bind(this)}
+                    >
                         <Star active />
                     </Rater>
                     { preview.ratings.length ?
@@ -112,13 +124,13 @@ class GlobalWordListPreview extends Component {
     }
 }
 
-function mapStateToProps({ globalWordLists }) {
-    return { globalWordLists };
+function mapStateToProps({ globalWordLists, user }) {
+    return { globalWordLists, user };
 }
 
 export default connect(mapStateToProps, { 
     fetchGlobalWordListIfNeeded, 
     deleteFavoredWordList,
     updateWordList,
-    favorWordList 
+    favorWordList
 })(GlobalWordListPreview);

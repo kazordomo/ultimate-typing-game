@@ -21,15 +21,15 @@ passport.use(new FacebookStrategy({
     clientSecret: keys.facebookClientSecret,
     callbackURL: '/auth/facebook/callback',
     proxy: true //if heroku - let herokus proxy server use https
-}, async (token, refreshToken, { id }, done) => {
-    debugger;
-    const user = await User.findOne({ 'facebook.id': id });
+}, async (token, refreshToken, profile, done) => {
+    const user = await User.findOne({ 'facebook.id': profile.id });
+    console.log(profile);
 
     if(user) {
         return done(null, user);
     }
     // const username = firstName + lastName;    
-    const newUser = await new User({ facebook: { id, token } }).save();
+    const newUser = await new User({ facebook: { id: profile.id, token } }).save();
     return done(null, newUser);
 }));
 
@@ -38,14 +38,15 @@ passport.use(new GoogleStrategy({
     clientSecret: keys.googleClientSecret,
     callbackURL: '/auth/google/callback',
     proxy: true
-}, async (token, refreshToken, { id }, done) => { 
-    const user = await User.findOne({ 'google.id': id });
+}, async (token, refreshToken, profile, done) => { 
+    const user = await User.findOne({ 'google.id': profile.id });
+    console.log(profile);
 
     if(user) {
         return done(null, user);
     }
-    // const username = firstName + lastName;
-    const newUser = await new User({ google: { id, token } }).save();
+    const username = profile.displayName;
+    const newUser = await new User({ google: { id: profile.id, token } }).save();
     return done(null, newUser);
 }));
 

@@ -31,7 +31,6 @@ class EditWordList extends Component {
         fetchWordListIfNeeded(match.params.id);
     }
 
-    //TODO: ????
     handleSaveList(wordList) {
         const { match, updateWordList, history } = this.props;
         updateWordList(wordList, match.params.id, history);
@@ -54,7 +53,8 @@ class EditWordList extends Component {
                     edit 
                     saveList={this.handleSaveList.bind(this)} 
                     deleteList={this.handleDeleteList.bind(this)} 
-                    wordList={currentWordList} 
+                    wordList={currentWordList}
+                    error={this.props.wordLists.error}
                 />
                 <DeleteButton onClick={this.handleDeleteList.bind(this)}>DELETE LIST</DeleteButton>
             </div>

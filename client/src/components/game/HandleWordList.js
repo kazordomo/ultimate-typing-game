@@ -5,6 +5,7 @@ import Button from '../../styles/Button';
 import Row from '../../styles/Row';
 import textInputStyle from '../../styles/textInput';
 import checkboxStyle from '../../styles/checkboxStyle';
+import DisplayError from '../basic/DisplayError';
 
 const WordsContainer = styled('div')`
     width: 500px;
@@ -60,10 +61,12 @@ class HandleWordList extends Component {
         this.handleAddWord = this.handleAddWord.bind(this);
         this.handleAddLabel = this.handleAddLabel.bind(this);
         this.handleDeleteWord = this.handleDeleteWord.bind(this);
+        this.handleSaveList = this.handleSaveList.bind(this);
     }
 
     componentDidMount() {
         this.refs.nameTextInput.value = this.state.name;
+        console.log(this.props);
     }
 
     handleAddListName() {
@@ -92,6 +95,10 @@ class HandleWordList extends Component {
         const labels = this.state.labels;
         labels.splice(index, 1);
         this.setState({ labels });
+    }
+
+    handleSaveList() {
+        this.props.saveList(this.state);
     }
 
     renderWords() {
@@ -125,17 +132,20 @@ class HandleWordList extends Component {
     }
 
     render() {
-        const { words, name, labels, isPublic } = this.state;
+        const { words, isPublic } = this.state;
         return(
             <div>
                 <Wrapper>
+                    { this.props.error.message && <DisplayError errorMsg={this.props.error.message} /> }
                     <Row>
                         <input 
                             type='text' 
                             ref='nameTextInput' 
                             onChange={this.handleAddListName} 
                             placeholder='List Name' 
-                            className={textInputStyle} />
+                            className={textInputStyle} 
+                            maxLength={10}
+                        />
                     </Row>
                     <Row>
                         <input type='checkbox' ref='isPublic' className={checkboxStyle} defaultChecked={isPublic} />
@@ -162,7 +172,7 @@ class HandleWordList extends Component {
                         />
                     </Row>
                     <Row>
-                        <Button onClick={() => this.props.saveList({name, words, labels, isPublic: this.refs.isPublic.checked})}>
+                        <Button onClick={this.handleSaveList}>
                             Save List
                         </Button>
                     </Row>

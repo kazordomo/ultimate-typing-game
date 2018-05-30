@@ -4,7 +4,7 @@ import { withRouter, Redirect } from 'react-router-dom';
 import SocialMedia from './SocialMedia';
 import Register from './Register';
 import Login from './Login';
-import ErrorMessage from '../../styles/ErrorMessage';
+import DisplayError from '../basic/DisplayError';
 import { submitAuthForm } from '../../actions';
 
 class AuthContainer extends Component {
@@ -19,14 +19,6 @@ class AuthContainer extends Component {
         this.setState({ showRegister: !this.state.showRegister });
     }
 
-    renderErrorMsg() {
-        const { error } = this.props.user;
-        if(error) {
-            return <ErrorMessage>{error.message}</ErrorMessage>;
-        }
-        return '';
-    }
-
     render() {
 
         //HasTokenRoute in app.js
@@ -36,7 +28,8 @@ class AuthContainer extends Component {
 
         return(
             <div>
-                { this.renderErrorMsg() }
+                { this.props.user.error ? 
+                    <DisplayError errorMsg={this.props.user.error.message} /> : '' }
                 { this.state.showRegister ? 
                 <Register 
                     _onSubmit={this.handleAuthSubmit.bind(this)}

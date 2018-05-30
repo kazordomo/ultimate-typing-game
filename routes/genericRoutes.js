@@ -70,11 +70,11 @@ module.exports = app => {
                 status: 400, 
                 message: 'You can not rate your own list.' 
             });
-        }else if(userAlreadyRated) {
+        } else if(userAlreadyRated) {
             return res.status(400).json({ 
                 success: false,
                 status: 400, 
-                message: 'You have already rated this list.' 
+                message: 'You have already rated this list.'
             });
         }
 
@@ -91,6 +91,21 @@ module.exports = app => {
 
     app.post('/api/wordList', requireLogin, async (req, res) => {
         const { name, words, isPublic, labels } = req.body;
+
+        if(name.length === 0) {
+            return res.status(400).json({ 
+                success: false,
+                status: 400, 
+                message: 'The list needs a name.' 
+            });
+        } else if(words.length === 0) {
+            return res.status(400).json({ 
+                success: false,
+                status: 400, 
+                message: 'The list needs at least one word.' 
+            });
+        }
+
         const newWordList = new WordList({
             name,
             words,

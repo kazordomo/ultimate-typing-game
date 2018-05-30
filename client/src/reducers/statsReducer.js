@@ -19,7 +19,7 @@ function calculateStats(scores, payload) {
 
     return {
         correctWords: sumTotal('correctWords'),
-        wpm: Math.round(sumTotal('correctWords') / scores.length),
+        wpm: Math.round(sumTotal('correctWords') / scores.length) || 0,
         incorrectWords: sumTotal('incorrectWords'),
         keystrokes: sumTotal('keystrokes'),
         totalPerfectGames: perfectGames.length,

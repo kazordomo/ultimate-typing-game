@@ -14,6 +14,16 @@ class PracticeSideBar extends Component {
 
     renderWordLists() {
         let { wordLists, user, chooseWordList } = this.props;
+
+        if(Object.keys(wordLists).length === 0) {
+            return (
+                <div style={{margin: '20px 0px', color: '#adb1b5', textAlign: 'center', opacity: '.5'}}>
+                    Such emptiness... 
+                    <div><i className="fas fa-arrow-down"></i></div>
+                </div>
+            );
+        }
+
         return (
             Object.keys(wordLists).map(key => {
                 let isGlobal = false;
@@ -65,7 +75,7 @@ class PracticeSideBar extends Component {
                     <Close onClick={this.openCloseWordList.bind(this)}>
                         <i className="fas fa-times"></i>
                     </Close>
-                    <SubTitle>Game Settings</SubTitle>
+                    <SubTitle>Game Time</SubTitle>
                     <GameSettingsWrapper>
                         <SetClock>
                             <i className="fas fa-clock"></i>

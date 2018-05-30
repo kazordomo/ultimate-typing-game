@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const wordListSchema = new Schema({
-    name: { type: String, required: true},
+    name: { type: String, required: true, maxlength: 10, minlength: 1 },
     words: Array,
     isPublic: { type: Boolean, default: false },
     ratings: [{ 

@@ -4,7 +4,9 @@ export const FETCH_WORD_LISTS_SUCCESS = 'FETCH_WORD_LISTS_SUCCESS';
 export const FETCH_WORD_LISTS_ERROR = 'FETCH_WORD_LISTS_ERROR';
 export const FETCH_WORD_LIST_SUCCESS = 'FETCH_WORD_LIST_SUCCESS';
 export const POST_WORD_LIST_SUCCESS = 'POST_WORD_LIST_SUCCESS';
+export const POST_WORD_LIST_ERROR = 'POST_WORD_LIST_ERROR';
 export const UPDATE_WORD_LIST_SUCCESS = 'UPDATE_WORD_LIST_SUCCESS';
+export const UPDATE_WORD_LIST_ERROR = 'UPDATE_WORD_LIST_ERROR';
 export const DELETE_WORD_LIST_SUCCESS = 'DELETE_WORD_LIST_SUCCESS';
 export const FAVOR_WORD_LIST_SUCCESS = 'FAVOR_WORD_LUST_SUCCESS';
 export const DELETE_FAVOR_WORD_LIST_SUCCESS = 'DELETE_FAVOR_WORD_LIST_SUCCESS';
@@ -57,7 +59,7 @@ export const fetchWordListIfNeeded = id => (dispatch, getState) => {
     }
 }
 
-export const addWordList = (wordList) => async dispatch => {
+export const addWordList = (wordList, cb) => async dispatch => {
     const response = await fetch('/api/wordList', { 
         credentials: 'include',
         method: 'post', 
@@ -65,7 +67,12 @@ export const addWordList = (wordList) => async dispatch => {
         headers: { 'Content-Type': 'application/json' }
     });
     const json = await response.json();
-    dispatch({ type: POST_WORD_LIST_SUCCESS, payload: json });
+    if(response.status === 200) {
+        dispatch({ type: POST_WORD_LIST_SUCCESS, payload: json });
+        cb();
+    }
+    else
+        dispatch({ type: POST_WORD_LIST_ERROR, payload: json });
 }
 
 export const updateWordList = (wordList, id, history) => async dispatch => {
@@ -77,8 +84,12 @@ export const updateWordList = (wordList, id, history) => async dispatch => {
         headers: { 'Content-Type': 'application/json' }
     });
     const json = await response.json();
-    history && history.push('/game/practice');
-    dispatch({ type: UPDATE_WORD_LIST_SUCCESS, payload: json });
+    if(response.status === 200) {
+        history && history.push('/game/practice');
+        dispatch({ type: UPDATE_WORD_LIST_SUCCESS, payload: json });
+    }
+    else
+        dispatch({ type: UPDATE_WORD_LIST_ERROR, payload: json });
 }
 
 export const deleteWordList = (id, history) => async dispatch => {

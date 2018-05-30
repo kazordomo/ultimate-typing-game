@@ -57,7 +57,7 @@ class Game extends Component {
             clearInterval(start);
     }
 
-    resetGame() {
+    handleResetGame() {
         this.refs.gameTextInput.value = '';
         this.refs.gameTextInput.style.color = '#5A7D7C';
         this.refs.gameTextInput.style.borderBottom = '1px solid #5A7D7C';
@@ -118,7 +118,7 @@ class Game extends Component {
             <div 
                 ref='_isMounted' 
                 tabIndex='0' 
-                onKeyDown={e => { if(e.keyCode === ENTER) this.resetGame.bind(this)}}
+                onKeyDown={e => { if(e.keyCode === ENTER) this.handleResetGame() }}
             >
                 <Title>{this.props.gameModeTitle}</Title>
                 <Wrapper>

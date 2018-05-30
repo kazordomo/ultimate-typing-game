@@ -48,7 +48,6 @@ class WordListItem extends Component {
                                 onClick={() => this.props.dispatch(showPopupModal({
                                     id: this.props.wordListObj._id,
                                     text: `Delete ${this.props.wordListObj.name}?`,
-                                    onClose: () => console.log('closing'),
                                     onConfirm: () => this.props.handleDeleteWordList(this.props.wordListObj._id),
                                 }))}>
                             </I> }

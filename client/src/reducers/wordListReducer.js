@@ -7,11 +7,14 @@ import {
     FETCH_WORD_LISTS_ERROR,
     FETCH_WORD_LIST_SUCCESS,
     POST_WORD_LIST_SUCCESS,
+    POST_WORD_LIST_ERROR,
     DELETE_WORD_LIST_SUCCESS,
     UPDATE_WORD_LIST_SUCCESS,
+    UPDATE_WORD_LIST_ERROR,
     FAVOR_WORD_LIST_SUCCESS,
     DELETE_FAVOR_WORD_LIST_SUCCESS
 } from '../actions/wordListActions';
+import { CLEAN_ERROR } from '../actions/errorActions';
 
 function addOrUpdateWordList(items, wordList) {
     const wordLists = items;
@@ -28,7 +31,8 @@ function deleteWordList(items, id) {
 export default function(state = {
     isFetched: false,
     items: {},
-    currentWordList: defaultWordList
+    currentWordList: defaultWordList,
+    error: false,
 }, action) {
     switch(action.type) {
         case SELECT_WORD_LIST:
@@ -64,10 +68,20 @@ export default function(state = {
                 ...state,
                 items: addOrUpdateWordList(state.items, action.payload)
             }
+        case UPDATE_WORD_LIST_ERROR:
+            return {
+                ...state,
+                error: action.payload,
+            }
         case POST_WORD_LIST_SUCCESS:
             return {
                 ...state,
                 items: addOrUpdateWordList(state.items, action.payload)
+            }
+        case POST_WORD_LIST_ERROR:
+            return {
+                ...state,
+                error: action.payload,
             }
         case DELETE_WORD_LIST_SUCCESS:
             return {
@@ -83,6 +97,11 @@ export default function(state = {
             return {
                 ...state,
                 items: deleteWordList(state.items, action.payload)
+            }
+        case CLEAN_ERROR:
+            return {
+                ...state,
+                error: false
             }
         default:
             return state;

@@ -31,8 +31,8 @@ export default {
         border-radius: 2px;
     `,
     ListWrapper: styled('div')`
-        height: 40%;
         margin-bottom: 20px;
+        max-height: 42%;
         overflow: auto;
     `,
     Close: styled('div')`

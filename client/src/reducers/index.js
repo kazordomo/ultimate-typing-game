@@ -14,5 +14,5 @@ export default combineReducers({
     globalWordLists,
     topScores,
     currentGame,
-    popup
+    popup,
 });
