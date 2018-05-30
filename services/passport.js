@@ -21,15 +21,15 @@ passport.use(new FacebookStrategy({
     clientSecret: keys.facebookClientSecret,
     callbackURL: '/auth/facebook/callback',
     proxy: true //if heroku - let herokus proxy server use https
-}, async (token, refreshToken, profile, done) => {
-    const user = await User.findOne({ 'facebook.id': profile.id });
-    console.log(profile);
+}, async (token, refreshToken, { id, displayName }, done) => {
+    const user = await User.findOne({ 'facebook.id': id });
 
-    if(user) {
+    if(user)
         return done(null, user);
-    }
-    // const username = firstName + lastName;    
-    const newUser = await new User({ facebook: { id: profile.id, token } }).save();
+    const newUser = await new User({ 
+        facebook: { id, token }, 
+        displayName,
+    }).save();
     return done(null, newUser);
 }));
 
@@ -38,15 +38,15 @@ passport.use(new GoogleStrategy({
     clientSecret: keys.googleClientSecret,
     callbackURL: '/auth/google/callback',
     proxy: true
-}, async (token, refreshToken, profile, done) => { 
-    const user = await User.findOne({ 'google.id': profile.id });
-    console.log(profile);
+}, async (token, refreshToken, { id, displayName }, done) => { 
+    const user = await User.findOne({ 'google.id': id });
 
-    if(user) {
+    if(user)
         return done(null, user);
-    }
-    const username = profile.displayName;
-    const newUser = await new User({ google: { id: profile.id, token } }).save();
+    const newUser = await new User({ 
+        google: { id, token }, 
+        displayName,
+    }).save();
     return done(null, newUser);
 }));
 
@@ -61,13 +61,22 @@ passport.use('local-signup', new LocalStrategy({
     try {
         const user = await User.findOne({ 'local.username': username });
         if(user) {
-            return done(null, false, { success: false, status: 400, message: 'User already exists.' });
+            return done(null, false, { 
+                success: false, 
+                status: 400, 
+                message: 'User already exists.' 
+            });
         }
         if(req.body.password !== req.body.retypepassword) {
-            return done(null, false, { success: false, status: 400, message: 'The passwords do not match.' });
+            return done(null, false, { 
+                success: false, 
+                status: 400, 
+                message: 'The passwords do not match.' 
+            });
         }
         const newUser = new User();
         newUser.local.username = username;
+        newUser.displayName = username;
         newUser.local.email = req.body.email;
         newUser.local.password = newUser.generateHash(password);
         await newUser.save();

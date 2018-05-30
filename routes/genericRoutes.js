@@ -28,7 +28,7 @@ module.exports = app => {
             perfectGame: incorrectWords ? false : true,
             multiplayerGame: req.body.multiplayerGame ? true : false,
             multiplayerWin: req.body.multiplayerWin ? req.body.multiplayerWin : false,
-            username: req.user.local.username,
+            username: req.user.displayName,
             _user: req.user.id
         });
         await newScore.save();

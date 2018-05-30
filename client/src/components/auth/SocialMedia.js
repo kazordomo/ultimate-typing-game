@@ -37,8 +37,8 @@ const SocialMedia = () => {
             <SubTitle>Social Media Login</SubTitle>
             <SocialMediaWrapper>
                 <Icons>
-                    <Ahref href='/auth/google'><i className='fab fa-facebook-square'></i></Ahref>
-                    <Ahref href='/auth/facebook'><i className='fab fa-google-plus-square'></i></Ahref>
+                    <Ahref href='/auth/facebook'><i className='fab fa-facebook-square'></i></Ahref>
+                    <Ahref href='/auth/google'><i className='fab fa-google-plus-square'></i></Ahref>
                 </Icons>
             </SocialMediaWrapper>
         </Section>

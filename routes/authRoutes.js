@@ -62,7 +62,6 @@ module.exports = app => {
 
     app.get('/api/current_user', (req, res) => {
         let user = req.user ? req.user : {}; //redo
-        //TODO: think about pro/cons with exluding wordlists.
         res.send(user);
     });
 

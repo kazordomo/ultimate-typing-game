@@ -7,12 +7,10 @@ const userSchema = new Schema({
     facebook: {
         id: String,
         token: String,
-        username: String
     },
     google: {
         id: String,
         token: String,
-        username: String
     },
     local: {
         username: {
@@ -22,6 +20,7 @@ const userSchema = new Schema({
         },
         password: String
     },
+    displayName: { type: String, trim: true },
     favoredWordLists: Array,
     createdDate: { type: Date, default: Date.now }
 });
