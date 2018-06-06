@@ -22,7 +22,7 @@ class WordLists extends Component {
     async componentDidMount() {
         await Promise.all([
             this.props.fetchGlobalWordListsIfNeeded(), 
-            this.props.fetchUserIfNeeded(),
+            // this.props.fetchUserIfNeeded(),
         ]);
     }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { showPopupModal } from '../../actions';
+import { showPopupModal, deleteAccount } from '../../actions';
 import GoBack from '../basic/GoBack';
 import Title from '../../styles/Title';
 import styled from 'react-emotion';
@@ -21,17 +21,6 @@ const Ahref = styled('a')`
 
 const Settings = props => {
 
-    // function deleteAccount() {
-    //     fetch('/auth/deleteAccount', {
-    //         credentials: 'include',
-    //         method: 'delete',
-    //         headers: { 'Content-Type': 'application/json' }
-    //     });
-    // }
-
-    function deleteAccount() {
-        console.log("deleting");
-    }
     //TODO: the unlinking should be done when deleting account.
 
     return (
@@ -48,8 +37,7 @@ const Settings = props => {
                 onClick={() => props.dispatch(showPopupModal({
                     id: 1,
                     text: 'Delete account?',
-                    onClose: () => console.log('closing'),
-                    onConfirm: () => deleteAccount(),
+                    onConfirm: () => props.dispatch(deleteAccount()),
                 }))}>
                 Delete account
             </Ahref>

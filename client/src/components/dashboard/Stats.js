@@ -6,9 +6,8 @@ import Title from '../../styles/Title';
 import Loading from '../../styles/Loading';
 import GoBack from '../basic/GoBack';
 import styled from 'react-emotion';
-import LeaderboardStyles from '../../styles/LeaderboardStyles';
-import TopScore from './TopScore';
-import { LineChart, Line, Tooltip } from 'recharts';
+import UserTopScores from './UserTopScores';
+import Chart from './Chart';
 
 const StatsContainer = styled('div')`
     width: 600px;
@@ -28,10 +27,6 @@ const GeneralStats = styled('div')`
     grid-auto-flow: row;
 `;
 
-const ChartWrapper = styled('div')`
-    width: 600px;
-`;
-
 class Stats extends Component {
 
     async componentDidMount() {
@@ -46,22 +41,10 @@ class Stats extends Component {
             .slice(-20).map(score => { return { wpm: score.correctWords } });
     }
 
-    renderScores() {
-        let position = 1;
-        return this.props.stats.data.topFive.map(score => { 
-            score.position = position++; 
-            return <TopScore 
-                isUserTopScores
-                key={score._id} 
-                topScore={score} />; 
-        });
-    }
-
     render() {
         if(!this.props.stats.isFetched)
             return <Loading />
         let { stats: { data } } = this.props;
-        const { Table, Tr } = LeaderboardStyles;
         return (
             <StatsContainer>
                 <Title>Statistics</Title>
@@ -76,24 +59,10 @@ class Stats extends Component {
                         <Stat label={'Perfect Games'} stat={data.totalPerfectGames} />
                         <Stat label={'Multiplayer Games'} stat={data.totalMultiplayerGames} />
                         <Stat label={'Multiplayer Wins'} stat={data.totalMultiplayerWins} />
-                    </GeneralStats>   
-                    <ChartWrapper>
-                        <LineChart width={600} height={200} data={this.sortChartData()}>
-                            <Tooltip/>
-                            <Line type="monotone" dataKey="wpm" stroke="#8884d8" />
-                        </LineChart>
-                    </ChartWrapper>
+                    </GeneralStats>
+                    <Chart width={600} height={200} data={this.sortChartData()} />   
+                    <UserTopScores topFive={this.props.stats.data.topFive} />
                 </Wrapper>
-                <Table>
-                    <tbody>
-                        <Tr>
-                            <th>Pos.</th>
-                            <th>WPM</th>
-                            <th>Date.</th>
-                        </Tr>
-                        {this.renderScores()}
-                    </tbody>
-                </Table>
             </StatsContainer>
         )
     }

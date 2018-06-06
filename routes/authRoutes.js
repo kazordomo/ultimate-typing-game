@@ -50,10 +50,11 @@ module.exports = app => {
     });
 
     app.delete('/auth/deleteAccount', (req, res) => {
-        User.findByIdAndRemove(req.user.id)
+        const user = req.user;
+        User.findByIdAndRemove(user.id)
         .exec()
         .then(doc => {
-            if(! doc)
+            if(!doc)
                 return res.status(404).end();
             return res.status(204).end();
         })
@@ -69,6 +70,8 @@ module.exports = app => {
         req.logout(); //logout with passport
         res.redirect('/');
     });
+
+    //BELOW: MAY BE INTRODUCED LATER
 
     // //UNLINK
     // app.get('/unlink/facebook', (req, res) => {

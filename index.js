@@ -17,6 +17,7 @@ mongoose.connect(keys.mongoURI);
 app.use(bodyParser.json());
 
 app.use(cookieSession({
+        name: 'session',
         maxAge: 30 * 24 * 60 * 1000, //30 days
         keys: [keys.cookieKey]
     })

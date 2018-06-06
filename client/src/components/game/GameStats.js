@@ -9,17 +9,12 @@ const StatRow = styled('div')`
     color: #FFFFFF;
 `;
 
-const Span = styled('span')`
-    color: #FFFFFF;
-`;
-
 export default ({ stats: { correctWords, incorrectWords, keystrokes } }) => {
     return (
         <div>
             <StatRow>Correct Words: {correctWords}</StatRow>
             <StatRow>Incorrect Words: {incorrectWords}</StatRow>
             <StatRow>Total Keystrokes: {keystrokes}</StatRow>
-            <Span>Press ENTER to play again</Span>
         </div>
     );
 }

@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 const { Schema } = mongoose;
 
-//TODO: the username should not be nested and always be required. if logged in from social media it should be the full name.
 const userSchema = new Schema({
     facebook: {
         id: String,

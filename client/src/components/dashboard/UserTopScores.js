@@ -1,18 +1,33 @@
 import React from 'react';
 import TopScore from './TopScore';
+import LeaderboardStyles from '../../styles/LeaderboardStyles';
 
-const TopScores = ({ scores }) => {
-
+export default props => {
+    
     function renderScores() {
-        return scores.map(score => <TopScore key={score._id} topScore={score} />);
+        let position = 1;
+        return props.topFive.map(score => { 
+            score.position = position++; 
+            return <TopScore 
+                isUserTopScores
+                key={score._id} 
+                topScore={score} />; 
+        });
     }
 
+    const { Table, Tr } = LeaderboardStyles;
+    if(!props.topFive.length)
+        return '';
     return (
-        <div>
-            TopFive
-            {renderScores()}
-        </div>
+        <Table>
+            <tbody>
+                <Tr>
+                    <th>Pos.</th>
+                    <th>WPM</th>
+                    <th>Date.</th>
+                </Tr>
+                {renderScores()}
+            </tbody>
+        </Table>
     );
 }
-
-export default TopScores;
