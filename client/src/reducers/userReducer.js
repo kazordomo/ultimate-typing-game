@@ -50,7 +50,6 @@ export default (state = initialState, action) => {
         case FETCH_USER_ERROR:
             return {
                 ...state,
-                isFetched: false,
                 error: action.payload
             }
         case FAVOR_WORD_LIST_SUCCESS:

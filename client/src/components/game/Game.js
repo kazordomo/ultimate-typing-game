@@ -61,7 +61,7 @@ class Game extends Component {
     }
 
     componentWillReceiveProps(props) {
-        if(props.currentGame.time === 0) {
+        if(props.gameTime === 0) {
             clearInterval(start);
         }
     }
@@ -148,11 +148,11 @@ class Game extends Component {
                     type="text" 
                     className={textInputStyle}
                     autoFocus
-                    disabled={!this.props.currentGame.time}
+                    disabled={!this.props.gameTime}
                     onKeyDown={this.handleOnKeyDown.bind(this)}
                     onKeyUp={this.handleOnKeyUp.bind(this)} 
                     ref={input => { this.gameTextInput = input; }}/>
-                <Counter>{this.props.currentGame.time}</Counter> 
+                <Counter>{this.props.gameTime}</Counter> 
             </Row>
         )
     }
@@ -166,7 +166,7 @@ class Game extends Component {
                         <ActiveWords words={this.props.currentWordList.words} />
                     </Row>
                     { 
-                        this.props.currentGame.time 
+                        this.props.gameTime
                             ? this.gameRunning()
                             : this.gameEnded()
                     }                    

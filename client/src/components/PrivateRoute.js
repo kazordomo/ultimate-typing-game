@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 
-const PrivateRoute = (user, { component: Component, ...rest }) => (
+const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={props => (
-        false ? (
+        true ? (
             <Component {...props}/>
         ) : (
             <Redirect to={{
@@ -15,9 +15,11 @@ const PrivateRoute = (user, { component: Component, ...rest }) => (
     )}/>
 );
 
+
 function mapStateToProps({ user }) {
     return { user };
 }
 
 export default connect(mapStateToProps, null)(PrivateRoute);
+// export default PrivateRoute;
 

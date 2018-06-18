@@ -24,11 +24,11 @@ const fetchUser = () => async dispatch => {
 const shouldFetchUser = state => {
     const user = state.user;
     
-    if(!user.isFetched)
+    if(!user.isAuthenticated)
         return true;
     if(Object.keys(user).length === 0)
         return true;
-    if(user.isFetched)
+    if(user.isAuthenticated)
         return false;
     return false;
 }
@@ -48,7 +48,6 @@ export const submitAuthForm = (values, authType, history) => async dispatch => {
     });
     const json = await response.json();
     if(response.status === 200) {
-        console.log(json);
         dispatch({ type: FETCH_USER_SUCCESS, payload: json });  
     } else {
         dispatch({ type: FETCH_USER_ERROR, payload: json });

@@ -15,6 +15,7 @@ import AddWordList from './game/AddWordList';
 import EditWordList from './game/EditWordList';
 import GlobalWordLists from './dashboard/GlobalWordLists';
 import GlobalWordListPreview from './dashboard/GlobalWordListPreview';
+import Loading from '../styles/Loading';
 
 import Stats from './dashboard/Stats';
 import Settings from './dashboard/Settings';
@@ -42,8 +43,7 @@ class App extends Component {
     }
 
     render() {
-        //TODO: we should really use the session to keep track of the user.
-        //the user will always be false when we reload the page for instance.
+        //TODO: user JWT
         const PrivateRoute = ({ component: Component, ...rest }) => (
             <Route {...rest} render={props => (
                 this.props.user.isAuthenticated ? (
@@ -56,6 +56,7 @@ class App extends Component {
                 )
             )}/>
         );
+
         return (
             <BrowserRouter>
                 <Container>

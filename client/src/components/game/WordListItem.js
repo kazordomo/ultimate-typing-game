@@ -8,7 +8,7 @@ const ListItem = styled('div')`
     position: relative;
     margin-bottom: 10px;
     color: #FFFFFF;
-    background-color: rgba(0,0,0,0.1);
+    background-color: ${ props => props.active ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.1)' };
     text-align: center;
     text-decoration: none;
     cursor: pointer;
@@ -36,7 +36,7 @@ class WordListItem extends Component {
         const href = `/game/wordList/edit/${this.props.wordListObj._id}`;
         return(
             <div>
-                <ListItem onClick={ () => this.props.chooseWordList() }>
+                <ListItem active={this.props.isActive} onClick={ () => this.props.chooseWordList() }>
                     {this.props.wordListObj.name}
                     <IconWrapper>
                         { this.props.isGlobalBoolean ? 

@@ -66,7 +66,6 @@ class HandleWordList extends Component {
 
     componentDidMount() {
         this.refs.nameTextInput.value = this.state.name;
-        console.log(this.props);
     }
 
     handleAddListName() {
@@ -148,7 +147,13 @@ class HandleWordList extends Component {
                         />
                     </Row>
                     <Row>
-                        <input type='checkbox' ref='isPublic' className={checkboxStyle} defaultChecked={isPublic} />
+                        <input 
+                            type='checkbox' 
+                            ref='isPublic' 
+                            className={checkboxStyle} 
+                            defaultChecked={isPublic} 
+                            onChange={() => this.setState({isPublic: this.refs.isPublic.checked})}
+                        />
                     </Row>
                     <Row>
                         <input 
@@ -170,6 +175,9 @@ class HandleWordList extends Component {
                             placeholder='Label To Add' 
                             className={textInputStyle} 
                         />
+                    </Row>
+                    <Row>
+                        <Button onClick={this.handleAddLabel}>Add label</Button>
                     </Row>
                     <Row>
                         <Button onClick={this.handleSaveList}>

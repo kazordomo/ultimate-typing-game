@@ -66,7 +66,8 @@ export default function(state = {
         case UPDATE_WORD_LIST_SUCCESS:
             return {
                 ...state,
-                items: addOrUpdateWordList(state.items, action.payload)
+                items: addOrUpdateWordList(state.items, action.payload),
+                currentWordList: action.payload,
             }
         case UPDATE_WORD_LIST_ERROR:
             return {
@@ -76,7 +77,8 @@ export default function(state = {
         case POST_WORD_LIST_SUCCESS:
             return {
                 ...state,
-                items: addOrUpdateWordList(state.items, action.payload)
+                items: addOrUpdateWordList(state.items, action.payload),
+                currentWordList: action.payload,
             }
         case POST_WORD_LIST_ERROR:
             return {
@@ -86,7 +88,8 @@ export default function(state = {
         case DELETE_WORD_LIST_SUCCESS:
             return {
                 ...state,
-                items: deleteWordList(state.items, action.payload)
+                items: deleteWordList(state.items, action.payload),
+                currentWordList: shuffleWords(defaultWordList),
             }
         case FAVOR_WORD_LIST_SUCCESS:
             return {

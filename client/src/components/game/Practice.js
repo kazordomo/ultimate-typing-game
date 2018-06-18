@@ -12,20 +12,11 @@ import {
     deleteWordList,
     gameTimer,
     updateStat,
+    updatePracticeStat,
     resetGame
 } from '../../actions';
 
 class Practice extends Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            words: [],
-            wordListActive: true,
-            time: 60
-        }
-    }
 
     async componentDidMount() {
         await this.props.fetchWordListsIfNeeded();
@@ -35,10 +26,9 @@ class Practice extends Component {
         this.props.resetGame();
     }
 
-    //DRY
     timer() {
         const { currentGame, gameTimer } = this.props;
-        gameTimer(currentGame.time - 1);
+        gameTimer(currentGame.practiceTime - 1);
     }
 
     handleChooseWordList(wordList) {
@@ -46,7 +36,9 @@ class Practice extends Component {
     }
 
     handleSetTime(time) {
-        this.setState({ time });
+        if(time && time !== 0) {
+            this.props.updatePracticeStat({target: 'practiceTime', value: time}); 
+        }
     }
 
     render() {
@@ -56,12 +48,18 @@ class Practice extends Component {
             <div>
                 <GoBack goTo='/dashboard' />
                 <Wrapper>
-                    <Game practice timer={this.timer.bind(this)} gameModeTitle='Practice' />
+                    <Game 
+                        practice 
+                        timer={this.timer.bind(this)} 
+                        gameTime={this.props.currentGame.practiceTime}
+                        gameModeTitle='Practice' 
+                    />
                     <PracticeSideBar 
                         wordLists={this.props.wordLists.items}
                         user={this.props.user}
-                        time={this.props.currentGame.time}
-                        changeTime={this.props.updateStat.bind(this)}
+                        time={this.props.currentGame.practiceTime}
+                        currentWordListId={this.props.wordLists.currentWordList._id}
+                        changeTime={this.handleSetTime.bind(this)}
                         chooseWordList={this.handleChooseWordList.bind(this)}
                         deleteWordList={this.props.deleteWordList.bind(this)}
                     />
@@ -82,5 +80,6 @@ export default connect(mapStateToProps, {
     deleteWordList,
     gameTimer,
     updateStat,
+    updatePracticeStat,
     resetGame
 })(Practice);

@@ -4,11 +4,15 @@ import {
     MULTIPLAYER_START,
     RESET_GAME,
     UPDATE_GAME_STAT,
-    INIT_MULTIPLAYER_GAME_PLAYERS
+    UPDATE_PRACTICE_GAME_STATE,
+    INIT_MULTIPLAYER_GAME_PLAYERS,
 } from '../actions/currentGameActions';
 
+const DEFAULT_GAME_TIME_LIMIT = 10;
+
 const initialState = {
-    time: 10,
+    time: DEFAULT_GAME_TIME_LIMIT,
+    practiceTime: DEFAULT_GAME_TIME_LIMIT,
     keystrokes: 0,
     correctWords: 0,
     incorrectWords: 0,
@@ -23,9 +27,11 @@ const initialState = {
 export default function(state = initialState, action) {
     switch(action.type) {
         case GAME_TIMER:
+            //tired, should obvs not need to update both stats.
             return {
                 ...state,
-                time: action.payload
+                time: action.payload,
+                practiceTime: action.payload,
             }
         case MULTIPLAYER_COUNT_DOWN:
             return {
@@ -54,9 +60,15 @@ export default function(state = initialState, action) {
             if(Number.isInteger(action.payload.value))
                 stateCopy[action.payload.target] += action.payload.value;
             else
-                stateCopy[action.payload.target] = action.payload.value
+                stateCopy[action.payload.target] = action.payload.value;
             return {
                 ...stateCopy
+            }
+        case UPDATE_PRACTICE_GAME_STATE:
+            initialState[action.payload.target] = action.payload.value;
+            return {
+                ...state,
+                practiceTime: action.payload.value,
             }
         default:
             return state;

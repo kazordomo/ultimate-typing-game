@@ -29,6 +29,7 @@ class SinglePlayer extends Component {
                 <Game 
                     gameModeTitle={'Singleplayer'}
                     timer={this.timer.bind(this)}
+                    gameTime={this.props.currentGame.time}
                 />
             </div>
         );

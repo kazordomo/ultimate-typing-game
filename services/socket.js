@@ -1,33 +1,26 @@
 const socketIO = require('socket.io');
 
-module.exports = (server) => {
+module.exports = server => {
 
     const io = socketIO(server);
     const players = {};
+    // const rooms = [];
     let roomno = 1;
-
-    //TODO: a new player/socket is added on page reload, even if same player as before.
-    //the roomno does not increase in this case.
 
     io.on('connection', socket => {
         let interval = null;
 
-        socket.on('subscribe to room', room => {
+        //TODO: with room number (roomno) we will basically que up players and give them
+        //the next possible room. this will need to be changed when implementing some kind of
+        //skill/rank/level matchup-search.
+
+        socket.on('subscribe to room', () => {
             let playersInRoom = io.nsps['/'].adapter.rooms[`room-${roomno}`];
+            //TODO: delete the room if roomno === 0
             if(playersInRoom && playersInRoom.length > 1) {
                 roomno++;
             }
             socket.join(`room-${roomno}`);
-            console.log(roomno);
-        });
-
-        //TODO: when a player leaves durring a game, the opponent should not notice
-        //and finish the game as usual. the room should stay the same so that no other joins the
-        //room. the player leaving should have a loss.
-        socket.on('unsubscribe', () => {
-            interval && clearInterval(interval);
-            delete players[socket.id];
-            socket.leave(`room-${roomno}`);
         });
 
         //TODO: problem seems to lie here. we start the game according to the callback inside
@@ -37,7 +30,7 @@ module.exports = (server) => {
             console.log(players);
             io.sockets.in(`room-${roomno}`).emit('new player', players);
         });
-
+        
         socket.on('timer', start => {
             let counter = 10;
             if(start) {
@@ -52,14 +45,33 @@ module.exports = (server) => {
                 socket.emit('get time', counter);
             }
         });
-
+        
         socket.on('update wpm', wpm => {
             socket.broadcast.emit('get wpm', wpm);  
         });
 
-        //disconnect is build in within socket object.
         socket.on('disconnet', () => {
+            console.log('disconectiong');
             socket.emit('player disconnet', players[socket.id]);
+        });
+
+        //TODO: when a player leaves durring a game, the opponent should not notice
+        //and finish the game as usual. the room should stay the same so that no other joins the
+        //room. the player leaving should have a loss.
+        socket.on('unsubscribe', () => {
+            console.log('unsubscribing');
+            interval && clearInterval(interval);
+            // delete players[socket.id];
+            io.of('/').in('room name').clients(function(error, clients) {
+                if (clients.length > 0) {
+                    console.log('clients in the room: \n');
+                    console.log(clients);
+                    clients.forEach(function (socket_id) {
+                        io.sockets.sockets[socket.id].leave(`room-${roomno}`);
+                    });
+                }
+            });
+            // socket.leave(`room-${roomno}`);
         });
     });
 }

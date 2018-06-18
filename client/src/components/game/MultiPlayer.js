@@ -127,6 +127,7 @@ class Multiplayer extends Component {
                     submitScore={this.handleSubmitScore.bind(this)}
                     gameIsReady={this.props.currentGame.gameIsReady}
                     timer={this.timer.bind(this)}
+                    gameTime={this.currentGame.time}
                 />
                 <WpmTracker player={this.props.currentGame.user} />
                 <WpmTracker player={this.props.currentGame.opponent} />

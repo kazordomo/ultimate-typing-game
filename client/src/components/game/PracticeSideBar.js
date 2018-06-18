@@ -31,7 +31,8 @@ class PracticeSideBar extends Component {
                     isGlobal = true;
                 return (
                     <WordListItem 
-                        key={wordLists[key]._id} 
+                        key={key} 
+                        isActive={this.props.currentWordListId === key}
                         chooseWordList={ () => chooseWordList(wordLists[key]) }
                         wordListObj={wordLists[key]}
                         isGlobalBoolean={isGlobal}
@@ -83,7 +84,7 @@ class PracticeSideBar extends Component {
                                 type='number'
                                 defaultValue={this.props.time}
                                 ref='timeInput'
-                                onChange={() => this.props.changeTime({target: 'time', value: this.refs.timeInput.value})}
+                                onChange={() => this.props.changeTime(this.refs.timeInput.value)}
                             />
                         </SetClock>
                     </GameSettingsWrapper>

@@ -3,6 +3,7 @@ export const MULTIPLAYER_COUNT_DOWN = 'MULTIPLAYER_COUNT_DOWN';
 export const MULTIPLAYER_START = 'MULTIPLAYER_START';
 export const RESET_GAME = 'RESET_GAME';
 export const UPDATE_GAME_STAT = 'UPDATE_GAME_STAT';
+export const UPDATE_PRACTICE_GAME_STATE = 'UPDATE_PRACTICE_GAME_STATE';
 export const INIT_MULTIPLAYER_GAME_PLAYERS = 'INIT_MULTIPLAYER_GAME_PLAYERS';
 
 export const gameTimer = time => dispatch => {
@@ -26,5 +27,9 @@ export const resetGame = () => dispatch => {
 }
 
 export const updateStat = stat => dispatch => {
-    dispatch({type: UPDATE_GAME_STAT, payload: stat});
+    dispatch({ type: UPDATE_GAME_STAT, payload: stat });
+}
+
+export const updatePracticeStat = stat => dispatch => {
+    dispatch({ type: UPDATE_PRACTICE_GAME_STATE, payload: stat });
 }
