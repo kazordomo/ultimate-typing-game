@@ -2,7 +2,6 @@
     Will keep this around. Unused atm.
 */
 export default function(values) {
-    console.log(values);
     const errors = {}
     if (!values.username) {
         errors.username = 'Required';

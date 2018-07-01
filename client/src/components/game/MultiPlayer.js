@@ -49,7 +49,6 @@ class Multiplayer extends Component {
                 name: players['opponent'],
                 wpm: 0
             };
-            console.log(players);
             let gameIsReady = (players['user'] && players['opponent']) ? true : false;
             //hax. chech if the comp is mounted before setting the state
             if(this.refs._isMounted) {
@@ -127,7 +126,7 @@ class Multiplayer extends Component {
                     submitScore={this.handleSubmitScore.bind(this)}
                     gameIsReady={this.props.currentGame.gameIsReady}
                     timer={this.timer.bind(this)}
-                    gameTime={this.currentGame.time}
+                    gameTime={this.props.currentGame.time}
                 />
                 <WpmTracker player={this.props.currentGame.user} />
                 <WpmTracker player={this.props.currentGame.opponent} />

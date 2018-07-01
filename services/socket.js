@@ -27,7 +27,6 @@ module.exports = server => {
         //the new player emit function.
         socket.on('new player', user => {
             players[socket.id] = { user: user.data.local.username };
-            console.log(players);
             io.sockets.in(`room-${roomno}`).emit('new player', players);
         });
         
@@ -51,7 +50,6 @@ module.exports = server => {
         });
 
         socket.on('disconnet', () => {
-            console.log('disconectiong');
             socket.emit('player disconnet', players[socket.id]);
         });
 
@@ -59,14 +57,11 @@ module.exports = server => {
         //and finish the game as usual. the room should stay the same so that no other joins the
         //room. the player leaving should have a loss.
         socket.on('unsubscribe', () => {
-            console.log('unsubscribing');
             interval && clearInterval(interval);
             // delete players[socket.id];
             io.of('/').in('room name').clients(function(error, clients) {
                 if (clients.length > 0) {
-                    console.log('clients in the room: \n');
-                    console.log(clients);
-                    clients.forEach(function (socket_id) {
+                    clients.forEach(function (socket) {
                         io.sockets.sockets[socket.id].leave(`room-${roomno}`);
                     });
                 }
