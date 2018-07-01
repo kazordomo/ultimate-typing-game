@@ -8,7 +8,7 @@ import {
     INIT_MULTIPLAYER_GAME_PLAYERS,
 } from '../actions/currentGameActions';
 
-const DEFAULT_GAME_TIME_LIMIT = 10;
+const DEFAULT_GAME_TIME_LIMIT = 60;
 
 const initialState = {
     time: DEFAULT_GAME_TIME_LIMIT,
