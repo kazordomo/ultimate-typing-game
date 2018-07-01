@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled, { css } from 'react-emotion';
 import { Link } from 'react-router-dom';
 import Rater from 'react-rater';
@@ -6,6 +6,7 @@ import 'react-rater/lib/react-rater.css';
 import Star from './Star';
 
 const ItemInList = styled('span')`
+    position: relative;
     display: flex;
     justify-content: space-between;
     padding: 4px;
@@ -21,30 +22,61 @@ const linkStyle = css`
     text-decoration: none;
 `;
 
-export default (props) => {
-    return (
-        <ItemInList>
-            <span>
-                <Link 
-                    className={linkStyle} 
-                    to={`/wordList/preview/${props.item._id}`}>
-                    {props.item.name}
-                </Link>
-            </span>
-            <Rater total={5} rating={props.item.rating} interactive={false}>
-                <Star />
-            </Rater>
-            {/* <span>{props.item.labels.map(label => label)}</span> */}
-            {/* {   
-                props.bools.isUserList ? '' : 
-                    props.bools.isUserFavored ? 
-                        <span onClick={() => props.deleteList(props.item)}>
-                            <I className="fas fa-star"></I>
-                        </span> :
-                        <span onClick={() => props.favorList(props.item)}>
-                            <I className="far fa-star"></I>
-                        </span>
-            } */}
-        </ItemInList>
-    );
+const OpenCloseLabels = styled('i')`
+    position: absolute;
+    z-index: 1000;
+    bottom: -12px;
+    left: 49%;
+    font-size: 22px;
+`;
+
+const Labels = styled('div')`
+    position: absolute;
+    z-index: 999;
+    height: ${props => props.isOpen ? 'auto' : '0px'};
+    transition: all .2s ease-in-out;
+    overflow: hidden;
+`;
+
+const Label = styled('span')`
+    margin-right: 2px;
+    padding: 2px 5px;
+    background-color: rgba(202, 205, 209, 1);
+    font-size: 15px;
+`;
+
+class GlobalWordListItem extends Component {
+
+    state = {
+        labelsIsOpen: false,
+    }
+
+    openCloseLabels() {
+        this.setState({ labelsIsOpen: !this.state.labelsIsOpen });
+    }
+    
+    render() {
+        return (
+            <div>
+                <ItemInList>
+                    <span>
+                        <Link 
+                            className={linkStyle} 
+                            to={`/wordList/preview/${this.props.item._id}`}>
+                            {this.props.item.name}
+                        </Link>
+                    </span>
+                    <Rater total={5} rating={this.props.item.rating} interactive={false}>
+                        <Star />
+                    </Rater>
+                    <OpenCloseLabels onClick={this.openCloseLabels.bind(this)} className="fas fa-caret-down"></OpenCloseLabels>
+                </ItemInList>
+                <Labels isOpen={this.state.labelsIsOpen}>
+                    { this.props.item.labels.map(label => <Label key={label}>{label}</Label>) }
+                </Labels>
+            </div>
+        );
+    }
 }
+
+export default GlobalWordListItem;

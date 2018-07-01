@@ -56,14 +56,6 @@ class GlobalWordListPreview extends Component {
         })
     }
 
-    renderLabels(labels) {
-        let id = 0;
-        return labels.map(label => {
-            id++;
-            return <div key={id}>{label}</div>;
-        });
-    }
-
     //TODO: this will make the component rerender and use calculatedRating as rating again.
     //avoiding componentWillUnmount, but perhaps we should update the wordlist first then, so that
     //the users rating will remain until the compoent is unmounted.
@@ -94,8 +86,8 @@ class GlobalWordListPreview extends Component {
                 <div style={{width: '250px', margin: '0 auto'}}>
                     { 
                         isCreatedByCurrentUser ? 
-                            <Button disabled onClick={() => this.props.favorWordList(preview)}>Save List</Button> :
-                            <Button onClick={() => this.props.favorWordList(preview)}>Save List</Button>
+                            <Button disabled onClick={() => this.props.favorWordList(preview)}>Favor List</Button> :
+                            <Button onClick={() => this.props.favorWordList(preview)}>Favor List</Button>
                     }
                 </div>
                 <RatingContainer>
@@ -113,12 +105,9 @@ class GlobalWordListPreview extends Component {
                 </RatingContainer>
                 <WordsContainer>
                     <Words>
-                    { this.renderWords(preview.words) }
+                        { this.renderWords(preview.words) }
                     </Words>
                 </WordsContainer>
-                <div>
-                    { this.renderLabels(preview.labels) }
-                </div>
             </div>
         )
     }

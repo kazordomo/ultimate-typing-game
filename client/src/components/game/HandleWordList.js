@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import Wrapper from '../../styles/Wrapper';
 import Button from '../../styles/Button';
 import Row from '../../styles/Row';
@@ -47,6 +47,41 @@ const Label = styled('span')`
     cursor: pointer;
 `;
 
+const groupedTextInputStyle = css`
+    float: left;
+    width: 70%;
+    padding: 5px;
+    background-color: rgba(0,0,0,0.1);
+    color: #FFFFFF;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    ::-webkit-input-placeholder {
+        color: #999;
+    }
+`;
+
+const GroupedButton = styled('button')`
+    width: 30%;
+    padding: 5px;
+    box-sizing: border-box;
+    background-color: #5A7D7C;
+    color: #FFFFFF;
+    outline: none;
+    border: none;
+    border-radius: 0px 2px 2px 0px;
+`;
+
+const CheckboxGroup = styled('div')`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: rgba(0,0,0,0.1);
+    color: #999;
+    padding: 5px;
+    box-sizing: border-box;
+`;
+
 class HandleWordList extends Component {
 
     constructor(props) {
@@ -62,6 +97,7 @@ class HandleWordList extends Component {
         this.handleAddLabel = this.handleAddLabel.bind(this);
         this.handleDeleteWord = this.handleDeleteWord.bind(this);
         this.handleSaveList = this.handleSaveList.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     componentDidMount() {
@@ -130,6 +166,13 @@ class HandleWordList extends Component {
         });
     }
 
+    handleKeyPress(event) {
+        this.refs.wordTextInput.value = 
+            this.refs.wordTextInput.value.replace(/\s+/g,'');
+        if(event.key === 'Enter')
+            this.handleAddWord()
+    }
+
     render() {
         const { words, isPublic } = this.state;
         return(
@@ -147,25 +190,16 @@ class HandleWordList extends Component {
                         />
                     </Row>
                     <Row>
-                        <input 
-                            type='checkbox' 
-                            ref='isPublic' 
-                            className={checkboxStyle} 
-                            defaultChecked={isPublic} 
-                            onChange={() => this.setState({isPublic: this.refs.isPublic.checked})}
-                        />
-                    </Row>
-                    <Row>
-                        <input 
-                            type='text' 
-                            ref='wordTextInput' 
-                            onKeyPress={event => (event.key === 'Enter') && this.handleAddWord()}  
-                            placeholder='Word To Add' 
-                            className={textInputStyle} 
-                        />
-                    </Row>
-                    <Row>
-                        <Button onClick={this.handleAddWord}>Add Word</Button>
+                        <CheckboxGroup>
+                            <div>Public</div>
+                            <input 
+                                type='checkbox' 
+                                ref='isPublic' 
+                                className={checkboxStyle} 
+                                defaultChecked={isPublic} 
+                                onChange={() => this.setState({isPublic: this.refs.isPublic.checked})}
+                            />
+                        </CheckboxGroup>
                     </Row>
                     <Row>
                         <input 
@@ -173,11 +207,19 @@ class HandleWordList extends Component {
                             ref='labelTextInput'
                             onKeyPress={event => (event.key === 'Enter') && this.handleAddLabel()}
                             placeholder='Label To Add' 
-                            className={textInputStyle} 
+                            className={groupedTextInputStyle} 
                         />
+                        <GroupedButton>Add</GroupedButton>
                     </Row>
                     <Row>
-                        <Button onClick={this.handleAddLabel}>Add label</Button>
+                        <input 
+                            type='text' 
+                            ref='wordTextInput' 
+                            onKeyPress={this.handleKeyPress}  
+                            placeholder='Word To Add' 
+                            className={groupedTextInputStyle} 
+                        />
+                        <GroupedButton>Add</GroupedButton>
                     </Row>
                     <Row>
                         <Button onClick={this.handleSaveList}>
