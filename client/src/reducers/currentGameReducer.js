@@ -53,9 +53,6 @@ export default function(state = initialState, action) {
         case RESET_GAME:
             return initialState;
         case UPDATE_GAME_STAT:
-            //TODO: known issue. "time" from practice-side-bar will come as a string.
-            //because of this, things work (look below). lol. however it should be changed.
-            //sometime.
             const stateCopy = Object.assign({}, state);
             if(Number.isInteger(action.payload.value))
                 stateCopy[action.payload.target] += action.payload.value;

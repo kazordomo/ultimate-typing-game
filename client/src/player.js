@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:5000');
+const socket = openSocket('https://ultimatetypinggame.herokuapp.com'); //make relative
 
 function newPlayer(player, cb) {
     socket.emit('subscribe to room');
