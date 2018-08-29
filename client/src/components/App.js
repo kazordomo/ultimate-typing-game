@@ -18,9 +18,8 @@ import GlobalWordListPreview from './dashboard/GlobalWordListPreview';
 import Stats from './dashboard/Stats';
 import Settings from './dashboard/Settings';
 
-//RENDERS 100 TIMES?!
 injectGlobal`
-    * {
+    body {
         font-family: 'Anton', sans-serif;
         font-size: 18px;
     }
